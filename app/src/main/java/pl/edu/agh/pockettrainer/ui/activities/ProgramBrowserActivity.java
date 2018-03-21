@@ -19,6 +19,6 @@ public class ProgramBrowserActivity extends AppCompatActivity {
 
         final ProgramRepository programs = new ProgramFileRepository(this);
         final ListView listView = findViewById(R.id.listView);
-        listView.setAdapter(new ProgramAdapter(this, programs.getInstalled()));
+        listView.setAdapter(new ProgramAdapter(this, programs));
     }
 }

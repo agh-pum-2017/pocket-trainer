@@ -59,4 +59,12 @@ public class DecoratedProgram {
     public void setInactive() {
         repository.unsetActiveProgram();
     }
+
+    public void toggleActive() {
+        if (isActive()) {
+            setInactive();
+        } else {
+            setActive();
+        }
+    }
 }

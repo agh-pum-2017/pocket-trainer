@@ -1,7 +1,9 @@
 package pl.edu.agh.pockettrainer.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,12 +30,17 @@ import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
 import pl.edu.agh.pockettrainer.program.repository.DecoratedProgram;
+import pl.edu.agh.pockettrainer.program.repository.ProgramFileRepository;
+import pl.edu.agh.pockettrainer.program.repository.ProgramRepository;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsActivity;
 
 public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
 
-    public ProgramAdapter(@NonNull Context context, List<DecoratedProgram> items) {
-        super(context, 0, items);
+    private final ProgramRepository programs;
+
+    public ProgramAdapter(@NonNull Context context, ProgramRepository programs) {
+        super(context, 0, programs.getInstalled());
+        this.programs = programs;
     }
 
     @NonNull
@@ -60,23 +68,14 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         btnToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
 
         if (program.isActive()) {
-            btnToggleEnroll.setTextColor(Color.GRAY);
-            btnToggleEnroll.setText("enrolled");
-            setBorderColor(convertView, 0xffffffff, 0xff00a6ff);
-        } else {
             btnToggleEnroll.setTextColor(Color.rgb(0, 166, 255));
+            btnToggleEnroll.setText("enrolled");
+        } else {
+            btnToggleEnroll.setTextColor(0xffaaaaaa);
             btnToggleEnroll.setText("enroll");
-            setBorderColor(convertView, 0xffffffff, 0x00000000);
         }
 
         return convertView;
-    }
-
-    private void setBorderColor(View view, int background, int stroke) {
-        GradientDrawable border = new GradientDrawable();
-        border.setColor(background);
-        border.setStroke(7, stroke);
-        view.setBackground(border);
     }
 
     private String makeString(Set<ProgramGoal> goals) {
@@ -107,12 +106,42 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (program.isActive()) {
-                    program.setInactive();
+                if (programs.hasActiveProgram()) {
+                    final String message;
+                    final String toastMessage;
+                    if (program.isActive()) {
+                        message = "This will erase your progress. Continue?";
+                        toastMessage = null;
+                    } else {
+                        message = "You are already enrolled to another program. This will erase you progress. Continue?";
+                        toastMessage = "Training program changed";
+                    }
+                    final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    program.toggleActive();
+                                    notifyDataSetChanged();
+                                    if (toastMessage != null) {
+                                        Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
+                                    }
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    break;
+                            }
+                        }
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage(message)
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener)
+                            .show();
                 } else {
                     program.setActive();
+                    notifyDataSetChanged();
+                    Toast.makeText(getContext(), "You are now enrolled", Toast.LENGTH_SHORT).show();
                 }
-                notifyDataSetChanged();
             }
         };
     }
