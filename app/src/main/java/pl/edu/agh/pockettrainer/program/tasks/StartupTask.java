@@ -33,6 +33,12 @@ public class StartupTask implements Runnable {
 
         programs.getInstalled();
 
+//        try {
+//            Thread.sleep(100L);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         navigateTo(ProgramBrowserActivity.class);
 
 //        if (programs.hasActiveProgram()) {
