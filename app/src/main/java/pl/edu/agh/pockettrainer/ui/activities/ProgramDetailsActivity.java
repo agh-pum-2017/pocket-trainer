@@ -27,6 +27,8 @@ public class ProgramDetailsActivity extends AppCompatActivity {
             final ProgramRepository programs = CachedProgramRepository.getInstance(this);
             DecoratedProgram program = programs.getById(id);
 
+            setTitle(program.getMetadata().getName());
+
             final TextView labelProgram = findViewById(R.id.label_program);
             labelProgram.setText(program.getMetadata().getName());
         }

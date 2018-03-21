@@ -31,6 +31,8 @@ public class StartupTask implements Runnable {
             }
         }
 
+        programs.getInstalled();
+
         navigateTo(ProgramBrowserActivity.class);
 
 //        if (programs.hasActiveProgram()) {

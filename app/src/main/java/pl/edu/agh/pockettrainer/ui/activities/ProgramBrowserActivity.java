@@ -16,6 +16,7 @@ public class ProgramBrowserActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_program_browser);
+        setTitle("Programs");
 
         final ProgramRepository programs = CachedProgramRepository.getInstance(this);
         final ListView listView = findViewById(R.id.listView);
