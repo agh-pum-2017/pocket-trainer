@@ -3,10 +3,4 @@
 
     <item android:drawable="@color/launcher_color"/>
 
-    <item>
-        <bitmap
-            android:src="@drawable/logo"
-            android:gravity="fill"/>
-    </item>
-
 </selector>
