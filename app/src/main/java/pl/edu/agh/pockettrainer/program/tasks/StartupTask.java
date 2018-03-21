@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import pl.edu.agh.pockettrainer.App;
-import pl.edu.agh.pockettrainer.ProgramBrowserActivity;
+import pl.edu.agh.pockettrainer.ui.ProgramBrowserActivity;
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.repository.ProgramFileRepository;
 import pl.edu.agh.pockettrainer.program.repository.ProgramRepository;

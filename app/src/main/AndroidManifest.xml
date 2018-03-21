@@ -24,7 +24,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ProgramBrowserActivity" />
+        <activity android:name=".ui.ProgramBrowserActivity" />
     </application>
 
 </manifest>
