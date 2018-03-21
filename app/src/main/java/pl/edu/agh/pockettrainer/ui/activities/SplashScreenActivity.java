@@ -1,4 +1,4 @@
-package pl.edu.agh.pockettrainer.ui;
+package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +14,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        Executors.newSingleThreadExecutor().execute(new StartupTask(getApplicationContext()));
+        Executors.newSingleThreadExecutor().execute(new StartupTask(this));
     }
 }

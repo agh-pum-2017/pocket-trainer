@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -54,10 +53,10 @@ public class ProgramFileRepository implements ProgramRepository {
     }
 
     @Override
-    public List<TrainingProgramWithId> getInstalled() {
-        final List<TrainingProgramWithId> installed = new ArrayList<>();
+    public List<DecoratedProgram> getInstalled() {
+        final List<DecoratedProgram> installed = new ArrayList<>();
         for (File file: IoUtils.listFiles(getInstalledDir())) {
-            final TrainingProgramWithId program = loadInstalledProgram(file);
+            final DecoratedProgram program = loadInstalledProgram(file);
             if (program != null) {
                 installed.add(program);
             }
@@ -130,13 +129,13 @@ public class ProgramFileRepository implements ProgramRepository {
     }
 
     @Override
-    public TrainingProgramWithId getActiveProgram() {
+    public DecoratedProgram getActiveProgram() {
         final String id = appConfig.getActiveProgramId();
         return id == null ? null : loadInstalledProgram(new File(getInstalledDir(), id));
     }
 
     @Override
-    public void setActiveProgram(TrainingProgramWithId program) {
+    public void setActiveProgram(DecoratedProgram program) {
         appConfig.setActiveProgramId(program.getId());
     }
 
@@ -178,11 +177,11 @@ public class ProgramFileRepository implements ProgramRepository {
         }
     }
 
-    private TrainingProgramWithId loadInstalledProgram(File file) {
+    private DecoratedProgram loadInstalledProgram(File file) {
         try {
             final ProgramDeserializer deserializer = ProgramDeserializer.withOriginalPaths();
             final TrainingProgram program = deserializer.parse(IoUtils.readFully(file));
-            return new TrainingProgramWithId(file.getName(), program);
+            return new DecoratedProgram(this, file.getName(), program);
         } catch (IOException ex) {
             logger.error(ex, "Unable to read file from '%s'", file.getAbsolutePath());
         } catch (JSONException ex) {
@@ -195,13 +194,13 @@ public class ProgramFileRepository implements ProgramRepository {
         return new File(context.getFilesDir(), INSTALLED_PROGRAMS_DIR);
     }
 
-    private List<TrainingProgramWithId> sortedByName(List<TrainingProgramWithId> programs) {
-        Collections.sort(programs, new Comparator<TrainingProgramWithId>() {
+    private List<DecoratedProgram> sortedByName(List<DecoratedProgram> programs) {
+        Collections.sort(programs, new Comparator<DecoratedProgram>() {
             @Override
-            public int compare(TrainingProgramWithId a, TrainingProgramWithId b) {
+            public int compare(DecoratedProgram a, DecoratedProgram b) {
 
-                final Metadata m1 = a.getProgram().getMetadata();
-                final Metadata m2 = b.getProgram().getMetadata();
+                final Metadata m1 = a.getMetadata();
+                final Metadata m2 = b.getMetadata();
 
                 if (m1 != null && m2 != null) {
                     final String name1 = m1.getName();
@@ -216,9 +215,9 @@ public class ProgramFileRepository implements ProgramRepository {
         });
         return programs;
     }
-}
 
-interface InputStreamProvider {
-    InputStream open() throws IOException;
-    String getName();
+    private interface InputStreamProvider {
+        InputStream open() throws IOException;
+        String getName();
+    }
 }

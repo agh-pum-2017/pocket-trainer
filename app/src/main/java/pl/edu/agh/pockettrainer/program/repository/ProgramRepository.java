@@ -7,7 +7,7 @@ public interface ProgramRepository {
 
     List<String> getBundledArchives();
 
-    List<TrainingProgramWithId> getInstalled();
+    List<DecoratedProgram> getInstalled();
 
     void installResource(String path);
 
@@ -21,9 +21,9 @@ public interface ProgramRepository {
 
     boolean hasActiveProgram();
 
-    TrainingProgramWithId getActiveProgram();
+    DecoratedProgram getActiveProgram();
 
-    void setActiveProgram(TrainingProgramWithId program);
+    void setActiveProgram(DecoratedProgram program);
 
     void unsetActiveProgram();
 }
