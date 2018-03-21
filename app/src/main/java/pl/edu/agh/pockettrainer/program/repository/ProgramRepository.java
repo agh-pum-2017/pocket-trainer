@@ -18,4 +18,12 @@ public interface ProgramRepository {
     void uninstallAll();
 
     void uninstall(String programId);
+
+    boolean hasActiveProgram();
+
+    TrainingProgramWithId getActiveProgram();
+
+    void setActiveProgram(TrainingProgramWithId program);
+
+    void unsetActiveProgram();
 }

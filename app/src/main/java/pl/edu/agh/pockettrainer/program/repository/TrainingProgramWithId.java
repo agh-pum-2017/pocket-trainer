@@ -19,4 +19,11 @@ public class TrainingProgramWithId {
     public TrainingProgram getProgram() {
         return program;
     }
+
+    @Override
+    public String toString() {
+        return "TrainingProgramWithId{" +
+                "id='" + id + '\'' +
+                '}';
+    }
 }

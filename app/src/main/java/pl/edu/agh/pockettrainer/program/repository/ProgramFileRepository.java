@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
@@ -31,10 +32,12 @@ public class ProgramFileRepository implements ProgramRepository {
     private static final String MAIN_JSON_FILENAME = "program.json";
 
     private final Logger logger = new Logger(ProgramFileRepository.class);
-        private final Context context;
+    private final Context context;
+    private final AppConfig appConfig;
 
     public ProgramFileRepository(Context context) {
         this.context = context;
+        this.appConfig = new AppConfig(context);
     }
 
     @Override
@@ -54,14 +57,9 @@ public class ProgramFileRepository implements ProgramRepository {
     public List<TrainingProgramWithId> getInstalled() {
         final List<TrainingProgramWithId> installed = new ArrayList<>();
         for (File file: IoUtils.listFiles(getInstalledDir())) {
-            try {
-                final ProgramDeserializer deserializer = ProgramDeserializer.withOriginalPaths();
-                final TrainingProgram program = deserializer.parse(IoUtils.readFully(file));
-                installed.add(new TrainingProgramWithId(file.getName(), program));
-            } catch (IOException ex) {
-                logger.error(ex, "Unable to read file from '%s'", file.getAbsolutePath());
-            } catch (JSONException ex) {
-                logger.error(ex, "Unable to parse JSON file at '%s'",  file.getAbsolutePath());
+            final TrainingProgramWithId program = loadInstalledProgram(file);
+            if (program != null) {
+                installed.add(program);
             }
         }
         return sortedByName(installed);
@@ -126,6 +124,27 @@ public class ProgramFileRepository implements ProgramRepository {
         IoUtils.delete(new File(getInstalledDir(), programId));
     }
 
+    @Override
+    public boolean hasActiveProgram() {
+        return null != appConfig.getActiveProgramId();
+    }
+
+    @Override
+    public TrainingProgramWithId getActiveProgram() {
+        final String id = appConfig.getActiveProgramId();
+        return id == null ? null : loadInstalledProgram(new File(getInstalledDir(), id));
+    }
+
+    @Override
+    public void setActiveProgram(TrainingProgramWithId program) {
+        appConfig.setActiveProgramId(program.getId());
+    }
+
+    @Override
+    public void unsetActiveProgram() {
+        appConfig.unsetActiveProgramId();
+    }
+
     private void install(InputStreamProvider provider) {
         try (TempDir tempDir = IoUtils.makeTempDir(context.getCacheDir())) {
             try (InputStream inputStream = provider.open()) {
@@ -157,6 +176,19 @@ public class ProgramFileRepository implements ProgramRepository {
         } catch (IOException ex) {
             logger.error(ex, "Unable to install program from %s", provider.getName());
         }
+    }
+
+    private TrainingProgramWithId loadInstalledProgram(File file) {
+        try {
+            final ProgramDeserializer deserializer = ProgramDeserializer.withOriginalPaths();
+            final TrainingProgram program = deserializer.parse(IoUtils.readFully(file));
+            return new TrainingProgramWithId(file.getName(), program);
+        } catch (IOException ex) {
+            logger.error(ex, "Unable to read file from '%s'", file.getAbsolutePath());
+        } catch (JSONException ex) {
+            logger.error(ex, "Unable to parse JSON file at '%s'",  file.getAbsolutePath());
+        }
+        return null;
     }
 
     private File getInstalledDir() {
