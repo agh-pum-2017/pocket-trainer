@@ -9,6 +9,8 @@ public interface ProgramRepository {
 
     List<DecoratedProgram> getInstalled();
 
+    DecoratedProgram getById(String id);
+
     void installResource(String path);
 
     void installLocalFile(File file);

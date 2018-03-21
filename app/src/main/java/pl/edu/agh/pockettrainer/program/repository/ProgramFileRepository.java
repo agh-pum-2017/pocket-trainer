@@ -65,6 +65,11 @@ public class ProgramFileRepository implements ProgramRepository {
     }
 
     @Override
+    public DecoratedProgram getById(String id) {
+        return loadInstalledProgram(new File(getInstalledDir(), id));
+    }
+
+    @Override
     public void installResource(final String name) {
         logger.debug("Installing program from bundled resource '%s'", name);
         install(new InputStreamProvider() {

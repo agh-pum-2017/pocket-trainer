@@ -1,14 +1,19 @@
 package pl.edu.agh.pockettrainer.ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +27,7 @@ import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
 import pl.edu.agh.pockettrainer.program.repository.DecoratedProgram;
+import pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsActivity;
 
 public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
 
@@ -40,15 +46,37 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.program_item, parent, false);
         }
 
+        final ImageView imageView = convertView.findViewById(R.id.program_image);
         final TextView title = convertView.findViewById(R.id.label_title);
         final TextView goals = convertView.findViewById(R.id.label_goals);
-        final ImageView imageView = convertView.findViewById(R.id.program_image);
+        final Button btnShow = convertView.findViewById(R.id.btnShow);
+        final Button btnToggleEnroll = convertView.findViewById(R.id.btnToggleEnroll);
 
         title.setText(metadata.getName());
         goals.setText(makeString(metadata.getGoals()));
         imageView.setImageBitmap(getImage(metadata));
 
+        btnShow.setOnClickListener(onBtnShowClick(program));
+        btnToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
+
+        if (program.isActive()) {
+            btnToggleEnroll.setTextColor(Color.GRAY);
+            btnToggleEnroll.setText("enrolled");
+            setBorderColor(convertView, 0xffffffff, 0xff00a6ff);
+        } else {
+            btnToggleEnroll.setTextColor(Color.rgb(0, 166, 255));
+            btnToggleEnroll.setText("enroll");
+            setBorderColor(convertView, 0xffffffff, 0x00000000);
+        }
+
         return convertView;
+    }
+
+    private void setBorderColor(View view, int background, int stroke) {
+        GradientDrawable border = new GradientDrawable();
+        border.setColor(background);
+        border.setStroke(7, stroke);
+        view.setBackground(border);
     }
 
     private String makeString(Set<ProgramGoal> goals) {
@@ -64,5 +92,35 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
     private Bitmap getImage(Metadata metadata) {
         final File file = metadata.getImage();
         return BitmapFactory.decodeFile(file.getAbsolutePath());
+    }
+
+    private View.OnClickListener onBtnShowClick(final DecoratedProgram program) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateTo(ProgramDetailsActivity.class, program);
+            }
+        };
+    }
+
+    private View.OnClickListener onBtnToggleEnrollClick(final DecoratedProgram program) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (program.isActive()) {
+                    program.setInactive();
+                } else {
+                    program.setActive();
+                }
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    private void navigateTo(Class<? extends Activity> activityClass, DecoratedProgram program) {
+        final Context context = getContext();
+        final Intent intent = new Intent(context, activityClass);
+        intent.putExtra("programId", program.getId());
+        context.startActivity(intent);
     }
 }

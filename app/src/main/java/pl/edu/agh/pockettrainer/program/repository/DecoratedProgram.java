@@ -48,12 +48,15 @@ public class DecoratedProgram {
     }
 
     public boolean isActive() {
-        return this == repository.getActiveProgram();
+        final DecoratedProgram activeProgram = repository.getActiveProgram();
+        return activeProgram != null && id.equals(activeProgram.id);
     }
 
     public void setActive() {
         repository.setActiveProgram(this);
+    }
 
-        // TODO force re-render of the entire list view
+    public void setInactive() {
+        repository.unsetActiveProgram();
     }
 }

@@ -30,11 +30,13 @@ public class StartupTask implements Runnable {
             }
         }
 
-        if (programs.hasActiveProgram()) {
-            navigateTo(HomeActivity.class);
-        } else {
-            navigateTo(ProgramBrowserActivity.class);
-        }
+        navigateTo(ProgramBrowserActivity.class);
+
+//        if (programs.hasActiveProgram()) {
+//            navigateTo(HomeActivity.class);
+//        } else {
+//            navigateTo(ProgramBrowserActivity.class);
+//        }
     }
 
     private void navigateTo(Class<? extends Activity> activityClass) {
