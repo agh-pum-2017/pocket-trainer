@@ -11,13 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.program.Logger;
-import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
 import pl.edu.agh.pockettrainer.program.repository.io.IoUtils;
 import pl.edu.agh.pockettrainer.program.repository.io.TempDir;
@@ -34,7 +31,7 @@ public class ProgramFileRepository implements ProgramRepository {
     private final Context context;
     private final AppConfig appConfig;
 
-    public ProgramFileRepository(Context context) {
+    ProgramFileRepository(Context context) {
         this.context = context;
         this.appConfig = new AppConfig(context);
     }
@@ -61,7 +58,7 @@ public class ProgramFileRepository implements ProgramRepository {
                 installed.add(program);
             }
         }
-        return sortedByName(installed);
+        return Sorter.sortedByName(installed);
     }
 
     @Override
@@ -197,28 +194,6 @@ public class ProgramFileRepository implements ProgramRepository {
 
     private File getInstalledDir() {
         return new File(context.getFilesDir(), INSTALLED_PROGRAMS_DIR);
-    }
-
-    private List<DecoratedProgram> sortedByName(List<DecoratedProgram> programs) {
-        Collections.sort(programs, new Comparator<DecoratedProgram>() {
-            @Override
-            public int compare(DecoratedProgram a, DecoratedProgram b) {
-
-                final Metadata m1 = a.getMetadata();
-                final Metadata m2 = b.getMetadata();
-
-                if (m1 != null && m2 != null) {
-                    final String name1 = m1.getName();
-                    final String name2 = m2.getName();
-                    if (name1 != null) {
-                        return name1.compareTo(name2);
-                    }
-                }
-
-                return 0;
-            }
-        });
-        return programs;
     }
 
     private interface InputStreamProvider {

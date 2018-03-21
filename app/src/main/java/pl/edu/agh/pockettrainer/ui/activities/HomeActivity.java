@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import pl.edu.agh.pockettrainer.R;
+import pl.edu.agh.pockettrainer.program.repository.CachedProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.DecoratedProgram;
 import pl.edu.agh.pockettrainer.program.repository.ProgramFileRepository;
 import pl.edu.agh.pockettrainer.program.repository.ProgramRepository;
@@ -28,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupView() {
 
-        final ProgramRepository programs = new ProgramFileRepository(this);
+        final ProgramRepository programs = CachedProgramRepository.getInstance(this);
         final DecoratedProgram activeProgram = programs.getActiveProgram();
 
         if (activeProgram == null) {

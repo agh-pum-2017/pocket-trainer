@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import pl.edu.agh.pockettrainer.AppConfig;
+import pl.edu.agh.pockettrainer.program.repository.CachedProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.ProgramFileRepository;
 import pl.edu.agh.pockettrainer.program.repository.ProgramRepository;
 import pl.edu.agh.pockettrainer.ui.activities.HomeActivity;
@@ -22,7 +23,7 @@ public class StartupTask implements Runnable {
     public void run() {
 
         final AppConfig appConfig = new AppConfig(context);
-        final ProgramRepository programs = new ProgramFileRepository(context);
+        final ProgramRepository programs = CachedProgramRepository.getInstance(context);
 
         if (appConfig.isFirstRun()) {
             for (String name : programs.getBundledArchives()) {
