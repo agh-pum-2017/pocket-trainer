@@ -27,7 +27,8 @@
 
         <activity android:name=".ui.activities.HomeActivity" />
         <activity android:name=".ui.activities.ProgramBrowserActivity" />
-        <activity android:name=".ui.activities.ProgramDetailsActivity" />
+        <activity android:name=".ui.activities.ProgramDetailsActivity"
+                  android:parentActivityName=".ui.activities.ProgramBrowserActivity"/>
     </application>
 
 </manifest>
