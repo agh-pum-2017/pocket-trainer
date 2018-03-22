@@ -22,16 +22,12 @@ public class ProgramDetailsActivity extends AppCompatActivity {
 
         if (extras != null) {
 
-            final String id = extras.getString("programId");
-
-            // TODO this is redundant, should be able to pass Program object directly rather than I/O and JSON parsing
             final ProgramRepository programs = CachedProgramRepository.getInstance(this);
-            DecoratedProgram program = programs.getById(id);
+            final DecoratedProgram program = programs.getById(extras.getString("programId"));
 
             setTitle(program.getMetadata().getName());
 
-            final TextView labelProgram = findViewById(R.id.label_program);
-            labelProgram.setText(program.getMetadata().getName());
+            // TODO
         }
     }
 }
