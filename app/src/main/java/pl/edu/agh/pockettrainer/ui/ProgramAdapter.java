@@ -92,18 +92,20 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
     }
 
     private View.OnClickListener onBtnShowClick(final DecoratedProgram program) {
-        return new View.OnClickListener() {
+        return new SingleClickListener() {
+
             @Override
-            public void onClick(View view) {
+            public void performClick(View view) {
                 navigateTo(ProgramDetailsActivity.class, program);
             }
         };
     }
 
     private View.OnClickListener onBtnToggleEnrollClick(final DecoratedProgram program) {
-        return new View.OnClickListener() {
+        return new SingleClickListener() {
+
             @Override
-            public void onClick(View view) {
+            public void performClick(View view) {
                 if (programs.hasActiveProgram()) {
                     final String message;
                     final String toastMessage;
