@@ -8,6 +8,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -65,7 +69,7 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         btnToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
 
         if (program.isActive()) {
-            btnToggleEnroll.setTextColor(Color.rgb(0, 166, 255));
+            btnToggleEnroll.setTextColor(0xff00a6ff);
             btnToggleEnroll.setText("enrolled");
         } else {
             btnToggleEnroll.setTextColor(0xffaaaaaa);
