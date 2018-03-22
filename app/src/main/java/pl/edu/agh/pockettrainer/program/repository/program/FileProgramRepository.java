@@ -1,4 +1,4 @@
-package pl.edu.agh.pockettrainer.program.repository;
+package pl.edu.agh.pockettrainer.program.repository.program;
 
 import android.content.Context;
 
@@ -16,22 +16,23 @@ import java.util.List;
 import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
+import pl.edu.agh.pockettrainer.program.repository.Sorter;
 import pl.edu.agh.pockettrainer.program.repository.io.IoUtils;
 import pl.edu.agh.pockettrainer.program.repository.io.TempDir;
 import pl.edu.agh.pockettrainer.program.serialization.ProgramDeserializer;
 import pl.edu.agh.pockettrainer.program.serialization.ProgramSerializer;
 
-public class ProgramFileRepository implements ProgramRepository {
+public class FileProgramRepository implements ProgramRepository {
 
     private static final String BUNDLED_PROGRAMS_DIR = "programs";
     private static final String INSTALLED_PROGRAMS_DIR = "programs";
     private static final String MAIN_JSON_FILENAME = "program.json";
 
-    private final Logger logger = new Logger(ProgramFileRepository.class);
+    private final Logger logger = new Logger(FileProgramRepository.class);
     private final Context context;
     private final AppConfig appConfig;
 
-    ProgramFileRepository(Context context) {
+    FileProgramRepository(Context context) {
         this.context = context;
         this.appConfig = new AppConfig(context);
     }
@@ -63,7 +64,7 @@ public class ProgramFileRepository implements ProgramRepository {
 
     @Override
     public DecoratedProgram getById(String id) {
-        return loadInstalledProgram(new File(getInstalledDir(), id));
+        return id == null ? null : loadInstalledProgram(new File(getInstalledDir(), id));
     }
 
     @Override
@@ -131,9 +132,13 @@ public class ProgramFileRepository implements ProgramRepository {
     }
 
     @Override
+    public String getActiveProgramId() {
+        return appConfig.getActiveProgramId();
+    }
+
+    @Override
     public DecoratedProgram getActiveProgram() {
-        final String id = appConfig.getActiveProgramId();
-        return id == null ? null : loadInstalledProgram(new File(getInstalledDir(), id));
+        return getById(appConfig.getActiveProgramId());
     }
 
     @Override

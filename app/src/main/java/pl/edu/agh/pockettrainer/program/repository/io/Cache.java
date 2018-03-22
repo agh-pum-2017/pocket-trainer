@@ -17,17 +17,26 @@ public class Cache<K, V> {
     }
 
     public V getOrSet(K key, ValueProvider<K, V> provider) {
-
-        V value = cache.get(key);
-
-        if (value == null) {
-            logger.debug("Caching value for key '%s'", key);
-            cache.put(key, provider.get(key));
+        if (key == null) {
+            logger.warning("Attempting to get null key from cache");
+            return null;
         } else {
-            logger.debug("Found cached value for key '%s'", key);
-        }
 
-        return cache.get(key);
+            V value = cache.get(key);
+
+            if (value == null) {
+                logger.debug("Caching value for key '%s'", key);
+                value = provider.get(key);
+                if (value == null) {
+                    logger.warning("Attempting to cache null value at key '%s'", key);
+                } else {
+                    cache.put(key, value);
+                }
+            } else {
+                logger.debug("Found cached value for key '%s'", key);
+            }
+            return cache.get(key);
+        }
     }
 
     public void invalidate() {

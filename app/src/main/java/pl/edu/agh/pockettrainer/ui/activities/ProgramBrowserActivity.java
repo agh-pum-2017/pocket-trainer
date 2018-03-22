@@ -13,8 +13,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.program.repository.CachedProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.CachedProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 import pl.edu.agh.pockettrainer.ui.ProgramAdapter;
 
 public class ProgramBrowserActivity extends AppCompatActivity {
@@ -64,7 +65,7 @@ public class ProgramBrowserActivity extends AppCompatActivity {
                     }
                 });
 
-        final ProgramRepository programs = CachedProgramRepository.getInstance(this);
+        final ProgramRepository programs = ProgramRepositoryFactory.getCachedFileRepository(this);
         final ListView listView = findViewById(R.id.listView);
         listView.setAdapter(new ProgramAdapter(this, programs));
     }

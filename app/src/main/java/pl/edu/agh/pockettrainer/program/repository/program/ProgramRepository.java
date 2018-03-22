@@ -1,4 +1,4 @@
-package pl.edu.agh.pockettrainer.program.repository;
+package pl.edu.agh.pockettrainer.program.repository.program;
 
 import java.io.File;
 import java.util.List;
@@ -22,6 +22,8 @@ public interface ProgramRepository {
     void uninstall(String programId);
 
     boolean hasActiveProgram();
+
+    String getActiveProgramId();
 
     DecoratedProgram getActiveProgram();
 

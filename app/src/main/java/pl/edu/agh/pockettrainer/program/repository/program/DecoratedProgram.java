@@ -1,4 +1,4 @@
-package pl.edu.agh.pockettrainer.program.repository;
+package pl.edu.agh.pockettrainer.program.repository.program;
 
 import java.util.List;
 import java.util.Set;

@@ -1,11 +1,10 @@
-package pl.edu.agh.pockettrainer.program.repository;
-
-import android.content.Context;
+package pl.edu.agh.pockettrainer.program.repository.program;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.agh.pockettrainer.program.repository.Sorter;
 import pl.edu.agh.pockettrainer.program.repository.io.Cache;
 
 public class CachedProgramRepository implements ProgramRepository {
@@ -13,18 +12,7 @@ public class CachedProgramRepository implements ProgramRepository {
     private final ProgramRepository wrapped;
     private final Cache<String, DecoratedProgram> cache = new Cache<>();
 
-    private static CachedProgramRepository instance;
-
-    public synchronized static ProgramRepository getInstance(Context context) {
-
-        if (instance == null) {
-            instance = new CachedProgramRepository(new ProgramFileRepository(context));
-        }
-
-        return instance;
-    }
-
-    private CachedProgramRepository(ProgramRepository wrapped) {
+    public CachedProgramRepository(ProgramRepository wrapped) {
         this.wrapped = wrapped;
     }
 
@@ -42,7 +30,7 @@ public class CachedProgramRepository implements ProgramRepository {
 
         if (cache.isEmpty()) {
             for (DecoratedProgram program : wrapped.getInstalled()) {
-                cache.set(program.getId(), program);
+                cache.set(program.getId(), injectCachedRepository(program));
             }
         }
 
@@ -54,7 +42,7 @@ public class CachedProgramRepository implements ProgramRepository {
         return cache.getOrSet(id, new Cache.ValueProvider<String, DecoratedProgram>() {
             @Override
             public DecoratedProgram get(String key) {
-                return wrapped.getById(key);
+                return injectCachedRepository(wrapped.getById(key));
             }
         });
     }
@@ -90,8 +78,13 @@ public class CachedProgramRepository implements ProgramRepository {
     }
 
     @Override
+    public String getActiveProgramId() {
+        return wrapped.getActiveProgramId();
+    }
+
+    @Override
     public DecoratedProgram getActiveProgram() {
-        return wrapped.getActiveProgram();
+        return getById(getActiveProgramId());
     }
 
     @Override
@@ -102,5 +95,9 @@ public class CachedProgramRepository implements ProgramRepository {
     @Override
     public void unsetActiveProgram() {
         wrapped.unsetActiveProgram();
+    }
+
+    private DecoratedProgram injectCachedRepository(DecoratedProgram program) {
+        return program == null ? null : new DecoratedProgram(this, program.getId(), program.get());
     }
 }

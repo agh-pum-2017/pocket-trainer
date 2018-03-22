@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 
 import pl.edu.agh.pockettrainer.AppConfig;
-import pl.edu.agh.pockettrainer.program.repository.CachedProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.ProgramFileRepository;
-import pl.edu.agh.pockettrainer.program.repository.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.CachedProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 import pl.edu.agh.pockettrainer.ui.activities.HomeActivity;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramBrowserActivity;
 
@@ -23,7 +23,7 @@ public class StartupTask implements Runnable {
     public void run() {
 
         final AppConfig appConfig = new AppConfig(context);
-        final ProgramRepository programs = CachedProgramRepository.getInstance(context);
+        final ProgramRepository programs = ProgramRepositoryFactory.getCachedFileRepository(context);
 
         if (appConfig.isFirstRun()) {
             for (String name : programs.getBundledArchives()) {
@@ -31,7 +31,7 @@ public class StartupTask implements Runnable {
             }
         }
 
-        programs.getInstalled();  // force installation while still showing splash screen
+        programs.getInstalled();  // force load all while still showing splash screen
 
         if (programs.hasActiveProgram()) {
             navigateTo(HomeActivity.class);

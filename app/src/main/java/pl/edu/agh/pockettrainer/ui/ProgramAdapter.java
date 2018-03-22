@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,8 +26,8 @@ import java.util.Set;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
-import pl.edu.agh.pockettrainer.program.repository.DecoratedProgram;
-import pl.edu.agh.pockettrainer.program.repository.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsActivity;
 
 public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
@@ -55,7 +57,7 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
 
         title.setText(metadata.getName());
         goals.setText(makeString(metadata.getGoals()));
-        //setImage(convertView, imageView, metadata);
+        setImage(convertView, imageView, metadata);
 
         convertView.setOnClickListener(onClick(program));
         btnToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
@@ -81,9 +83,9 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         return result.substring(1, result.length() - 1);
     }
 
-//    private void setImage(View view, ImageView imageView, Metadata metadata) {
-//        Glide.with(view).load(metadata.getImage()).into(imageView);
-//    }
+    private void setImage(View view, ImageView imageView, Metadata metadata) {
+        Glide.with(view).load(metadata.getImage()).into(imageView);
+    }
 
     private View.OnClickListener onClick(final DecoratedProgram program) {
         return new SingleClickListener() {

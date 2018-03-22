@@ -9,15 +9,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.program.repository.CachedProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.DecoratedProgram;
-import pl.edu.agh.pockettrainer.program.repository.ProgramFileRepository;
-import pl.edu.agh.pockettrainer.program.repository.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.CachedProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -87,15 +86,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupView() {
 
-        final ProgramRepository programs = CachedProgramRepository.getInstance(this);
+        final ProgramRepository programs = ProgramRepositoryFactory.getCachedFileRepository(this);
         final DecoratedProgram activeProgram = programs.getActiveProgram();
 
         if (activeProgram == null) {
-            //label.setVisibility(View.VISIBLE);
             label.setText("No active program");
         } else {
             label.setText("Program: " + activeProgram.getMetadata().getName());
-            //label.setVisibility(View.INVISIBLE);
         }
 
         // TODO load progress

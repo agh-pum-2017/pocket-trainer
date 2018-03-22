@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
+import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
 
 public class Sorter {
 
