@@ -13,6 +13,7 @@
         android:theme="@style/Theme.AppCompat.Light">
 
         <activity android:name=".ui.activities.SplashScreenActivity"
+            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
