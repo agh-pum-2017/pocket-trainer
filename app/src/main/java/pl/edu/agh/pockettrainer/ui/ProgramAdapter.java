@@ -55,14 +55,13 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         final ImageView imageView = convertView.findViewById(R.id.program_image);
         final TextView title = convertView.findViewById(R.id.label_title);
         final TextView goals = convertView.findViewById(R.id.label_goals);
-        final Button btnShow = convertView.findViewById(R.id.btnShow);
         final Button btnToggleEnroll = convertView.findViewById(R.id.btnToggleEnroll);
 
         title.setText(metadata.getName());
         goals.setText(makeString(metadata.getGoals()));
         imageView.setImageBitmap(getImage(metadata));
 
-        btnShow.setOnClickListener(onBtnShowClick(program));
+        convertView.setOnClickListener(onClick(program));
         btnToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
 
         if (program.isActive()) {
@@ -91,7 +90,7 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         return BitmapFactory.decodeFile(file.getAbsolutePath());
     }
 
-    private View.OnClickListener onBtnShowClick(final DecoratedProgram program) {
+    private View.OnClickListener onClick(final DecoratedProgram program) {
         return new SingleClickListener() {
 
             @Override

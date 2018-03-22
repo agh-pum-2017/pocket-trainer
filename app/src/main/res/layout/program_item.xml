@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appConfig="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:drawable/dialog_holo_light_frame">
@@ -43,32 +44,19 @@
         appConfig:layout_constraintTop_toBottomOf="@+id/label_title" />
 
     <Button
-        android:id="@+id/btnShow"
-        android:layout_width="wrap_content"
-        android:layout_height="30sp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:drawable/screen_background_light_transparent"
-        android:text="show"
-        android:textColor="@android:color/darker_gray"
-        appConfig:layout_constraintBottom_toBottomOf="parent"
-        appConfig:layout_constraintStart_toStartOf="parent"
-        appConfig:layout_constraintTop_toBottomOf="@+id/label_goals"
-        appConfig:layout_constraintVertical_bias="0.0" />
-
-    <Button
         android:id="@+id/btnToggleEnroll"
         android:layout_width="wrap_content"
         android:layout_height="30sp"
         android:layout_marginBottom="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="4dp"
         android:background="@android:drawable/screen_background_light_transparent"
         android:text="Enroll"
         android:textColor="@android:color/darker_gray"
         appConfig:layout_constraintBottom_toBottomOf="parent"
-        appConfig:layout_constraintStart_toEndOf="@+id/btnShow"
+        appConfig:layout_constraintEnd_toEndOf="parent"
+        appConfig:layout_constraintRight_toRightOf="parent"
         appConfig:layout_constraintTop_toBottomOf="@+id/label_goals"
         appConfig:layout_constraintVertical_bias="0.0" />
 
