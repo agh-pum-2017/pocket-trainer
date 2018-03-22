@@ -5,13 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -23,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -63,7 +55,7 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
 
         title.setText(metadata.getName());
         goals.setText(makeString(metadata.getGoals()));
-        imageView.setImageBitmap(getImage(metadata));
+        //setImage(convertView, imageView, metadata);
 
         convertView.setOnClickListener(onClick(program));
         btnToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
@@ -89,10 +81,9 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         return result.substring(1, result.length() - 1);
     }
 
-    private Bitmap getImage(Metadata metadata) {
-        final File file = metadata.getImage();
-        return BitmapFactory.decodeFile(file.getAbsolutePath());
-    }
+//    private void setImage(View view, ImageView imageView, Metadata metadata) {
+//        Glide.with(view).load(metadata.getImage()).into(imageView);
+//    }
 
     private View.OnClickListener onClick(final DecoratedProgram program) {
         return new SingleClickListener() {

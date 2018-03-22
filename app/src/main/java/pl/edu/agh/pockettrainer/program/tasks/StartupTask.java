@@ -31,27 +31,16 @@ public class StartupTask implements Runnable {
             }
         }
 
-        programs.getInstalled();
+        programs.getInstalled();  // force installation while still showing splash screen
 
-//        try {
-//            Thread.sleep(1000L);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-        navigateTo(ProgramBrowserActivity.class);
-
-//        if (programs.hasActiveProgram()) {
-//            navigateTo(HomeActivity.class);
-//        } else {
-//            navigateTo(ProgramBrowserActivity.class);
-//        }
+        if (programs.hasActiveProgram()) {
+            navigateTo(HomeActivity.class);
+        } else {
+            navigateTo(ProgramBrowserActivity.class);
+        }
     }
 
     private void navigateTo(Class<? extends Activity> activityClass) {
-
-        // TODO disable full screen mode
-
         context.startActivity(new Intent(context, activityClass));
     }
 }

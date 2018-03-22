@@ -91,9 +91,11 @@ public class HomeActivity extends AppCompatActivity {
         final DecoratedProgram activeProgram = programs.getActiveProgram();
 
         if (activeProgram == null) {
-            label.setVisibility(View.VISIBLE);
+            //label.setVisibility(View.VISIBLE);
+            label.setText("No active program");
         } else {
-            label.setVisibility(View.INVISIBLE);
+            label.setText("Program: " + activeProgram.getMetadata().getName());
+            //label.setVisibility(View.INVISIBLE);
         }
 
         // TODO load progress
