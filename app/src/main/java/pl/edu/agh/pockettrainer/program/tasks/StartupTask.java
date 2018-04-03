@@ -5,10 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 
 import pl.edu.agh.pockettrainer.AppConfig;
-import pl.edu.agh.pockettrainer.program.repository.program.CachedProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
-import pl.edu.agh.pockettrainer.ui.activities.HomeActivity;
+import pl.edu.agh.pockettrainer.ui.activities.TodayNoneActivity;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramBrowserActivity;
 
 public class StartupTask implements Runnable {
@@ -34,7 +33,7 @@ public class StartupTask implements Runnable {
         programs.getInstalled();  // force load all while still showing splash screen
 
         if (programs.hasActiveProgram()) {
-            navigateTo(HomeActivity.class);
+            navigateTo(TodayNoneActivity.class);
         } else {
             navigateTo(ProgramBrowserActivity.class);
         }

@@ -1,0 +1,17 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appConfig="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="589dp">
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_active_programs"
+        android:textSize="16sp"
+        appConfig:layout_constraintBottom_toBottomOf="parent"
+        appConfig:layout_constraintLeft_toLeftOf="parent"
+        appConfig:layout_constraintRight_toRightOf="parent"
+        appConfig:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
