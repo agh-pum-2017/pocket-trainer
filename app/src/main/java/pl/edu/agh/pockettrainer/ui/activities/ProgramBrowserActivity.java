@@ -11,7 +11,6 @@ import pl.edu.agh.pockettrainer.ui.ProgramAdapter;
 
 public class ProgramBrowserActivity extends WithMenuActivity {
 
-    private AppConfig appConfig;
     private ProgramRepository programsRepository;
 
     @Override
@@ -27,7 +26,6 @@ public class ProgramBrowserActivity extends WithMenuActivity {
     @Override
     protected void initView(View child) {
 
-        appConfig = new AppConfig(getApplicationContext());
         programsRepository = ProgramRepositoryFactory.getCachedFileRepository(getApplicationContext());
 
         final ListView listView = template.findViewById(R.id.listView);
@@ -37,7 +35,7 @@ public class ProgramBrowserActivity extends WithMenuActivity {
     @Override
     protected void onSelectToday() {
         if (programsRepository.hasActiveProgram()) {
-            toast("TODO");
+            navigateTo(TodaySomeActivity.class);
         } else {
             navigateTo(TodayNoneActivity.class);
         }

@@ -11,12 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-
-        <activity android:name=".ui.activities.SplashScreenActivity"
+        <activity
+            android:name=".ui.activities.SplashScreenActivity"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,8 +28,10 @@
 
         <activity android:name=".ui.activities.TodayNoneActivity" />
         <activity android:name=".ui.activities.ProgramBrowserActivity" />
-        <activity android:name=".ui.activities.ProgramDetailsActivity"
-                  android:parentActivityName=".ui.activities.ProgramBrowserActivity"/>
+        <activity
+            android:name=".ui.activities.ProgramDetailsActivity"
+            android:parentActivityName=".ui.activities.ProgramBrowserActivity" />
+        <activity android:name=".ui.activities.TodaySomeActivity"></activity>
     </application>
 
 </manifest>

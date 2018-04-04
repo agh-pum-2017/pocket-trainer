@@ -9,6 +9,7 @@ import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 import pl.edu.agh.pockettrainer.ui.activities.TodayNoneActivity;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramBrowserActivity;
+import pl.edu.agh.pockettrainer.ui.activities.TodaySomeActivity;
 
 public class StartupTask implements Runnable {
 
@@ -33,7 +34,7 @@ public class StartupTask implements Runnable {
         programs.getInstalled();  // force load all while still showing splash screen
 
         if (programs.hasActiveProgram()) {
-            navigateTo(TodayNoneActivity.class);
+            navigateTo(TodaySomeActivity.class);
         } else {
             navigateTo(ProgramBrowserActivity.class);
         }
