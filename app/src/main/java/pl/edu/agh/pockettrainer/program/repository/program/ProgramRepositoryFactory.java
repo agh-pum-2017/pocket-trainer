@@ -1,6 +1,7 @@
 package pl.edu.agh.pockettrainer.program.repository.program;
 
 import android.content.Context;
+import android.util.Log;
 
 public class ProgramRepositoryFactory {
 
