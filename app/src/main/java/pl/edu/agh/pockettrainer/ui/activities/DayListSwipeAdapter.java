@@ -1,43 +1,38 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
+import pl.edu.agh.pockettrainer.program.domain.days.Day;
 import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
-import pl.edu.agh.pockettrainer.ui.ProgramAdapter;
 
 /**
  * Created by Mateusz on 4/11/2018.
  */
 
-class ProgramDetailsSwipeAdapter extends FragmentStatePagerAdapter {
+class DayListSwipeAdapter extends FragmentStatePagerAdapter {
     private List<DecoratedProgram> programs;
 
-    public ProgramDetailsSwipeAdapter(FragmentManager fm, Context context) {
+    public DayListSwipeAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.programs = ProgramRepositoryFactory.getCachedFileRepository(context).getInstalled();
     }
 
     @Override
-    public ProgramDetailsFragment getItem(int position) {
-        Log.d("SWP","public ProgramDetailsFragment getItem(int position = " + Integer.toString(position) + ")");
-        Log.d("SWP","public ProgramDetailsFragment programs.size() = " + Integer.toString(programs.size()));
+    public DayListFragment getItem(int position) {
+        Log.d("SWP","public DayListFragment getItem(int position = " + Integer.toString(position) + ")");
+        Log.d("SWP","public DayListFragment programs.size() = " + Integer.toString(programs.size()));
         DecoratedProgram program = programs.get(position);
-        final Metadata metadata = program.getMetadata();
+        final List<Day> dayList = program.getSchedule();
 
-        ProgramDetailsFragment fragment = new ProgramDetailsFragment();
-        fragment.SetMetadata(metadata);
+        DayListFragment fragment = new DayListFragment();
+        fragment.SetDayList(dayList);
 
         return fragment;
     }

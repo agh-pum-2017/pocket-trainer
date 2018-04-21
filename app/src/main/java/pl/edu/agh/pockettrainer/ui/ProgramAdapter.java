@@ -146,6 +146,11 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         final Context context = getContext();
         final Intent intent = new Intent(context, activityClass);
         intent.putExtra("programId", program.getId());
+        List<DecoratedProgram> programList = programs.getInstalled();
+        for(int i=0;i<programList.size();i++){
+            if(program.getId()==programList.get(i).getId())
+                intent.putExtra("position", i);
+        }
         context.startActivity(intent);
     }
 }
