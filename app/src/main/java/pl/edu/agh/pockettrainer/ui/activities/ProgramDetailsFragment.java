@@ -22,7 +22,10 @@ import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Gender;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
+import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
 import pl.edu.agh.pockettrainer.program.repository.program.FileProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 import pl.edu.agh.pockettrainer.ui.ProgramAdapter;
 
 /**
@@ -40,6 +43,10 @@ public class ProgramDetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final Bundle args = getArguments();
+        final ProgramRepository programRepository = ProgramRepositoryFactory.getCachedFileRepository(getContext());
+        final DecoratedProgram program = programRepository.getById(args.getString("programId"));
+        metadata = program.getMetadata();
     }
 
     @Override
@@ -54,6 +61,13 @@ public class ProgramDetailsFragment extends Fragment {
         final TextView goals = view.findViewById(R.id.label_goals);
         final TextView description = view.findViewById(R.id.label_description);
         final TextView author = view.findViewById(R.id.label_author);
+        //savedInstanceState.getString("programId");
+
+        if(container != null){
+            Log.d("SWP","ProgramDetailsFragment: container.getTransitionName() = " + container.getTransitionName());
+        }else{
+            Log.d("SWP","ProgramDetailsFragment: container = null");
+        }
 
         Glide.with(view).load(metadata.getImage()).into(imageView);//set Image
         title.setText(metadata.getName());

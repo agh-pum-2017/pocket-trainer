@@ -1,6 +1,7 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,38 @@ import pl.edu.agh.pockettrainer.ui.DayAdapter;
 import pl.edu.agh.pockettrainer.ui.TabHostSwipeAdapter;
 
 public class ProgramDetailsActivity extends FragmentActivity {//AppCompatActivity {//
+
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_program_details);
+
+        viewPager = findViewById(R.id.view_pager);
+        tabLayout = findViewById(R.id.tab_layout);
+
+        final Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            //Setting of program details into About
+            final ProgramRepository programRepository = ProgramRepositoryFactory.getCachedFileRepository(this);
+            final DecoratedProgram program = programRepository.getById(extras.getString("programId"));
+            setTitle(program.getMetadata().getName());
+
+            TabHostSwipeAdapter swipeAdapter = new TabHostSwipeAdapter(getSupportFragmentManager(),this);//, (ArrayAdapter<DecoratedProgram>) programs);
+            Log.d("SWP","ProgramDetailsActivity: swipeAdapter.getCount() = "+Integer.toString(swipeAdapter.getCount()));
+            if(viewPager==null) Log.d("SWP","ERROR!  viewPager==null");
+            viewPager.setAdapter(swipeAdapter);
+            tabLayout.setupWithViewPager(viewPager);
+            //viewPager.setCurrentItem(extras.getInt("position",0));
+            // TODO
+        }
+    }
+}//*/
+
+        /*
     ViewPager viewPagerAbout;
     ViewPager viewPagerSchedule;
     @Override
@@ -74,33 +107,4 @@ public class ProgramDetailsActivity extends FragmentActivity {//AppCompatActivit
         }
     }
 }/*
-    ViewPager viewPager;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_program_details);
-
-        viewPager = (ViewPager)findViewById(R.id.view_pager);
-
-        final Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {
-            //Setting of program details into About
-            final ProgramRepository programRepository = ProgramRepositoryFactory.getCachedFileRepository(this);
-            final DecoratedProgram program = programRepository.getById(extras.getString("programId"));
-            setTitle(program.getMetadata().getName());
-
-            TabHostSwipeAdapter swipeAdapter = new TabHostSwipeAdapter(getSupportFragmentManager(),this);//, (ArrayAdapter<DecoratedProgram>) programs);
-            Log.d("SWP","ProgramDetailsActivity: swipeAdapter.getCount() = "+Integer.toString(swipeAdapter.getCount()));
-            if(viewPager==null) Log.d("SWP","ERROR!  viewPager==null");
-            viewPager.setAdapter(swipeAdapter);
-            viewPager.setCurrentItem(extras.getInt("position",0));
-            // TODO
-        }
-    }
-}//*/
-
-        /*
-
 //*/

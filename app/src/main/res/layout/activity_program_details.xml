@@ -5,76 +5,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsActivity">
-    <!--<android.support.v4.view.ViewPager-->
-        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:id="@+id/view_pager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
 
-    <TabHost
-        android:id="@+id/tabhost"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="1dp"
-        tools:ignore="MissingConstraints">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#eeeeee"/>
+    <!--<TabHost-->
+        <!--android:id="@+id/tabhost"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:layout_editor_absoluteX="32dp"-->
+        <!--tools:layout_editor_absoluteY="1dp"-->
+        <!--tools:ignore="MissingConstraints">-->
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#dddddd">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:id="@+id/About"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+            <!--<TabWidget-->
+                <!--android:id="@android:id/tabs"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="#eeeeee"/>-->
 
-                    <android.support.v4.view.ViewPager
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/view_pager_about"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+            <!--<FrameLayout-->
+                <!--android:id="@android:id/tabcontent"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="#dddddd">-->
 
-                </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/About"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:id="@+id/Exercises"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    <!--<android.support.v4.view.ViewPager-->
+                    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                    <!--android:id="@+id/view_pager_about"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
+
+                <!--</LinearLayout>-->
+
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/Exercises"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical">-->
 
 
-                    <ListView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
+                    <!--<ListView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent" />-->
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:id="@+id/Schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/Schedule"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical">-->
 
-                    <android.support.v4.view.ViewPager
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/view_pager_schedule"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
+                    <!--<android.support.v4.view.ViewPager-->
+                        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                        <!--android:id="@+id/view_pager_schedule"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent" />-->
+                <!--</LinearLayout>-->
+            <!--</FrameLayout>-->
+        <!--</LinearLayout>-->
+    <!--</TabHost>-->
 </android.support.constraint.ConstraintLayout>

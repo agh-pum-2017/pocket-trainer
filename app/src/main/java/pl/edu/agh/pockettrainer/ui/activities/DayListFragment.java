@@ -25,6 +25,9 @@ import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
+import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 import pl.edu.agh.pockettrainer.ui.DayAdapter;
 
 /**
@@ -43,6 +46,10 @@ public class DayListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final Bundle args = getArguments();
+        final ProgramRepository programRepository = ProgramRepositoryFactory.getCachedFileRepository(getContext());
+        final DecoratedProgram program = programRepository.getById(args.getString("programId"));
+        dayList = program.getSchedule();
     }
 
     @Override
