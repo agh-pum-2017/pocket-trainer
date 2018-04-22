@@ -3,7 +3,6 @@ package pl.edu.agh.pockettrainer.ui.activities;
 import android.view.View;
 import android.widget.ListView;
 
-import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
@@ -33,15 +32,7 @@ public class ProgramBrowserActivity extends WithMenuActivity {
     }
 
     @Override
-    protected void onSelectToday() {
-        if (programsRepository.hasActiveProgram()) {
-            navigateTo(TodaySomeActivity.class);
-        } else {
-            navigateTo(TodayNoneActivity.class);
-        }
-    }
-
-    @Override
     protected void onSelectProgramBrowser() {
+        // do nothing
     }
 }

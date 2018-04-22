@@ -17,6 +17,9 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import pl.edu.agh.pockettrainer.R;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
+import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public abstract class WithMenuActivity extends AppCompatActivity {
 
@@ -86,9 +89,21 @@ public abstract class WithMenuActivity extends AppCompatActivity {
 
     protected abstract void initView(View child);
 
-    protected abstract void onSelectToday();
+    protected void onSelectToday() {
 
-    protected abstract void onSelectProgramBrowser();
+        final ProgramRepository programs = ProgramRepositoryFactory.getCachedFileRepository(this);
+        final Navigator navigator = new Navigator(this);
+
+        if (programs.hasActiveProgram()) {
+            navigator.navigateToToday(programs.getActiveProgram());
+        } else {
+            navigator.navigateTo(TodayNoneActivity.class);
+        }
+    }
+
+    protected void onSelectProgramBrowser() {
+        navigateTo(ProgramBrowserActivity.class);
+    }
 
     protected void onSelectStatistics() {
         toast("Statistics");

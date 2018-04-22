@@ -19,13 +19,4 @@ public class TodayNoneActivity extends WithMenuActivity {
     @Override
     protected void initView(View child) {
     }
-
-    @Override
-    protected void onSelectToday() {
-    }
-
-    @Override
-    protected void onSelectProgramBrowser() {
-        navigateTo(ProgramBrowserActivity.class);
-    }
 }
