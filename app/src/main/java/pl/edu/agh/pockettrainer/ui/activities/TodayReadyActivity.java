@@ -1,6 +1,8 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import pl.edu.agh.pockettrainer.R;
 
@@ -19,5 +21,12 @@ public class TodayReadyActivity extends WithMenuActivity {
     @Override
     protected void initView(View child) {
 
+        int percent = 87;
+
+        ProgressBar progressBar = child.findViewById(R.id.progressBarReady);
+        progressBar.setProgress(percent);
+
+        TextView label = child.findViewById(R.id.textViewReady);
+        label.setText(percent + "% complete");
     }
 }
