@@ -4,6 +4,7 @@ import android.content.Context;
 
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
+import pl.edu.agh.pockettrainer.program.repository.progress.FileProgressRepository;
 import pl.edu.agh.pockettrainer.program.repository.progress.ProgressRepository;
 
 public class DefaultMetaRepository implements MetaRepository {
@@ -13,7 +14,7 @@ public class DefaultMetaRepository implements MetaRepository {
 
     public DefaultMetaRepository(Context context) {
         this.programRepository = ProgramRepositoryFactory.getCachedFileRepository(context, this);
-        this.progressRepository = null; // TODO new DatabaseProgressRepository(context);
+        this.progressRepository = new FileProgressRepository(context, this);
     }
 
     @Override

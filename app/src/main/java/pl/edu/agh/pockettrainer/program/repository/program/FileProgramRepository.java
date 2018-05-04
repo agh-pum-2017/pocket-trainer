@@ -19,8 +19,8 @@ import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
 import pl.edu.agh.pockettrainer.program.repository.io.IoUtils;
 import pl.edu.agh.pockettrainer.program.repository.io.TempDir;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
-import pl.edu.agh.pockettrainer.program.serialization.ProgramDeserializer;
-import pl.edu.agh.pockettrainer.program.serialization.ProgramSerializer;
+import pl.edu.agh.pockettrainer.program.serialization.program.ProgramDeserializer;
+import pl.edu.agh.pockettrainer.program.serialization.program.ProgramSerializer;
 
 public class FileProgramRepository implements ProgramRepository {
 

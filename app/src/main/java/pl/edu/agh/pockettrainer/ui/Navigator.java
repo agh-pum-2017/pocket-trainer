@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import pl.edu.agh.pockettrainer.program.domain.ProgressState;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
+import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.activities.TodayFinishedActivity;
 import pl.edu.agh.pockettrainer.ui.activities.TodayNewActivity;
 import pl.edu.agh.pockettrainer.ui.activities.TodayReadyActivity;
@@ -24,10 +24,8 @@ public class Navigator {
     }
 
     public void navigateToToday(Program program) {
-
-        ProgressState progress = ProgressState.RECOVERY; // TODO program.getProgress();
-
-        switch (progress) {
+        final Progress progress = program.getProgress();
+        switch (progress.getState()) {
             case NEW:
                 navigateTo(TodayNewActivity.class);
                 break;
@@ -35,15 +33,15 @@ public class Navigator {
                 navigateTo(TodayReadyActivity.class);
                 break;
             case BELATED:
-                throw new RuntimeException("Not implemented"); // TODO
-            // TODO case IN_PROGRESS:
+                throw new RuntimeException("Not implemented");
             case RECOVERY:
                 navigateTo(TodayRecoveryActivity.class);
                 break;
+            case IN_PROGRESS:
+                throw new RuntimeException("Not implemented");
             case FINISHED:
                 navigateTo(TodayFinishedActivity.class);
                 break;
         }
-
     }
 }

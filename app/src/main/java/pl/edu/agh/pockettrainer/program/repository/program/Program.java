@@ -6,17 +6,22 @@ import java.util.Set;
 import pl.edu.agh.pockettrainer.program.domain.Exercise;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
+import pl.edu.agh.pockettrainer.program.domain.TrainingProgress;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
+import pl.edu.agh.pockettrainer.program.repository.progress.ProgressRepository;
 
 public class Program {
 
     private final ProgramRepository programRepository;
+    private final ProgressRepository progressRepository;
     private final String id;
     private final TrainingProgram program;
 
     public Program(MetaRepository metaRepository, String id, TrainingProgram program) {
         this.programRepository = metaRepository.getProgramRepository();
+        this.progressRepository = metaRepository.getProgressRepository();
         this.id = id;
         this.program = program;
     }
@@ -34,6 +39,10 @@ public class Program {
 
     public TrainingProgram get() {
         return program;
+    }
+
+    public Progress getProgress() {
+        return progressRepository.getProgress(this);
     }
 
     public Metadata getMetadata() {

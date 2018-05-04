@@ -5,5 +5,6 @@ public enum ProgressState {
     READY,
     BELATED,
     RECOVERY,
+    IN_PROGRESS,
     FINISHED
 }

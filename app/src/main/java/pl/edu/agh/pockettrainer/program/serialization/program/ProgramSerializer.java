@@ -1,4 +1,4 @@
-package pl.edu.agh.pockettrainer.program.serialization;
+package pl.edu.agh.pockettrainer.program.serialization.program;
 
 import org.json.JSONArray;
 import org.json.JSONException;
