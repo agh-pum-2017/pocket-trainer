@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import java.util.Random;
-
 import pl.edu.agh.pockettrainer.program.domain.ProgressState;
-import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
+import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.ui.activities.TodayFinishedActivity;
 import pl.edu.agh.pockettrainer.ui.activities.TodayNewActivity;
 import pl.edu.agh.pockettrainer.ui.activities.TodayReadyActivity;
@@ -25,7 +23,7 @@ public class Navigator {
         context.startActivity(new Intent(context, activityClass));
     }
 
-    public void navigateToToday(DecoratedProgram program) {
+    public void navigateToToday(Program program) {
 
         ProgressState progress = ProgressState.RECOVERY; // TODO program.getProgress();
 

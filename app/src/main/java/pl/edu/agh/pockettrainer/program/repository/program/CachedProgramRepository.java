@@ -1,23 +1,49 @@
 package pl.edu.agh.pockettrainer.program.repository.program;
 
+import android.content.Context;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.edu.agh.pockettrainer.program.repository.Sorter;
 import pl.edu.agh.pockettrainer.program.repository.io.Cache;
+import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.progress.ProgressRepository;
 
 public class CachedProgramRepository implements ProgramRepository {
 
+    private final MetaRepository metaRepository;
     private final ProgramRepository wrapped;
-    private final Cache<String, DecoratedProgram> cache = new Cache<>();
+    private final Cache<String, Program> cache = new Cache<>();
 
-    public CachedProgramRepository(ProgramRepository wrapped) {
+    public CachedProgramRepository(final ProgramRepository wrapped) {
+        final ProgramRepository self = this;
         this.wrapped = wrapped;
+        this.metaRepository = new MetaRepository() {
+            @Override
+            public ProgramRepository getProgramRepository() {
+                return self;
+            }
+
+            @Override
+            public ProgressRepository getProgressRepository() {
+                return wrapped.getMetaRepository().getProgressRepository();
+            }
+        };
     }
 
     public void invalidateCache() {
         cache.invalidate();
+    }
+
+    @Override
+    public MetaRepository getMetaRepository() {
+        return metaRepository;
+    }
+
+    @Override
+    public Context getContext() {
+        return wrapped.getContext();
     }
 
     @Override
@@ -26,10 +52,10 @@ public class CachedProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public List<DecoratedProgram> getInstalled() {
+    public List<Program> getInstalled() {
 
         if (cache.isEmpty()) {
-            for (DecoratedProgram program : wrapped.getInstalled()) {
+            for (Program program : wrapped.getInstalled()) {
                 cache.set(program.getId(), injectCachedRepository(program));
             }
         }
@@ -38,10 +64,10 @@ public class CachedProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public DecoratedProgram getById(String id) {
-        return cache.getOrSet(id, new Cache.ValueProvider<String, DecoratedProgram>() {
+    public Program getById(String id) {
+        return cache.getOrSet(id, new Cache.ValueProvider<String, Program>() {
             @Override
-            public DecoratedProgram get(String key) {
+            public Program get(String key) {
                 return injectCachedRepository(wrapped.getById(key));
             }
         });
@@ -83,12 +109,12 @@ public class CachedProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public DecoratedProgram getActiveProgram() {
+    public Program getActiveProgram() {
         return getById(getActiveProgramId());
     }
 
     @Override
-    public void setActiveProgram(DecoratedProgram program) {
+    public void setActiveProgram(Program program) {
         wrapped.setActiveProgram(program);
     }
 
@@ -97,7 +123,7 @@ public class CachedProgramRepository implements ProgramRepository {
         wrapped.unsetActiveProgram();
     }
 
-    private DecoratedProgram injectCachedRepository(DecoratedProgram program) {
-        return program == null ? null : new DecoratedProgram(this, program.getId(), program.get());
+    private Program injectCachedRepository(Program program) {
+        return program == null ? null : new Program(metaRepository, program.getId(), program.get());
     }
 }

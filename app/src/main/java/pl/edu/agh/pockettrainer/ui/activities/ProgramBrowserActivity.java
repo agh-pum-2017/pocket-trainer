@@ -4,13 +4,15 @@ import android.view.View;
 import android.widget.ListView;
 
 import pl.edu.agh.pockettrainer.R;
+import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.Repository;
+import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 import pl.edu.agh.pockettrainer.ui.ProgramAdapter;
 
 public class ProgramBrowserActivity extends WithMenuActivity {
 
-    private ProgramRepository programsRepository;
+    private ProgramRepository programRepository;
 
     @Override
     protected int getChildLayoutId() {
@@ -25,10 +27,11 @@ public class ProgramBrowserActivity extends WithMenuActivity {
     @Override
     protected void initView(View child) {
 
-        programsRepository = ProgramRepositoryFactory.getCachedFileRepository(getApplicationContext());
+        final MetaRepository metaRepository = new DefaultMetaRepository(this);
+        programRepository = metaRepository.getProgramRepository();
 
         final ListView listView = template.findViewById(R.id.listView);
-        listView.setAdapter(new ProgramAdapter(this, programsRepository));
+        listView.setAdapter(new ProgramAdapter(this, programRepository));
     }
 
     @Override

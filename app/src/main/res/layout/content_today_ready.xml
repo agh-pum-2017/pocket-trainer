@@ -54,15 +54,17 @@
         android:layout_width="279dp"
         android:layout_height="261dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:indeterminate="false"
         android:max="100"
         android:progressDrawable="@drawable/circle_blue"
         appConfig:layout_constraintBottom_toBottomOf="parent"
         appConfig:layout_constraintEnd_toEndOf="parent"
+        appConfig:layout_constraintHorizontal_bias="0.504"
+        appConfig:layout_constraintLeft_toLeftOf="parent"
+        appConfig:layout_constraintRight_toRightOf="parent"
         appConfig:layout_constraintStart_toStartOf="parent"
-        appConfig:layout_constraintTop_toTopOf="parent" />
+        appConfig:layout_constraintTop_toTopOf="parent"
+        appConfig:layout_constraintVertical_bias="0.538" />
 
 </android.support.constraint.ConstraintLayout>

@@ -17,8 +17,10 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import pl.edu.agh.pockettrainer.R;
+import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.Repository;
+import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public abstract class WithMenuActivity extends AppCompatActivity {
@@ -33,16 +35,18 @@ public abstract class WithMenuActivity extends AppCompatActivity {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         template = (DrawerLayout) inflater.inflate(R.layout.template_with_menu, null);
-        FrameLayout parent = template.findViewById(R.id.content_frame);
 
+        FrameLayout parent = template.findViewById(R.id.content_frame);
         View child = inflater.inflate(getChildLayoutId(), null);
         parent.addView(child);
 
         setTitle(getTitleForActivity());
 
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        }
 
         navigationView = template.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -91,7 +95,8 @@ public abstract class WithMenuActivity extends AppCompatActivity {
 
     protected void onSelectToday() {
 
-        final ProgramRepository programs = ProgramRepositoryFactory.getCachedFileRepository(this);
+        final MetaRepository metaRepository = new DefaultMetaRepository(this);
+        final ProgramRepository programs = metaRepository.getProgramRepository();
         final Navigator navigator = new Navigator(this);
 
         if (programs.hasActiveProgram()) {

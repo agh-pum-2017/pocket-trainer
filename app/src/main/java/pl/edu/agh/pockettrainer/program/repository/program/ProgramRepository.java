@@ -3,13 +3,15 @@ package pl.edu.agh.pockettrainer.program.repository.program;
 import java.io.File;
 import java.util.List;
 
-public interface ProgramRepository {
+import pl.edu.agh.pockettrainer.program.repository.Repository;
+
+public interface ProgramRepository extends Repository {
 
     List<String> getBundledArchives();
 
-    List<DecoratedProgram> getInstalled();
+    List<Program> getInstalled();
 
-    DecoratedProgram getById(String id);
+    Program getById(String id);
 
     void installResource(String path);
 
@@ -25,9 +27,9 @@ public interface ProgramRepository {
 
     String getActiveProgramId();
 
-    DecoratedProgram getActiveProgram();
+    Program getActiveProgram();
 
-    void setActiveProgram(DecoratedProgram program);
+    void setActiveProgram(Program program);
 
     void unsetActiveProgram();
 }

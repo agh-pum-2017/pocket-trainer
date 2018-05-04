@@ -26,11 +26,11 @@ import java.util.Set;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
-import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
+import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsActivity;
 
-public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
+public class ProgramAdapter extends ArrayAdapter<Program> {
 
     private final ProgramRepository programs;
 
@@ -43,7 +43,7 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        final DecoratedProgram program = getItem(position);
+        final Program program = getItem(position);
         final Metadata metadata = program.getMetadata();
 
         if (convertView == null) {
@@ -87,7 +87,7 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         Glide.with(view).load(metadata.getImage()).into(imageView);
     }
 
-    private View.OnClickListener onClick(final DecoratedProgram program) {
+    private View.OnClickListener onClick(final Program program) {
         return new SingleClickListener() {
 
             @Override
@@ -97,7 +97,7 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         };
     }
 
-    private View.OnClickListener onBtnToggleEnrollClick(final DecoratedProgram program) {
+    private View.OnClickListener onBtnToggleEnrollClick(final Program program) {
         return new SingleClickListener() {
 
             @Override
@@ -142,7 +142,7 @@ public class ProgramAdapter extends ArrayAdapter<DecoratedProgram> {
         };
     }
 
-    private void navigateTo(Class<? extends Activity> activityClass, DecoratedProgram program) {
+    private void navigateTo(Class<? extends Activity> activityClass, Program program) {
         final Context context = getContext();
         final Intent intent = new Intent(context, activityClass);
         intent.putExtra("programId", program.getId());

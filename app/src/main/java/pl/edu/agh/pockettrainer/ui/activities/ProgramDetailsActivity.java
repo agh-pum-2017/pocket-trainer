@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.program.repository.program.CachedProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
+import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
 
 public class ProgramDetailsActivity extends AppCompatActivity {
 
@@ -21,8 +21,11 @@ public class ProgramDetailsActivity extends AppCompatActivity {
 
         if (extras != null) {
 
-            final ProgramRepository programs = ProgramRepositoryFactory.getCachedFileRepository(this);
-            final DecoratedProgram program = programs.getById(extras.getString("programId"));
+            final String id = extras.getString("programId");
+
+            final MetaRepository metaRepository = new DefaultMetaRepository(this);
+            final ProgramRepository programRepository = metaRepository.getProgramRepository();
+            final Program program = programRepository.getById(id);
 
             setTitle(program.getMetadata().getName());
 

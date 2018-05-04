@@ -16,9 +16,9 @@ import java.util.List;
 import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
-import pl.edu.agh.pockettrainer.program.repository.Sorter;
 import pl.edu.agh.pockettrainer.program.repository.io.IoUtils;
 import pl.edu.agh.pockettrainer.program.repository.io.TempDir;
+import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.serialization.ProgramDeserializer;
 import pl.edu.agh.pockettrainer.program.serialization.ProgramSerializer;
 
@@ -30,11 +30,23 @@ public class FileProgramRepository implements ProgramRepository {
 
     private final Logger logger = new Logger(FileProgramRepository.class);
     private final Context context;
+    private final MetaRepository metaRepository;
     private final AppConfig appConfig;
 
-    FileProgramRepository(Context context) {
+    FileProgramRepository(Context context, MetaRepository metaRepository) {
         this.context = context;
+        this.metaRepository = metaRepository;
         this.appConfig = new AppConfig(context);
+    }
+
+    @Override
+    public MetaRepository getMetaRepository() {
+        return metaRepository;
+    }
+
+    @Override
+    public Context getContext() {
+        return context;
     }
 
     @Override
@@ -51,10 +63,10 @@ public class FileProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public List<DecoratedProgram> getInstalled() {
-        final List<DecoratedProgram> installed = new ArrayList<>();
+    public List<Program> getInstalled() {
+        final List<Program> installed = new ArrayList<>();
         for (File file: IoUtils.listFiles(getInstalledDir())) {
-            final DecoratedProgram program = loadInstalledProgram(file);
+            final Program program = loadInstalledProgram(file);
             if (program != null) {
                 installed.add(program);
             }
@@ -63,7 +75,7 @@ public class FileProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public DecoratedProgram getById(String id) {
+    public Program getById(String id) {
         return id == null ? null : loadInstalledProgram(new File(getInstalledDir(), id));
     }
 
@@ -137,12 +149,12 @@ public class FileProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public DecoratedProgram getActiveProgram() {
+    public Program getActiveProgram() {
         return getById(appConfig.getActiveProgramId());
     }
 
     @Override
-    public void setActiveProgram(DecoratedProgram program) {
+    public void setActiveProgram(Program program) {
         appConfig.setActiveProgramId(program.getId());
     }
 
@@ -184,11 +196,11 @@ public class FileProgramRepository implements ProgramRepository {
         }
     }
 
-    private DecoratedProgram loadInstalledProgram(File file) {
+    private Program loadInstalledProgram(File file) {
         try {
             final ProgramDeserializer deserializer = ProgramDeserializer.withOriginalPaths();
             final TrainingProgram program = deserializer.parse(IoUtils.readFully(file));
-            return new DecoratedProgram(this, file.getName(), program);
+            return new Program(metaRepository, file.getName(), program);
         } catch (IOException ex) {
             logger.error(ex, "Unable to read file from '%s'", file.getAbsolutePath());
         } catch (JSONException ex) {

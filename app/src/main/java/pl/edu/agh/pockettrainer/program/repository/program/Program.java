@@ -7,22 +7,23 @@ import pl.edu.agh.pockettrainer.program.domain.Exercise;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
+import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 
-public class DecoratedProgram {
+public class Program {
 
-    private final ProgramRepository repository;
+    private final ProgramRepository programRepository;
     private final String id;
     private final TrainingProgram program;
 
-    public DecoratedProgram(ProgramRepository repository, String id, TrainingProgram program) {
-        this.repository = repository;
+    public Program(MetaRepository metaRepository, String id, TrainingProgram program) {
+        this.programRepository = metaRepository.getProgramRepository();
         this.id = id;
         this.program = program;
     }
 
     @Override
     public String toString() {
-        return "DecoratedProgram{" +
+        return "Program{" +
                 "id='" + id + '\'' +
                 '}';
     }
@@ -48,16 +49,16 @@ public class DecoratedProgram {
     }
 
     public boolean isActive() {
-        final DecoratedProgram activeProgram = repository.getActiveProgram();
+        final Program activeProgram = programRepository.getActiveProgram();
         return activeProgram != null && id.equals(activeProgram.id);
     }
 
     public void setActive() {
-        repository.setActiveProgram(this);
+        programRepository.setActiveProgram(this);
     }
 
     public void setInactive() {
-        repository.unsetActiveProgram();
+        programRepository.unsetActiveProgram();
     }
 
     public void toggleActive() {
