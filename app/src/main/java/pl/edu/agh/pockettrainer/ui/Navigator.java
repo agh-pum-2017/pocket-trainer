@@ -27,7 +27,7 @@ public class Navigator {
 
     public void navigateToToday(DecoratedProgram program) {
 
-        ProgressState progress = ProgressState.NEW; // TODO program.getProgress();
+        ProgressState progress = ProgressState.RECOVERY; // TODO program.getProgress();
 
         switch (progress) {
             case NEW:
