@@ -8,4 +8,6 @@
     <string name="behind_schedule">Behind schedule!</string>
     <string name="start_over">Start over</string>
     <string name="_100_complete">100% complete</string>
+    <string name="show">Show</string>
+    <string name="go">Go!</string>
 </resources>
