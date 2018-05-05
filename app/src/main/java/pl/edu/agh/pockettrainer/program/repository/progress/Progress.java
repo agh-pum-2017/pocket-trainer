@@ -119,6 +119,11 @@ public class Progress {
         return nextPlanned;
     }
 
+    public int getPercentage() {
+        double percent = 100.0 * trainingProgress.getNumRecords() / program.getNumActions();
+        return (int) percent;
+    }
+
     public void startAction() {
 
         final TimeInstant now = TimeInstant.now();

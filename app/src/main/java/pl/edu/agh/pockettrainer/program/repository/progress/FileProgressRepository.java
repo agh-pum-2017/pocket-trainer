@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import pl.edu.agh.pockettrainer.program.Logger;
+import pl.edu.agh.pockettrainer.program.domain.ActionRecord;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgress;
 import pl.edu.agh.pockettrainer.program.repository.io.IoUtils;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
@@ -62,10 +63,43 @@ public class FileProgressRepository implements ProgressRepository {
         try {
             if (file.exists()) {
                 final ProgressDeserializer deserializer = new ProgressDeserializer();
-                return deserializer.parse(IoUtils.readFully(file));
+                //return deserializer.parse(IoUtils.readFully(file));
+                TrainingProgress pr = deserializer.parse(IoUtils.readFully(file));
+
+                for (ActionRecord record : pr.getRecords()) {
+                    System.out.println(">>> " + record);
+                }
+
+                return pr;
             } else {
                 final TrainingProgress progress = TrainingProgress.empty();
-                saveProgress(file, progress);
+                // TODO saveProgress(file, progress);
+
+                // TODO dummy test data
+                //final File file = new File("/data/user/0/pl.edu.agh.pockettrainer/files/progress/D936AA1503391004864E38D015E3F6E4.csv");
+                final String csv = "# startedAt, finishedAt, skipped\n" +
+                        "2018-05-04T10:00:00.000,2018-05-05T10:01:00.000,false\n" +
+                        "2018-05-04T10:02:00.000,2018-05-05T10:03:00.000,false\n" +
+                        "2018-05-04T10:04:00.000,2018-05-05T10:05:00.000,false\n" +
+                        "2018-05-04T10:06:00.000,2018-05-05T10:07:00.000,false\n" +
+                        "2018-05-04T10:08:00.000,2018-05-05T10:09:00.000,false\n" +
+                        "2018-05-04T10:10:00.000,2018-05-05T10:11:00.000,false\n" +
+                        "2018-05-04T10:12:00.000,2018-05-05T10:13:00.000,false\n" +
+                        "2018-05-04T10:14:00.000,2018-05-05T10:15:00.000,false\n" +
+                        "2018-05-04T10:16:00.000,2018-05-05T10:17:00.000,false\n" +
+                        "2018-05-04T10:18:00.000,2018-05-05T10:19:00.000,false\n" +
+                        "2018-05-04T10:20:00.000,2018-05-05T10:21:00.000,false\n" +
+                        "2018-05-04T10:22:00.000,2018-05-05T10:23:00.000,false\n" +
+                        "2018-05-04T10:24:00.000,2018-05-05T10:25:00.000,false\n" +
+                        "2018-05-04T10:26:00.000,2018-05-05T10:27:00.000,false\n" +
+                        "2018-05-04T10:28:00.000,2018-05-05T10:29:00.000,false\n";
+
+                try {
+                    IoUtils.save(file, csv);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
                 return progress;
             }
         } catch (IOException ex) {

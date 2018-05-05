@@ -35,7 +35,8 @@
         <activity android:name=".ui.activities.TodayRecoveryActivity" />
         <activity android:name=".ui.activities.TodayNewActivity" />
         <activity android:name=".ui.activities.TodayReadyActivity" />
-        <activity android:name=".ui.activities.UpcomingActivity"></activity>
+        <activity android:name=".ui.activities.UpcomingActivity" />
+        <activity android:name=".ui.activities.TodayBelatedActivity"></activity>
     </application>
 
 </manifest>

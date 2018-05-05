@@ -5,6 +5,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import pl.edu.agh.pockettrainer.R;
+import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.Program;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 
 public class TodayReadyActivity extends WithMenuActivity {
 
@@ -21,7 +26,12 @@ public class TodayReadyActivity extends WithMenuActivity {
     @Override
     protected void initView(View child) {
 
-        int percent = 87;
+        MetaRepository metaRepository = new DefaultMetaRepository(this);
+        ProgramRepository programRepository = metaRepository.getProgramRepository();
+        Program program = programRepository.getActiveProgram();
+        Progress progress = program.getProgress();
+
+        int percent = progress.getPercentage();
 
         ProgressBar progressBar = child.findViewById(R.id.progressBarReady);
         progressBar.setProgress(percent);

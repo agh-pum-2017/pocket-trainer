@@ -18,4 +18,13 @@ public class ActionRecord {
     public TimeDuration getDuration() {
         return TimeDuration.of(startedAt, finishedAt);
     }
+
+    @Override
+    public String toString() {
+        return "ActionRecord{" +
+                "startedAt=" + startedAt +
+                ", finishedAt=" + finishedAt +
+                ", skipped=" + skipped +
+                '}';
+    }
 }

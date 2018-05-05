@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
+import pl.edu.agh.pockettrainer.ui.activities.TodayBelatedActivity;
 import pl.edu.agh.pockettrainer.ui.activities.TodayFinishedActivity;
 import pl.edu.agh.pockettrainer.ui.activities.TodayNewActivity;
 import pl.edu.agh.pockettrainer.ui.activities.TodayReadyActivity;
@@ -33,7 +34,8 @@ public class Navigator {
                 navigateTo(TodayReadyActivity.class);
                 break;
             case BELATED:
-                throw new RuntimeException("Not implemented");
+                navigateTo(TodayBelatedActivity.class);
+                break;
             case RECOVERY:
                 navigateTo(TodayRecoveryActivity.class);
                 break;
