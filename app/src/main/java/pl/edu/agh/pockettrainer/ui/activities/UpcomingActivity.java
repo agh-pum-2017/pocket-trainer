@@ -18,8 +18,10 @@ import java.io.File;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Exercise;
 import pl.edu.agh.pockettrainer.program.domain.actions.Action;
+import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
+import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
 import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
@@ -60,6 +62,9 @@ public class UpcomingActivity extends AppCompatActivity {
         final ImageView iconView = findViewById(R.id.upcoming_action_icon);
         final TextView title = findViewById(R.id.upcoming_action_title);
         final TextView label = findViewById(R.id.upcoming_action_label);
+        final TextView button = findViewById(R.id.upcoming_action_button_show);
+
+        button.setVisibility(View.VISIBLE);
 
         if (action instanceof TimedAction) {
             final TimedAction timedAction = (TimedAction) action;
@@ -75,6 +80,18 @@ public class UpcomingActivity extends AppCompatActivity {
             iconView.setImageResource(R.drawable.ic_reps);
             title.setText(capitalize(exercise.getName()));
             label.setText(repsAction.getReps() + " reps");
+        } else if (action instanceof TimedRecovery) {
+            TimedRecovery timedRecovery = (TimedRecovery) action;
+            iconView.setImageResource(R.drawable.ic_watch);
+            title.setText("Timed recovery");
+            label.setText(timedRecovery.getSeconds() + " seconds");
+            button.setVisibility(View.INVISIBLE);
+        } else if (action instanceof Recovery) {
+            TimedRecovery timedRecovery = (TimedRecovery) action;
+            iconView.setImageResource(R.drawable.ic_reps);
+            title.setText("Recovery");
+            label.setText("");
+            button.setVisibility(View.INVISIBLE);
         }
     }
 

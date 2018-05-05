@@ -12,8 +12,10 @@ import java.util.Locale;
 import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.Logger;
+import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
+import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.Navigator;
 
@@ -115,6 +117,10 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
             navigator.navigateTo(TimedActionActivity.class);
         } else if (state.action instanceof RepsAction) {
             // TODO navigator.navigateTo(RepsActionActivity.class);
+        } else if (state.action instanceof TimedRecovery) {
+            // TODO navigator.navigateTo(TimedRecoveryActivity.class);
+        } else if (state.action instanceof Recovery) {
+            // TODO navigator.navigateTo(TimedRecoveryActivity.class);
         }
     }
 

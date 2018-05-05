@@ -38,6 +38,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     private int numSeconds;
     private TextToSpeech tts;
     private Navigator navigator;
+    private Progress progress;
 
     @Override
     public void onBackPressed() {
@@ -49,6 +50,11 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timed_action);
+
+        final MetaRepository metaRepository = new DefaultMetaRepository(this);
+        final ProgramRepository programRepository = metaRepository.getProgramRepository();
+        final Program program = programRepository.getActiveProgram();
+        progress = program.getProgress();
 
         navigator = new Navigator(this);
 
@@ -113,16 +119,9 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     }
 
     public void onSkipButtonClick(View view) {
-
         stopTimer();
         tickTockSound.stop();
-
-        final MetaRepository metaRepository = new DefaultMetaRepository(this);
-        final ProgramRepository programRepository = metaRepository.getProgramRepository();
-        final Program program = programRepository.getActiveProgram();
-        final Progress progress = program.getProgress();
         progress.skipAction();
-
         navigator.navigateToNextAction(progress, timedAction);
     }
 
@@ -163,10 +162,12 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
                 @Override
                 public void onFinish() {
                     tickTockSound.stop();
-                    navigateToNextAction();
+                    progress.finishAction();
+                    navigator.navigateToNextAction(progress, timedAction);
                 }
             };
 
+            progress.startAction();
             timer.start();
         }
     }
@@ -178,16 +179,5 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     private String capitalize(String string) {
         string = string.toLowerCase();
         return string.substring(0, 1).toUpperCase() + string.substring(1);
-    }
-
-    private void navigateToNextAction() {
-
-        final MetaRepository metaRepository = new DefaultMetaRepository(this);
-        final ProgramRepository programRepository = metaRepository.getProgramRepository();
-        final Program program = programRepository.getActiveProgram();
-        final Progress progress = program.getProgress();
-        progress.finishAction();
-
-        navigator.navigateToNextAction(progress, timedAction);
     }
 }

@@ -129,11 +129,6 @@ public class Progress {
     }
 
     public void startAction() {
-
-        // TODO remember day index
-        // TODO remember action index within the day
-        // TODO serialize to CSV as <day_index>,<action_index>,<started_at>,<finished_at>,<skippd>
-
         startedAt = TimeInstant.now();
     }
 

@@ -46,7 +46,8 @@ public class Navigator {
                 navigateTo(TodayRecoveryActivity.class);
                 break;
             case IN_PROGRESS:
-                throw new RuntimeException("Not implemented");
+                navigateTo(TodayReadyActivity.class);
+                break;
             case FINISHED:
                 navigateTo(TodayFinishedActivity.class);
                 break;
