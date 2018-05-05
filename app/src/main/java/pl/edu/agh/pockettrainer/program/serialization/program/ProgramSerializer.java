@@ -86,7 +86,7 @@ public class ProgramSerializer {
                     dayJson.put("type", "running");
                 } else if (day instanceof WorkoutDay) {
                     dayJson.put("type", "workout");
-                    dayJson.put("routine", serializeActions(((WorkoutDay) day).getRoutine()));
+                    dayJson.put("routine", serializeActions(day.getActions()));
                 }
             }
             daysJson.put(day.getName(), dayJson);
@@ -104,11 +104,15 @@ public class ProgramSerializer {
                 actionJson.put("type", "timed_recovery");
                 actionJson.put("seconds", ((TimedRecovery) action).getSeconds());
             } else if (action instanceof TimedAction) {
-                actionJson.put("type", ((TimedAction) action).getExercise().getName());
-                actionJson.put("seconds", ((TimedAction) action).getSeconds());
+                final TimedAction timedAction = (TimedAction) action;
+                actionJson.put("type", "@" + timedAction.getExercise().getName());
+                actionJson.put("goal", "seconds");
+                actionJson.put("value", ((TimedAction) action).getSeconds());
             } else if (action instanceof RepsAction) {
-                actionJson.put("type", ((RepsAction) action).getExercise());
-                actionJson.put("seconds", ((RepsAction) action).getReps());
+                final RepsAction repsAction = (RepsAction) action;
+                actionJson.put("type", "@" + repsAction.getExercise().getName());
+                actionJson.put("goal", "reps");
+                actionJson.put("value", ((RepsAction) action).getReps());
             }
             actionsJson.put(actionJson);
         }

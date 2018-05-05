@@ -3,8 +3,12 @@ package pl.edu.agh.pockettrainer.program.repository.progress;
 import java.util.List;
 
 import pl.edu.agh.pockettrainer.program.domain.ActionRecord;
+import pl.edu.agh.pockettrainer.program.domain.Exercise;
 import pl.edu.agh.pockettrainer.program.domain.ProgressState;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgress;
+import pl.edu.agh.pockettrainer.program.domain.actions.Action;
+import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
+import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
 import pl.edu.agh.pockettrainer.program.domain.time.TimeInstant;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
@@ -127,6 +131,11 @@ public class Progress {
     }
 
     public void startAction() {
+
+        // TODO remember day index
+        // TODO remember action index within the day
+        // TODO serialize to CSV as <day_index>,<action_index>,<started_at>,<finished_at>,<skippd>
+
         startedAt = TimeInstant.now();
     }
 
@@ -134,8 +143,8 @@ public class Progress {
 
         if (startedAt != null) {
 
-            final TimeInstant finishedAt = TimeInstant.now();
-            final ActionRecord record = new ActionRecord(startedAt, finishedAt, true);
+            final TimeInstant skippedAt = TimeInstant.now();
+            final ActionRecord record = new ActionRecord(startedAt, skippedAt, true);
             trainingProgress.addRecord(record);
 
             progressRepository.update(this);
@@ -149,12 +158,56 @@ public class Progress {
         if (startedAt != null) {
 
             final TimeInstant finishedAt = TimeInstant.now();
-            final ActionRecord record = new ActionRecord(startedAt, finishedAt, false);
+            final ActionRecord record = new ActionRecord(startedAt, finishedAt, true);
             trainingProgress.addRecord(record);
 
             progressRepository.update(this);
 
             startedAt = null;
         }
+    }
+
+    public Action getNextAction() {
+
+        final int numRecords = trainingProgress.getNumRecords();
+        final List<Day> schedule = program.getSchedule();
+
+        int cumulativeActions = 0;
+        int dayIndex = -1;
+
+        for (Day day : schedule) {
+
+            dayIndex++;
+
+            if (day.isRecovery()) {
+                continue;
+            }
+
+            cumulativeActions += day.getNumActions();
+
+            if (cumulativeActions >= numRecords) {
+               int lastActionIndex = numRecords - (cumulativeActions - day.getNumActions()) - 1;
+               if (lastActionIndex < day.getNumActions() - 1) {
+                   return day.getActions().get(lastActionIndex + 1);
+               } else {
+                   return nextDayUnlessRecovery(schedule, dayIndex);
+               }
+            }
+        }
+
+        return null;
+    }
+
+    private Action nextDayUnlessRecovery(List<Day> schedule, int dayIndex) {
+
+        for (int i = dayIndex; i < schedule.size(); i++){
+            final Day day = schedule.get(i);
+            if (day.isRecovery()) {
+                continue;
+            }
+            return day.getActions().get(0);
+        }
+
+        return null;
     }
 }

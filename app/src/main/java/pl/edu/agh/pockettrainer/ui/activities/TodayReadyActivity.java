@@ -11,6 +11,7 @@ import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
+import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public class TodayReadyActivity extends WithMenuActivity {
 
@@ -40,13 +41,13 @@ public class TodayReadyActivity extends WithMenuActivity {
 
         updatePercent(progress.getPercentage(), progressBar, label);
 
+        final Navigator navigator = new Navigator(this);
+
         final Button button = child.findViewById(R.id.today_ready_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final int percent = Math.min(progressBar.getProgress() + 1, 100);
-                updatePercent(percent, progressBar, label);
-                // TODO
+            navigator.navigateTo(UpcomingActivity.class);
             }
         });
     }

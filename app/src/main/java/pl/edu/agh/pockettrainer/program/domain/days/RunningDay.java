@@ -2,6 +2,11 @@ package pl.edu.agh.pockettrainer.program.domain.days;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collections;
+import java.util.List;
+
+import pl.edu.agh.pockettrainer.program.domain.actions.Action;
+
 public class RunningDay implements Day {
 
     private final String name;
@@ -23,6 +28,20 @@ public class RunningDay implements Day {
     @Override
     public int getNumActions() {
         return 1;
+    }
+
+    @Override
+    public List<Action> getActions() {
+        final Action runningAction = new Action() {
+
+            // TODO two types: timed vs. distance
+
+            @Override
+            public boolean isRecovery() {
+                return false;
+            }
+        };
+        return Collections.singletonList(runningAction);
     }
 
     @Override

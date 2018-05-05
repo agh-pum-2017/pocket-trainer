@@ -32,7 +32,7 @@ public class WorkoutDay implements Day {
         return routine.size(); // including recovery breaks
     }
 
-    public List<Action> getRoutine() {
+    public List<Action> getActions() {
         return Collections.unmodifiableList(routine);
     }
 
