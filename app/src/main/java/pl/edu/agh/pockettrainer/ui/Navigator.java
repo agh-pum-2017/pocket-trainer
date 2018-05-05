@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import pl.edu.agh.pockettrainer.program.domain.actions.Action;
+import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.activities.TodayBelatedActivity;
@@ -22,6 +24,10 @@ public class Navigator {
 
     public void navigateTo(Class<? extends Activity> activityClass) {
         context.startActivity(new Intent(context, activityClass));
+    }
+
+    public void navigateToNextAction(Progress progress, Action action) {
+        // TODO
     }
 
     public void navigateToToday(Program program) {

@@ -10,4 +10,5 @@
     <string name="_100_complete">100% complete</string>
     <string name="show">Show</string>
     <string name="go">Go!</string>
+    <string name="skip">Skip</string>
 </resources>

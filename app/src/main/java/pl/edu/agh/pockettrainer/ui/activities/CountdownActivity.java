@@ -12,6 +12,10 @@ import java.util.Locale;
 import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.Logger;
+import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
+import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
+import pl.edu.agh.pockettrainer.ui.ApplicationState;
+import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public class CountdownActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
@@ -102,6 +106,18 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
         }
     }
 
+    private void navigateToTrainer() {
+
+        final ApplicationState state = (ApplicationState) getApplicationContext();
+        final Navigator navigator = new Navigator(this);
+
+        if (state.action instanceof TimedAction) {
+            navigator.navigateTo(TimedActionActivity.class);
+        } else if (state.action instanceof RepsAction) {
+            // TODO navigator.navigateTo(RepsActionActivity.class);
+        }
+    }
+
     private void startTimer() {
 
         if (timer == null) {
@@ -113,8 +129,7 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
                     if (!tts.isSpeaking()) {
                         if (count < 0) {
                             cancel();
-                            // TODO navigate to action player (get action from somewhere, where from?)
-                            finish();
+                            navigateToTrainer();
                         } else if (count > 0) {
                             title.setVisibility(View.VISIBLE);
                             label.setVisibility(View.VISIBLE);

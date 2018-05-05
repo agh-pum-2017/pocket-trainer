@@ -25,6 +25,7 @@ import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
+import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public class UpcomingActivity extends AppCompatActivity {
@@ -51,6 +52,9 @@ public class UpcomingActivity extends AppCompatActivity {
         final Progress progress = program.getProgress();
 
         final Action action = progress.getNextAction();
+
+        final ApplicationState state = (ApplicationState) getApplicationContext();
+        state.action = action;
 
         final ImageView imageView = findViewById(R.id.upcoming_action_image);
         final ImageView iconView = findViewById(R.id.upcoming_action_icon);
@@ -92,7 +96,6 @@ public class UpcomingActivity extends AppCompatActivity {
     public void onGoButtonClick(View view) {
         final Navigator navigator = new Navigator(this);
         navigator.navigateTo(CountdownActivity.class);
-        // TODO somehow serialize action with exercise to avoid loading it again
     }
 
     private void setImage(ImageView imageView, File imageFile) {
