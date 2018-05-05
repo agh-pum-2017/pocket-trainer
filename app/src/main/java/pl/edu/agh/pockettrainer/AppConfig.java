@@ -39,4 +39,8 @@ public class AppConfig {
     public void unsetActiveProgramId() {
         preferences.edit().remove(KEY_ACTIVE_PROGRAM_ID).apply();
     }
+
+    public int getCountdownIntervalSeconds() {
+        return 3; // TODO
+    }
 }
