@@ -1,19 +1,29 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.ui.Navigator;
+import pl.edu.agh.pockettrainer.program.Logger;
 
-public class CountdownActivity extends AppCompatActivity {
+public class CountdownActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+
+    private final Logger logger = new Logger(CountdownActivity.class);
 
     private CountDownTimer timer;
     private int count;
+    private TextToSpeech tts;
+
+    private TextView title;
+    private TextView label;
+    private TextView labelHidden;
 
     @Override
     public void onBackPressed() {
@@ -24,6 +34,7 @@ public class CountdownActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_countdown);
+        tts = new TextToSpeech(this, this);
     }
 
     @Override
@@ -31,47 +42,15 @@ public class CountdownActivity extends AppCompatActivity {
 
         super.onResume();
 
-        final Navigator navigator = new Navigator(this);
-
-        final TextView title = findViewById(R.id.countdown_title);
-        final TextView label = findViewById(R.id.countdown_label);
-        final TextView labelHidden = findViewById(R.id.countdown_label_hidden);
+        title = findViewById(R.id.countdown_title);
+        label = findViewById(R.id.countdown_label);
+        labelHidden = findViewById(R.id.countdown_label_hidden);
 
         title.setVisibility(View.VISIBLE);
-        label.setVisibility(View.VISIBLE);
+        label.setVisibility(View.INVISIBLE);
         labelHidden.setVisibility(View.INVISIBLE);
 
         resetTimer();
-
-        if (timer == null) {
-            timer = new CountDownTimer(Long.MAX_VALUE, 1000L) {
-
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                    if (count < 0) {
-                        cancel();
-                        // TODO navigate to action player (get action from somewhere, where from?)
-                        finish();
-                    } else if (count > 0) {
-                        label.setText(String.valueOf(count));
-                    } else {
-                        title.setVisibility(View.INVISIBLE);
-                        label.setVisibility(View.INVISIBLE);
-                        labelHidden.setVisibility(View.VISIBLE);
-                    }
-
-                    count--;
-                }
-
-                @Override
-                public void onFinish() {
-                    // do nothing
-                }
-            };
-        }
-
-        timer.start();
     }
 
     @Override
@@ -82,6 +61,12 @@ public class CountdownActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+
         stopTimer();
         super.onDestroy();
     }
@@ -101,5 +86,59 @@ public class CountdownActivity extends AppCompatActivity {
         if (timer != null) {
             timer.cancel();
         }
+    }
+
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+            final int result = tts.setLanguage(Locale.US);
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                logger.error("TTS language is not supported: US English");
+            } else {
+                startTimer();
+            }
+        } else {
+            logger.error("Unable to initialize TTS");
+        }
+    }
+
+    private void startTimer() {
+
+        if (timer == null) {
+
+            timer = new CountDownTimer(Long.MAX_VALUE, 1000L) {
+
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if (!tts.isSpeaking()) {
+                        if (count < 0) {
+                            cancel();
+                            // TODO navigate to action player (get action from somewhere, where from?)
+                            finish();
+                        } else if (count > 0) {
+                            title.setVisibility(View.VISIBLE);
+                            label.setVisibility(View.VISIBLE);
+                            labelHidden.setVisibility(View.INVISIBLE);
+                            tts.speak("" + count, TextToSpeech.QUEUE_FLUSH, null, "" + count);
+                            label.setText(String.valueOf(count));
+                        } else {
+                            tts.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, "0");
+                            title.setVisibility(View.INVISIBLE);
+                            label.setVisibility(View.INVISIBLE);
+                            labelHidden.setVisibility(View.VISIBLE);
+                        }
+
+                        count--;
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    // do nothing
+                }
+            };
+        }
+
+        timer.start();
     }
 }
