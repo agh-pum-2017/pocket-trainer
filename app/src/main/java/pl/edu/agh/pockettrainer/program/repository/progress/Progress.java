@@ -3,15 +3,13 @@ package pl.edu.agh.pockettrainer.program.repository.progress;
 import java.util.List;
 
 import pl.edu.agh.pockettrainer.program.domain.ActionRecord;
-import pl.edu.agh.pockettrainer.program.domain.Exercise;
 import pl.edu.agh.pockettrainer.program.domain.ProgressState;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgress;
 import pl.edu.agh.pockettrainer.program.domain.actions.Action;
-import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
-import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
 import pl.edu.agh.pockettrainer.program.domain.time.TimeInstant;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.ActionIterator;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 
 public class Progress {
@@ -169,45 +167,12 @@ public class Progress {
 
     public Action getNextAction() {
 
-        final int numRecords = trainingProgress.getNumRecords();
-        final List<Day> schedule = program.getSchedule();
+        final ActionIterator it = program.getActionIterator();
 
-        int cumulativeActions = 0;
-        int dayIndex = -1;
-
-        for (Day day : schedule) {
-
-            dayIndex++;
-
-            if (day.isRecovery()) {
-                continue;
-            }
-
-            cumulativeActions += day.getNumActions();
-
-            if (cumulativeActions >= numRecords) {
-               int lastActionIndex = numRecords - (cumulativeActions - day.getNumActions()) - 1;
-               if (lastActionIndex < day.getNumActions() - 1) {
-                   return day.getActions().get(lastActionIndex + 1);
-               } else {
-                   return nextDayUnlessRecovery(schedule, dayIndex);
-               }
-            }
+        for (int i = 0; it.hasNext() && i < trainingProgress.getNumRecords(); i++) {
+            it.next();
         }
 
-        return null;
-    }
-
-    private Action nextDayUnlessRecovery(List<Day> schedule, int dayIndex) {
-
-        for (int i = dayIndex; i < schedule.size(); i++){
-            final Day day = schedule.get(i);
-            if (day.isRecovery()) {
-                continue;
-            }
-            return day.getActions().get(0);
-        }
-
-        return null;
+        return it.hasNext() ? it.next() : null;
     }
 }

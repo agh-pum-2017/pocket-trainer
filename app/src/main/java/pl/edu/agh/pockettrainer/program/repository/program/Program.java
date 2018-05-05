@@ -59,6 +59,10 @@ public class Program {
         return program.getSchedule();
     }
 
+    public ActionIterator getActionIterator() {
+        return new ActionIterator(program.getSchedule());
+    }
+
     public boolean isActive() {
         final Program activeProgram = programRepository.getActiveProgram();
         return activeProgram != null && id.equals(activeProgram.id);
