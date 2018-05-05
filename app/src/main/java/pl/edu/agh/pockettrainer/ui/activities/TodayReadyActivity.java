@@ -1,6 +1,7 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,12 +32,27 @@ public class TodayReadyActivity extends WithMenuActivity {
         Program program = programRepository.getActiveProgram();
         Progress progress = program.getProgress();
 
-        int percent = progress.getPercentage();
+        final TextView titleLabel = child.findViewById(R.id.today_ready_title);
+        titleLabel.setText(program.getMetadata().getName());
 
-        ProgressBar progressBar = child.findViewById(R.id.today_belated_progressBar);
+        final ProgressBar progressBar = child.findViewById(R.id.today_ready_progressBar);
+        final TextView label = child.findViewById(R.id.today_ready_percent);
+
+        updatePercent(progress.getPercentage(), progressBar, label);
+
+        final Button button = child.findViewById(R.id.today_ready_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final int percent = Math.min(progressBar.getProgress() + 1, 100);
+                updatePercent(percent, progressBar, label);
+                // TODO
+            }
+        });
+    }
+
+    private void updatePercent(int percent, ProgressBar progressBar, TextView label) {
         progressBar.setProgress(percent);
-
-        TextView label = child.findViewById(R.id.today_belated_textView);
         label.setText(percent + "% complete");
     }
 }

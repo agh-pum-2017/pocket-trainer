@@ -3,23 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/today_new_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="30sp"
+        appConfig:layout_constraintEnd_toEndOf="parent"
+        appConfig:layout_constraintStart_toStartOf="parent"
+        appConfig:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
         android:id="@+id/today_new_progressBar"
         style="?android:progressBarStyleHorizontal"
-        android:layout_width="279dp"
-        android:layout_height="261dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:indeterminate="false"
         android:max="100"
         android:progress="100"
         android:progressDrawable="@drawable/circle_full"
         appConfig:layout_constraintBottom_toBottomOf="parent"
         appConfig:layout_constraintEnd_toEndOf="parent"
         appConfig:layout_constraintStart_toStartOf="parent"
-        appConfig:layout_constraintTop_toTopOf="parent" />
+        appConfig:layout_constraintTop_toBottomOf="@+id/today_new_title"
+        appConfig:layout_constraintVertical_bias="0.35" />
 
     <Button
         android:id="@+id/today_new_button"
@@ -28,10 +41,11 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Start"
+        android:layout_marginTop="8dp"
+        android:text="@string/start"
         appConfig:layout_constraintBottom_toBottomOf="@+id/today_new_progressBar"
         appConfig:layout_constraintEnd_toEndOf="@+id/today_new_progressBar"
-        appConfig:layout_constraintStart_toStartOf="@+id/today_new_progressBar"
+        appConfig:layout_constraintStart_toStartOf="parent"
         appConfig:layout_constraintTop_toTopOf="@+id/today_new_progressBar" />
 
 </android.support.constraint.ConstraintLayout>

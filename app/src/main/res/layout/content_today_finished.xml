@@ -1,53 +1,72 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appConfig="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/today_finished_textView"
+        android:id="@+id/today_finished_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="100% Complete"
-        android:textSize="16sp"
-        appConfig:layout_constraintBottom_toBottomOf="@+id/today_finished_progressBar"
+        android:layout_marginTop="64dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="30sp"
         appConfig:layout_constraintEnd_toEndOf="parent"
-        appConfig:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/today_finished_button"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Start Over"
-        appConfig:layout_constraintBottom_toTopOf="@+id/today_finished_textView"
-        appConfig:layout_constraintEnd_toEndOf="@+id/today_finished_progressBar"
-        appConfig:layout_constraintHorizontal_bias="0.496"
-        appConfig:layout_constraintStart_toStartOf="@+id/today_finished_progressBar"
-        appConfig:layout_constraintTop_toTopOf="@+id/today_finished_progressBar"
-        appConfig:layout_constraintVertical_bias="1.0" />
+        appConfig:layout_constraintStart_toStartOf="parent"
+        appConfig:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/today_finished_progressBar"
         style="?android:progressBarStyleHorizontal"
-        android:layout_width="279dp"
-        android:layout_height="261dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:indeterminate="false"
         android:max="100"
         android:progress="100"
         android:progressDrawable="@drawable/circle_green"
         appConfig:layout_constraintBottom_toBottomOf="parent"
         appConfig:layout_constraintEnd_toEndOf="parent"
         appConfig:layout_constraintStart_toStartOf="parent"
-        appConfig:layout_constraintTop_toTopOf="parent" />
+        appConfig:layout_constraintTop_toBottomOf="@+id/today_finished_title"
+        appConfig:layout_constraintVertical_bias="0.35" />
+
+    <Button
+        android:id="@+id/today_finished_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/start_over"
+        appConfig:layout_constraintBottom_toBottomOf="@+id/today_finished_progressBar"
+        appConfig:layout_constraintEnd_toEndOf="@+id/today_finished_progressBar"
+        appConfig:layout_constraintHorizontal_bias="0.516"
+        appConfig:layout_constraintStart_toStartOf="parent"
+        appConfig:layout_constraintTop_toTopOf="@+id/today_finished_progressBar"
+        appConfig:layout_constraintVertical_bias="0.464" />
+
+    <TextView
+        android:id="@+id/today_finished_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/_100_complete"
+        android:textSize="18sp"
+        appConfig:layout_constraintBottom_toBottomOf="@+id/today_finished_progressBar"
+        appConfig:layout_constraintEnd_toEndOf="@+id/today_finished_progressBar"
+        appConfig:layout_constraintHorizontal_bias="0.501"
+        appConfig:layout_constraintStart_toStartOf="@+id/today_finished_progressBar"
+        appConfig:layout_constraintTop_toBottomOf="@+id/today_finished_button"
+        appConfig:layout_constraintVertical_bias="0.0"/>
 
 </android.support.constraint.ConstraintLayout>

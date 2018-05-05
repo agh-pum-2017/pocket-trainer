@@ -3,4 +3,9 @@
     <string name="no_active_programs">No active programs</string>
     <string name="recovery_day">Recovery day</string>
     <string name="battery_icon">battery icon</string>
+    <string name="start">Start</string>
+    <string name="continue_">Continue</string>
+    <string name="behind_schedule">Behind schedule!</string>
+    <string name="start_over">Start over</string>
+    <string name="_100_complete">100% complete</string>
 </resources>
