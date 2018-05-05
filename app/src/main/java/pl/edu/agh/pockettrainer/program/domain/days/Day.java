@@ -5,4 +5,6 @@ public interface Day extends Comparable<Day> {
     String getName();
 
     boolean isRecovery();
+
+    int getNumActions();
 }

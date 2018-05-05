@@ -18,12 +18,14 @@ public class Program {
     private final ProgressRepository progressRepository;
     private final String id;
     private final TrainingProgram program;
+    private final int numActions;
 
     public Program(MetaRepository metaRepository, String id, TrainingProgram program) {
         this.programRepository = metaRepository.getProgramRepository();
         this.progressRepository = metaRepository.getProgressRepository();
         this.id = id;
         this.program = program;
+        this.numActions = calculateNumActions(program);
     }
 
     @Override
@@ -76,5 +78,17 @@ public class Program {
         } else {
             setActive();
         }
+    }
+
+    public int getNumActions() {
+        return numActions;
+    }
+
+    private int calculateNumActions(TrainingProgram program) {
+        int numActions = 0;
+        for (Day day : program.getSchedule()) {
+            numActions += day.getNumActions();
+        }
+        return numActions;
     }
 }

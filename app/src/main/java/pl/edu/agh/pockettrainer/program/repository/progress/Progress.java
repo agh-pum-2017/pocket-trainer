@@ -1,12 +1,12 @@
 package pl.edu.agh.pockettrainer.program.repository.progress;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.List;
 
+import pl.edu.agh.pockettrainer.program.domain.ActionRecord;
 import pl.edu.agh.pockettrainer.program.domain.ProgressState;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgress;
+import pl.edu.agh.pockettrainer.program.domain.days.Day;
+import pl.edu.agh.pockettrainer.program.domain.time.TimeInstant;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 
@@ -31,36 +31,115 @@ public class Progress {
     }
 
     public ProgressState getState() {
-        // TODO calculate
+
+        final int numRecords = trainingProgress.getNumRecords();
+
+        if (numRecords == 0) {
+            return ProgressState.NEW;
+        }
+
+        if (numRecords == program.getNumActions()) {
+            return ProgressState.FINISHED;
+        }
+
+        if (hasUnfinishedDay(numRecords)) {
+            return ProgressState.IN_PROGRESS;
+        }
+
+        final ActionRecord lastAction = trainingProgress.getLastRecord();
+        final int numRecoveryDays = getNumRecoveryDaysAfter(numRecords);
+
+        final TimeInstant previous = lastAction.startedAt;
+        final TimeInstant nextPlanned = previous.plusDays(1 + numRecoveryDays);
+        final TimeInstant deadline = nextPlanned.endOfDay().minus(lastAction.getDuration());
+        final TimeInstant currentTime = TimeInstant.now();
+
+        if (currentTime.isAfter(deadline)) {
+            return ProgressState.BELATED;
+        }
+
+        if (currentTime.isAfter(nextPlanned)) {
+            return ProgressState.READY;
+        }
+
         return ProgressState.RECOVERY;
     }
 
+    private boolean hasUnfinishedDay(int numRecords) {
+
+        int cumulativeActions = 0;
+        for (Day day : program.getSchedule()) {
+            cumulativeActions += day.getNumActions();
+
+            if (numRecords < cumulativeActions) {
+                return true;
+            } else if (numRecords == cumulativeActions) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private int getNumRecoveryDaysAfter(int numRecords) {
+
+        final List<Day> schedule = program.getSchedule();
+
+        int cumulativeActions = 0;
+        int dayIndex = 0;
+
+        while (cumulativeActions < numRecords) {
+            final Day day = schedule.get(dayIndex++);
+            cumulativeActions += day.getNumActions();
+        }
+
+        int numRecoveryDays = 0;
+        for (int i = dayIndex + 1; i < schedule.size(); i++) {
+            final Day day = schedule.get(i);
+            if (day.isRecovery()) {
+                numRecoveryDays++;
+            } else {
+                break;
+            }
+        }
+
+        return numRecoveryDays;
+    }
+
+    public TimeInstant getNextTrainingAt() {
+
+        final int numRecords = trainingProgress.getNumRecords();
+
+        final ActionRecord lastAction = trainingProgress.getLastRecord();
+        final int numRecoveryDays = getNumRecoveryDaysAfter(numRecords);
+
+        final TimeInstant previous = lastAction.startedAt;
+        final TimeInstant nextPlanned = previous.plusDays(1 + numRecoveryDays);
+
+        return nextPlanned;
+    }
+
     public void startAction() {
-        final String timestamp = utcNow();
+
+        final TimeInstant now = TimeInstant.now();
 
         // TODO progress.startAction()
         progressRepository.update(this);
     }
 
     public void skipAction() {
-        final String timestamp = utcNow();
+
+        final TimeInstant now = TimeInstant.now();
+
         // TODO progress.skipAction()
         progressRepository.update(this);
     }
 
     public void finishAction() {
-        final String timestamp = utcNow();
+
+        final TimeInstant now = TimeInstant.now();
+
         // TODO progress.finishAction()
         progressRepository.update(this);
-    }
-
-    private String utcNow() {
-        return iso8601(new Date());
-    }
-
-    private String iso8601(Date date) {
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS", Locale.US);
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return format.format(date);
     }
 }

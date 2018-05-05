@@ -21,6 +21,11 @@ public class RecoveryDay implements Day {
     }
 
     @Override
+    public int getNumActions() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         return "RecoveryDay{}";
     }

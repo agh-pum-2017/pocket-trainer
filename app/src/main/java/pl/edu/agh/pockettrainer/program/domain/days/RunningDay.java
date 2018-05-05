@@ -21,6 +21,11 @@ public class RunningDay implements Day {
     }
 
     @Override
+    public int getNumActions() {
+        return 1;
+    }
+
+    @Override
     public String toString() {
         return "RunningDay{}";
     }

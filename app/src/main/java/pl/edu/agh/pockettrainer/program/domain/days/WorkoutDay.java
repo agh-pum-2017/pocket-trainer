@@ -27,6 +27,11 @@ public class WorkoutDay implements Day {
         return false;
     }
 
+    @Override
+    public int getNumActions() {
+        return routine.size(); // including recovery breaks
+    }
+
     public List<Action> getRoutine() {
         return Collections.unmodifiableList(routine);
     }

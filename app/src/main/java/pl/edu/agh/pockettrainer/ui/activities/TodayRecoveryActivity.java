@@ -7,6 +7,11 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import pl.edu.agh.pockettrainer.R;
+import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.Program;
+import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public class TodayRecoveryActivity extends WithMenuActivity {
@@ -87,8 +92,13 @@ public class TodayRecoveryActivity extends WithMenuActivity {
     }
 
     private void setNextTrainingAt() {
-        // TODO
-        nextTrainingAt = 1525539600000L;
+
+        MetaRepository metaRepository = new DefaultMetaRepository(this);
+        ProgramRepository programRepository = metaRepository.getProgramRepository();
+        Program program = programRepository.getActiveProgram();
+        Progress progress = program.getProgress();
+
+        nextTrainingAt = progress.getNextTrainingAt().timestamp;
     }
 
     private void stopTimer() {

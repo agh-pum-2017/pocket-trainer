@@ -2,8 +2,6 @@ package pl.edu.agh.pockettrainer.program.repository.progress;
 
 import android.content.Context;
 
-import org.json.JSONException;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -62,8 +60,6 @@ public class FileProgressRepository implements ProgressRepository {
             }
         } catch (IOException ex) {
             logger.error(ex, "Unable to read file from '%s'", file.getAbsolutePath());
-        } catch (JSONException ex) {
-            logger.error(ex, "Unable to parse JSON file at '%s'",  file.getAbsolutePath());
         }
         return null;
     }
@@ -71,8 +67,8 @@ public class FileProgressRepository implements ProgressRepository {
     private void saveProgress(File file, TrainingProgress progress) {
         try {
             final ProgressSerializer serializer = new ProgressSerializer();
-            final String serializedJsonString = serializer.serialize(progress);
-            IoUtils.save(file, serializedJsonString);
+            final String serializedCsvString = serializer.serialize(progress);
+            IoUtils.save(file, serializedCsvString);
         } catch (IOException ex) {
             logger.error(ex, "Unable to save file at '%s'", file.getAbsolutePath());
         }
@@ -80,6 +76,6 @@ public class FileProgressRepository implements ProgressRepository {
 
     private File getProgressPath(Program program) {
         final File dir = new File(context.getFilesDir(), PROGRESS_DIR);
-        return new File(dir, program.getId() + ".json");
+        return new File(dir, program.getId() + ".csv");
     }
 }
