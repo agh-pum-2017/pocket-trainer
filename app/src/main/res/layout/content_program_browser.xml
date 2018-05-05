@@ -7,7 +7,7 @@
     android:background="#ccc">
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/program_browser_listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"

@@ -63,7 +63,7 @@ public class TodayRecoveryActivity extends WithMenuActivity {
     @Override
     protected void initView(View child) {
 
-        labelCounter = template.findViewById(R.id.textViewCounter);
+        labelCounter = template.findViewById(R.id.today_recovery_textViewCounter);
 
         setNextTrainingAt();
 

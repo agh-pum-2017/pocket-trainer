@@ -6,7 +6,7 @@
     android:background="@android:drawable/dialog_holo_light_frame">
 
     <ImageView
-        android:id="@+id/program_image"
+        android:id="@+id/program_item_image"
         android:layout_width="match_parent"
         android:layout_height="500px"
         android:layout_marginEnd="8dp"
@@ -19,7 +19,7 @@
         appConfig:srcCompat="@android:color/black" />
 
     <TextView
-        android:id="@+id/label_title"
+        android:id="@+id/program_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -28,10 +28,10 @@
         android:text="28 days 10 minutes a day"
         android:textSize="22sp"
         appConfig:layout_constraintLeft_toLeftOf="parent"
-        appConfig:layout_constraintTop_toBottomOf="@+id/program_image" />
+        appConfig:layout_constraintTop_toBottomOf="@+id/program_item_image" />
 
     <TextView
-        android:id="@+id/label_goals"
+        android:id="@+id/program_item_goals"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -44,10 +44,10 @@
         appConfig:layout_constraintHorizontal_bias="0.0"
         appConfig:layout_constraintLeft_toLeftOf="parent"
         appConfig:layout_constraintStart_toStartOf="parent"
-        appConfig:layout_constraintTop_toBottomOf="@+id/label_title" />
+        appConfig:layout_constraintTop_toBottomOf="@+id/program_item_title" />
 
     <Button
-        android:id="@+id/btnToggleEnroll"
+        android:id="@+id/program_item_button"
         android:layout_width="wrap_content"
         android:layout_height="30sp"
         android:layout_marginBottom="16dp"
@@ -60,7 +60,7 @@
         appConfig:layout_constraintBottom_toBottomOf="parent"
         appConfig:layout_constraintEnd_toEndOf="parent"
         appConfig:layout_constraintRight_toRightOf="parent"
-        appConfig:layout_constraintTop_toBottomOf="@+id/label_goals"
+        appConfig:layout_constraintTop_toBottomOf="@+id/program_item_goals"
         appConfig:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/progressBar3"
+        android:id="@+id/today_new_progressBar"
         style="?android:progressBarStyleHorizontal"
         android:layout_width="279dp"
         android:layout_height="261dp"
@@ -22,15 +22,16 @@
         appConfig:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/today_new_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:text="Start"
-        appConfig:layout_constraintBottom_toBottomOf="@+id/progressBar3"
-        appConfig:layout_constraintEnd_toEndOf="@+id/progressBar3"
-        appConfig:layout_constraintStart_toStartOf="@+id/progressBar3"
-        appConfig:layout_constraintTop_toTopOf="@+id/progressBar3" />
+        appConfig:layout_constraintBottom_toBottomOf="@+id/today_new_progressBar"
+        appConfig:layout_constraintEnd_toEndOf="@+id/today_new_progressBar"
+        appConfig:layout_constraintStart_toStartOf="@+id/today_new_progressBar"
+        appConfig:layout_constraintTop_toTopOf="@+id/today_new_progressBar" />
 
 </android.support.constraint.ConstraintLayout>

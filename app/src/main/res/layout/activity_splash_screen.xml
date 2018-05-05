@@ -8,7 +8,7 @@
     tools:context="pl.edu.agh.pockettrainer.ui.activities.SplashScreenActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/splash_screen_title_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_slab"
@@ -23,7 +23,7 @@
         appConfig:layout_constraintVertical_bias="0.411" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/splash_screen_progressBar"
         android:layout_width="31dp"
         android:layout_height="30dp"
         android:layout_marginBottom="8dp"
@@ -34,7 +34,7 @@
         appConfig:layout_constraintBottom_toBottomOf="parent"
         appConfig:layout_constraintLeft_toLeftOf="parent"
         appConfig:layout_constraintRight_toRightOf="parent"
-        appConfig:layout_constraintTop_toBottomOf="@+id/textView"
+        appConfig:layout_constraintTop_toBottomOf="@+id/splash_screen_title_textView"
         appConfig:layout_constraintVertical_bias="0.018" />
 
 </android.support.constraint.ConstraintLayout>

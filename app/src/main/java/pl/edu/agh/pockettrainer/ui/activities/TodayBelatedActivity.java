@@ -33,10 +33,10 @@ public class TodayBelatedActivity extends WithMenuActivity {
 
         int percent = progress.getPercentage();
 
-        ProgressBar progressBar = child.findViewById(R.id.progressBarReady);
+        ProgressBar progressBar = child.findViewById(R.id.today_belated_progressBar);
         progressBar.setProgress(percent);
 
-        TextView label = child.findViewById(R.id.textViewReady);
+        TextView label = child.findViewById(R.id.today_belated_textView);
         label.setText(percent + "% complete");
     }
 }

@@ -35,7 +35,7 @@ public abstract class WithMenuActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         template = (DrawerLayout) inflater.inflate(R.layout.template_with_menu, null);
 
-        FrameLayout parent = template.findViewById(R.id.content_frame);
+        FrameLayout parent = template.findViewById(R.id.with_menu_content_frame);
         View child = inflater.inflate(getChildLayoutId(), null);
         parent.addView(child);
 
@@ -47,7 +47,7 @@ public abstract class WithMenuActivity extends AppCompatActivity {
             actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
         }
 
-        navigationView = template.findViewById(R.id.nav_view);
+        navigationView = template.findViewById(R.id.with_menu_nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override

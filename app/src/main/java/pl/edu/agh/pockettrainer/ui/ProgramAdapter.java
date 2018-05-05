@@ -50,10 +50,10 @@ public class ProgramAdapter extends ArrayAdapter<Program> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.program_item, parent, false);
         }
 
-        final ImageView imageView = convertView.findViewById(R.id.program_image);
-        final TextView title = convertView.findViewById(R.id.label_title);
-        final TextView goals = convertView.findViewById(R.id.label_goals);
-        final Button btnToggleEnroll = convertView.findViewById(R.id.btnToggleEnroll);
+        final ImageView imageView = convertView.findViewById(R.id.program_item_image);
+        final TextView title = convertView.findViewById(R.id.program_item_title);
+        final TextView goals = convertView.findViewById(R.id.program_item_goals);
+        final Button btnToggleEnroll = convertView.findViewById(R.id.program_item_button);
 
         title.setText(metadata.getName());
         goals.setText(makeString(metadata.getGoals()));
