@@ -16,6 +16,8 @@ public class Progress {
     private final Program program;
     private final TrainingProgress trainingProgress;
 
+    private TimeInstant startedAt;
+
     public Progress(MetaRepository metaRepository, Program program, TrainingProgress trainingProgress) {
         this.progressRepository = metaRepository.getProgressRepository();
         this.program = program;
@@ -34,11 +36,11 @@ public class Progress {
 
         final int numRecords = trainingProgress.getNumRecords();
 
-        if (numRecords == 0) {
+        if (numRecords <= 0) {
             return ProgressState.NEW;
         }
 
-        if (numRecords == program.getNumActions()) {
+        if (numRecords >= program.getNumActions()) {
             return ProgressState.FINISHED;
         }
 
@@ -125,26 +127,34 @@ public class Progress {
     }
 
     public void startAction() {
-
-        final TimeInstant now = TimeInstant.now();
-
-        // TODO progress.startAction()
-        progressRepository.update(this);
+        startedAt = TimeInstant.now();
     }
 
     public void skipAction() {
 
-        final TimeInstant now = TimeInstant.now();
+        if (startedAt != null) {
 
-        // TODO progress.skipAction()
-        progressRepository.update(this);
+            final TimeInstant finishedAt = TimeInstant.now();
+            final ActionRecord record = new ActionRecord(startedAt, finishedAt, true);
+            trainingProgress.addRecord(record);
+
+            progressRepository.update(this);
+
+            startedAt = null;
+        }
     }
 
     public void finishAction() {
 
-        final TimeInstant now = TimeInstant.now();
+        if (startedAt != null) {
 
-        // TODO progress.finishAction()
-        progressRepository.update(this);
+            final TimeInstant finishedAt = TimeInstant.now();
+            final ActionRecord record = new ActionRecord(startedAt, finishedAt, false);
+            trainingProgress.addRecord(record);
+
+            progressRepository.update(this);
+
+            startedAt = null;
+        }
     }
 }

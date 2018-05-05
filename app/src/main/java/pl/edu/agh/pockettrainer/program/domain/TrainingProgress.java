@@ -28,6 +28,10 @@ public class TrainingProgress {
         return records.get(getLastIndex());
     }
 
+    public void addRecord(ActionRecord record) {
+        records.add(record);
+    }
+
     private int getLastIndex() {
         return records.size() - 1;
     }
