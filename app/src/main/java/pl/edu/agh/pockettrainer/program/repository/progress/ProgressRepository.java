@@ -8,4 +8,8 @@ public interface ProgressRepository extends Repository {
     Progress getProgress(Program program);
 
     void update(Progress progress);
+
+    void deleteProgress(Program program);
+
+    void deleteAll();
 }

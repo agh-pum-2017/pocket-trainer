@@ -70,12 +70,14 @@ public class Program {
 
     public void setInactive() {
         programRepository.unsetActiveProgram();
+        progressRepository.deleteProgress(this);
     }
 
     public void toggleActive() {
         if (isActive()) {
             setInactive();
         } else {
+            progressRepository.deleteAll();
             setActive();
         }
     }

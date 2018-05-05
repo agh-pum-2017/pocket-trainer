@@ -48,6 +48,16 @@ public class FileProgressRepository implements ProgressRepository {
         saveProgress(file, progress.get());
     }
 
+    @Override
+    public void deleteProgress(Program program) {
+        IoUtils.delete(getProgressPath(program));
+    }
+
+    @Override
+    public void deleteAll() {
+        IoUtils.delete(getProgressDir());
+    }
+
     private TrainingProgress loadProgress(File file) {
         try {
             if (file.exists()) {
@@ -75,7 +85,10 @@ public class FileProgressRepository implements ProgressRepository {
     }
 
     private File getProgressPath(Program program) {
-        final File dir = new File(context.getFilesDir(), PROGRESS_DIR);
-        return new File(dir, program.getId() + ".csv");
+        return new File(getProgressDir(), program.getId() + ".csv");
+    }
+
+    private File getProgressDir() {
+        return new File(context.getFilesDir(), PROGRESS_DIR);
     }
 }
