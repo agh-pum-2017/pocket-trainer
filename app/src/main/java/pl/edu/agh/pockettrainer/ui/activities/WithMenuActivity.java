@@ -3,6 +3,8 @@ package pl.edu.agh.pockettrainer.ui.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +35,12 @@ public abstract class WithMenuActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00A6FF")));
+        }
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         template = (DrawerLayout) inflater.inflate(R.layout.template_with_menu, null);
 
@@ -39,12 +48,12 @@ public abstract class WithMenuActivity extends AppCompatActivity {
         View child = inflater.inflate(getChildLayoutId(), null);
         parent.addView(child);
 
-        setTitle(getTitleForActivity());
+        setTitle(Html.fromHtml("<font color='#ffffff'>" + getTitleForActivity() + "</font>"));
 
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         }
 
         navigationView = template.findViewById(R.id.with_menu_nav_view);
