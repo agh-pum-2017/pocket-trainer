@@ -36,30 +36,33 @@ public class Navigator {
     }
 
     public void navigateToNextAction(Progress progress) {
+        if (progress.getState() == ProgressState.IN_PROGRESS) {
+            final ApplicationState state = (ApplicationState) context.getApplicationContext();
+            state.action = progress.getNextAction();
+            state.futureAction = null;
 
-        final ApplicationState state = (ApplicationState) context.getApplicationContext();
-        state.action = progress.getNextAction();
-        state.futureAction = null;
-
-        if (state.action == null) {
-            navigateTo(TodayFinishedActivity.class);
-        } else {
-            if (state.action.isRecovery()) {
-
-                state.futureAction = state.getProgress().getFutureAction();
-
-                if (state.action instanceof TimedRecovery) {
-                    state.navigator.navigateTo(TimedRecoveryActivity.class);
-                } else if (state.action instanceof Recovery) {
-                    // TODO navigator.navigateTo(TimedRecoveryActivity.class);
-                }
+            if (state.action == null) {
+                navigateToToday(progress.getProgram());
             } else {
-                if (state.action instanceof TimedAction) {
-                    state.navigator.navigateTo(TimedActionActivity.class);
-                } else if (state.action instanceof RepsAction) {
-                    // TODO navigator.navigateTo(RepsActionActivity.class);
+                if (state.action.isRecovery()) {
+
+                    state.futureAction = state.getProgress().getFutureAction();
+
+                    if (state.action instanceof TimedRecovery) {
+                        state.navigator.navigateTo(TimedRecoveryActivity.class);
+                    } else if (state.action instanceof Recovery) {
+                        // TODO navigator.navigateTo(TimedRecoveryActivity.class);
+                    }
+                } else {
+                    if (state.action instanceof TimedAction) {
+                        state.navigator.navigateTo(TimedActionActivity.class);
+                    } else if (state.action instanceof RepsAction) {
+                        // TODO navigator.navigateTo(RepsActionActivity.class);
+                    }
                 }
             }
+        } else {
+            navigateToToday(progress.getProgram());
         }
     }
 
