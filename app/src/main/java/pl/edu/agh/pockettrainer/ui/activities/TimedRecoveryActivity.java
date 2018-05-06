@@ -6,6 +6,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -61,6 +62,9 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
         timedRecoveryAction = (TimedRecovery) state.pointedAction.action;
         secondsLabel = findViewById(R.id.timed_recovery_seconds);
         secondsLabel.setText(String.valueOf(timedRecoveryAction.getSeconds()));
+
+        final ProgressBar progressBar = findViewById(R.id.timed_recovery_next_progressBar);
+        progressBar.setProgress(state.getDayProgressPercentage());
 
         final TextView comingLabel = findViewById(R.id.timed_recovery_coming_label);
         final ImageView imageView = findViewById(R.id.timed_recovery_next_image);

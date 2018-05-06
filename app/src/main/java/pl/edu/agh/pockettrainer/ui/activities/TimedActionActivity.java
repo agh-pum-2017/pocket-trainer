@@ -6,6 +6,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,16 +42,20 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timed_action);
+    }
+
+    @Override
+    protected void onResume() {
 
         state = (ApplicationState) getApplicationContext();
         progress = state.getProgress();
 
-        // TODO state.getDayProgressPercentage())
-
         tts = new TextToSpeech(this, this);
+
+        final ProgressBar progressBar = findViewById(R.id.timed_action_progressBar);
+        progressBar.setProgress(state.getDayProgressPercentage());
 
         final ImageView imageView = findViewById(R.id.timed_action_image);
         final TextView title = findViewById(R.id.timed_action_title);
@@ -66,12 +71,10 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
         resetTimer();
         labelSeconds.setText(String.valueOf(numSeconds));
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
         resetTimer();
+
+        super.onResume();
     }
 
     @Override
