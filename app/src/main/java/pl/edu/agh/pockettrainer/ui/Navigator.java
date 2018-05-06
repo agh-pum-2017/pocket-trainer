@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import pl.edu.agh.pockettrainer.program.Logger;
+import pl.edu.agh.pockettrainer.program.domain.ProgressState;
 import pl.edu.agh.pockettrainer.program.domain.actions.Action;
 import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
@@ -20,6 +22,8 @@ import pl.edu.agh.pockettrainer.ui.activities.TodayReadyActivity;
 import pl.edu.agh.pockettrainer.ui.activities.TodayRecoveryActivity;
 
 public class Navigator {
+
+    private final Logger logger = new Logger(Navigator.class);
 
     private final Context context;
 
@@ -61,7 +65,9 @@ public class Navigator {
 
     public void navigateToToday(Program program) {
         final Progress progress = program.getProgress();
-        switch (progress.getState()) {
+        final ProgressState state = progress.getState();
+        logger.info("Training program state is \"%s\"", state.name());
+        switch (state) {
             case NEW:
                 navigateTo(TodayNewActivity.class);
                 break;

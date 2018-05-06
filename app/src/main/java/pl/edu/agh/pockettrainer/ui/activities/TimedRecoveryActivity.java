@@ -22,6 +22,8 @@ import pl.edu.agh.pockettrainer.ui.ApplicationState;
 public class TimedRecoveryActivity extends AppCompatActivity {
 
     // TODO TTS recovery time 30 seconds...
+    // TODO TTS next exercise: "push-ups"
+    // TODO destroy() shutdown TTS
 
     private TextView secondsLabel;
 

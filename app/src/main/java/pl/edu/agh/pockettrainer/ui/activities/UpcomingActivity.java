@@ -22,6 +22,7 @@ import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
+import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 
 public class UpcomingActivity extends AppCompatActivity {
@@ -46,8 +47,14 @@ public class UpcomingActivity extends AppCompatActivity {
 
         state = (ApplicationState) getApplicationContext();
 
-        final Action action = state.getProgress().getNextAction();
+        final Progress progress = state.getProgress();
+        final Action action = progress.getNextAction();
+
         state.action = action;
+
+        if (action.isRecovery()) {
+            state.futureAction = progress.getFutureAction();
+        }
 
         final ImageView imageView = findViewById(R.id.upcoming_action_image);
         final ImageView iconView = findViewById(R.id.upcoming_action_icon);
