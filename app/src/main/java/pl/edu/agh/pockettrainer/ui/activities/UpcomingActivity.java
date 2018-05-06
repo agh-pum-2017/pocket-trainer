@@ -22,6 +22,7 @@ import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
+import pl.edu.agh.pockettrainer.program.repository.program.iterator.PointedAction;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 
@@ -48,12 +49,12 @@ public class UpcomingActivity extends AppCompatActivity {
         state = (ApplicationState) getApplicationContext();
 
         final Progress progress = state.getProgress();
-        final Action action = progress.getNextAction();
+        final PointedAction pointedAction = progress.getNextAction();
 
-        state.action = action;
+        state.pointedAction = pointedAction;
 
-        if (action.isRecovery()) {
-            state.futureAction = progress.getFutureAction();
+        if (pointedAction.isRecovery()) {
+            state.futurePointedAction = progress.getFutureAction();
         }
 
         final ImageView imageView = findViewById(R.id.upcoming_action_image);
@@ -64,28 +65,28 @@ public class UpcomingActivity extends AppCompatActivity {
 
         button.setVisibility(View.VISIBLE);
 
-        if (action instanceof TimedAction) {
-            final TimedAction timedAction = (TimedAction) action;
+        if (pointedAction.isTimedAction()) {
+            final TimedAction timedAction = (TimedAction) pointedAction.action;
             final Exercise exercise = timedAction.getExercise();
             setImage(imageView, exercise.getImage());
             iconView.setImageResource(R.drawable.ic_watch);
             title.setText(capitalize(exercise.getName()));
             label.setText(timedAction.getSeconds() + " seconds");
-        } else if (action instanceof RepsAction) {
-            final RepsAction repsAction = (RepsAction) action;
+        } else if (pointedAction.isRepsAction()) {
+            final RepsAction repsAction = (RepsAction) pointedAction.action;
             final Exercise exercise = repsAction.getExercise();
             setImage(imageView, exercise.getImage());
             iconView.setImageResource(R.drawable.ic_reps);
             title.setText(capitalize(exercise.getName()));
             label.setText(repsAction.getReps() + " reps");
-        } else if (action instanceof TimedRecovery) {
-            final TimedRecovery timedRecovery = (TimedRecovery) action;
+        } else if (pointedAction.isTimedRecoveryAction()) {
+            final TimedRecovery timedRecovery = (TimedRecovery) pointedAction.action;
             iconView.setImageResource(R.drawable.ic_watch);
             title.setText("Timed recovery");
             label.setText(timedRecovery.getSeconds() + " seconds");
             button.setVisibility(View.INVISIBLE);
-        } else if (action instanceof Recovery) {
-            final Recovery recovery = (Recovery) action;
+        } else if (pointedAction.isRecoveryAction()) {
+            final Recovery recovery = (Recovery) pointedAction.action;
             iconView.setImageResource(R.drawable.ic_reps);
             title.setText("Recovery");
             label.setText("");

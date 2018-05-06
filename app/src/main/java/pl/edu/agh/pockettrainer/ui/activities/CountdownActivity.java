@@ -17,7 +17,6 @@ import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
-import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public class CountdownActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
@@ -112,13 +111,13 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
 
         final ApplicationState state = (ApplicationState) getApplicationContext();
 
-        if (state.action instanceof TimedAction) {
+        if (state.pointedAction.isTimedAction()) {
             state.navigator.navigateTo(TimedActionActivity.class);
-        } else if (state.action instanceof RepsAction) {
+        } else if (state.pointedAction.isRepsAction()) {
             // TODO navigator.navigateTo(RepsActionActivity.class);
-        } else if (state.action instanceof TimedRecovery) {
+        } else if (state.pointedAction.isTimedRecoveryAction()) {
             state.navigator.navigateTo(TimedRecoveryActivity.class);
-        } else if (state.action instanceof Recovery) {
+        } else if (state.pointedAction.isRecoveryAction()) {
             // TODO navigator.navigateTo(TimedRecoveryActivity.class);
         }
     }

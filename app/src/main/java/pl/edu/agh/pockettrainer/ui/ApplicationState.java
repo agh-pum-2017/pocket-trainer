@@ -9,6 +9,8 @@ import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.iterator.PointedAction;
+import pl.edu.agh.pockettrainer.program.repository.program.iterator.Pointer;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.program.repository.progress.ProgressRepository;
 import pl.edu.agh.pockettrainer.program.tasks.StartupTask;
@@ -34,10 +36,27 @@ public class ApplicationState extends Application {
     public ProgressRepository progressRepository;
     public Navigator navigator;
 
-    public Action action;
-    public Action futureAction;
+    public PointedAction pointedAction;
+    public PointedAction futurePointedAction;
 
     public Progress getProgress() {
         return programRepository.getActiveProgram().getProgress();
+    }
+
+    public int getDayProgressPercentage() {
+
+        if (pointedAction != null) {
+
+            final Pointer pointer = pointedAction.pointer;
+            final int numDayActions = programRepository.getActiveProgram().getSchedule().get(pointer.dayIndex).getNumActions();
+
+            if (numDayActions > 0) {
+                return (int) (100.0 * (pointer.actionIndex + 1) / numDayActions);
+            } else {
+                return 0;
+            }
+        }
+
+        return 0;
     }
 }

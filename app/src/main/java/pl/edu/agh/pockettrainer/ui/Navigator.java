@@ -6,11 +6,8 @@ import android.content.Intent;
 
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.domain.ProgressState;
-import pl.edu.agh.pockettrainer.program.domain.actions.Action;
-import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
-import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.activities.TimedActionActivity;
@@ -38,25 +35,25 @@ public class Navigator {
     public void navigateToNextAction(Progress progress) {
         if (progress.getState() == ProgressState.IN_PROGRESS) {
             final ApplicationState state = (ApplicationState) context.getApplicationContext();
-            state.action = progress.getNextAction();
-            state.futureAction = null;
+            state.pointedAction = progress.getNextAction();
+            state.futurePointedAction = null;
 
-            if (state.action == null) {
+            if (state.pointedAction == null) {
                 navigateToToday(progress.getProgram());
             } else {
-                if (state.action.isRecovery()) {
+                if (state.pointedAction.isRecovery()) {
 
-                    state.futureAction = state.getProgress().getFutureAction();
+                    state.futurePointedAction = state.getProgress().getFutureAction();
 
-                    if (state.action instanceof TimedRecovery) {
+                    if (state.pointedAction.isTimedRecoveryAction()) {
                         state.navigator.navigateTo(TimedRecoveryActivity.class);
-                    } else if (state.action instanceof Recovery) {
+                    } else if (state.pointedAction.isRecoveryAction()) {
                         // TODO navigator.navigateTo(TimedRecoveryActivity.class);
                     }
                 } else {
-                    if (state.action instanceof TimedAction) {
+                    if (state.pointedAction.isTimedAction()) {
                         state.navigator.navigateTo(TimedActionActivity.class);
-                    } else if (state.action instanceof RepsAction) {
+                    } else if (state.pointedAction.isRepsAction()) {
                         // TODO navigator.navigateTo(RepsActionActivity.class);
                     }
                 }

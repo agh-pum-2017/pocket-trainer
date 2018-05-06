@@ -1,4 +1,4 @@
-package pl.edu.agh.pockettrainer.program.repository.program;
+package pl.edu.agh.pockettrainer.program.repository.program.iterator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import pl.edu.agh.pockettrainer.program.domain.actions.Action;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
 
-public class ActionIterator implements Iterator<Action> {
+public class ActionIterator implements Iterator<PointedAction> {
 
     private final List<Day> schedule;
 
@@ -40,7 +40,7 @@ public class ActionIterator implements Iterator<Action> {
     }
 
     @Override
-    public Action next() {
+    public PointedAction next() {
         while (dayIndex < schedule.size()) {
             final Day day = schedule.get(dayIndex);
             if (day.isRecovery()) {
@@ -48,8 +48,9 @@ public class ActionIterator implements Iterator<Action> {
             } else {
                 if (actionIndex < day.getNumActions()) {
                     final Action action = day.getActions().get(actionIndex);
+                    final PointedAction pointedAction = new PointedAction(action, new Pointer(dayIndex, actionIndex));
                     actionIndex++;
-                    return action;
+                    return pointedAction;
                 } else {
                     dayIndex++;
                     actionIndex = 0;

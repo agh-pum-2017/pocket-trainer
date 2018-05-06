@@ -9,8 +9,9 @@ import pl.edu.agh.pockettrainer.program.domain.actions.Action;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
 import pl.edu.agh.pockettrainer.program.domain.time.TimeInstant;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.ActionIterator;
+import pl.edu.agh.pockettrainer.program.repository.program.iterator.ActionIterator;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
+import pl.edu.agh.pockettrainer.program.repository.program.iterator.PointedAction;
 
 public class Progress {
 
@@ -160,7 +161,7 @@ public class Progress {
         }
     }
 
-    public Action getNextAction() {
+    public PointedAction getNextAction() {
 
         final ActionIterator it = program.getActionIterator();
 
@@ -171,7 +172,7 @@ public class Progress {
         return it.hasNext() ? it.next() : null;
     }
 
-    public Action getFutureAction() {
+    public PointedAction getFutureAction() {
 
         final ActionIterator it = program.getActionIterator();
 

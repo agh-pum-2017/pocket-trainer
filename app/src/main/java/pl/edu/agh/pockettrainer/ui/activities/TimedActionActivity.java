@@ -48,6 +48,8 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         state = (ApplicationState) getApplicationContext();
         progress = state.getProgress();
 
+        // TODO state.getDayProgressPercentage())
+
         tts = new TextToSpeech(this, this);
 
         final ImageView imageView = findViewById(R.id.timed_action_image);
@@ -55,7 +57,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         final TextView label = findViewById(R.id.timed_action_label);
         labelSeconds = findViewById(R.id.timed_action_seconds);
 
-        timedAction = (TimedAction) state.action;
+        timedAction = (TimedAction) state.pointedAction.action;
         final Exercise exercise = timedAction.getExercise();
 
         setImage(imageView, exercise.getImage());

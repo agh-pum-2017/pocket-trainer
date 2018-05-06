@@ -58,7 +58,7 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
         tts = new TextToSpeech(this, this);
 
-        timedRecoveryAction = (TimedRecovery) state.action;
+        timedRecoveryAction = (TimedRecovery) state.pointedAction.action;
         secondsLabel = findViewById(R.id.timed_recovery_seconds);
         secondsLabel.setText(String.valueOf(timedRecoveryAction.getSeconds()));
 
@@ -68,36 +68,36 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
         final TextView title = findViewById(R.id.timed_recovery_next_title);
         final TextView label = findViewById(R.id.timed_recovery_next_label);
 
-        if (state.futureAction != null) {
+        if (state.futurePointedAction != null) {
 
             comingLabel.setVisibility(View.VISIBLE);
             iconView.setVisibility(View.VISIBLE);
             title.setVisibility(View.VISIBLE);
             label.setVisibility(View.VISIBLE);
 
-            if (state.futureAction instanceof TimedAction) {
-                final TimedAction timedAction = (TimedAction) state.futureAction;
+            if (state.futurePointedAction.isTimedAction()) {
+                final TimedAction timedAction = (TimedAction) state.futurePointedAction.action;
                 final Exercise exercise = timedAction.getExercise();
                 nextExerciseMessage = "Next exercise: " + exercise.getName();
                 setImage(imageView, exercise.getImage());
                 iconView.setImageResource(R.drawable.ic_watch);
                 title.setText(capitalize(exercise.getName()));
                 label.setText(timedAction.getSeconds() + " seconds");
-            } else if (state.futureAction instanceof RepsAction) {
-                final RepsAction repsAction = (RepsAction) state.futureAction;
+            } else if (state.futurePointedAction.isRepsAction()) {
+                final RepsAction repsAction = (RepsAction) state.futurePointedAction.action;
                 final Exercise exercise = repsAction.getExercise();
                 nextExerciseMessage = "Next exercise: " + exercise.getName();
                 setImage(imageView, exercise.getImage());
                 iconView.setImageResource(R.drawable.ic_reps);
                 title.setText(capitalize(exercise.getName()));
                 label.setText(repsAction.getReps() + " reps");
-            } else if (state.futureAction instanceof TimedRecovery) {
-                final TimedRecovery timedRecovery = (TimedRecovery) state.futureAction;
+            } else if (state.futurePointedAction.isTimedAction()) {
+                final TimedRecovery timedRecovery = (TimedRecovery) state.futurePointedAction.action;
                 iconView.setImageResource(R.drawable.ic_watch);
                 title.setText("Timed recovery");
                 label.setText(timedRecovery.getSeconds() + " seconds");
-            } else if (state.futureAction instanceof Recovery) {
-                final Recovery recovery = (Recovery) state.futureAction;
+            } else if (state.futurePointedAction.isRecoveryAction()) {
+                final Recovery recovery = (Recovery) state.futurePointedAction.action;
                 iconView.setImageResource(R.drawable.ic_reps);
                 title.setText("Recovery");
                 label.setText("");
