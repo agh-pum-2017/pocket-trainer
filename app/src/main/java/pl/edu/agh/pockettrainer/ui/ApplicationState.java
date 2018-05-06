@@ -35,6 +35,7 @@ public class ApplicationState extends Application {
     public Navigator navigator;
 
     public Action action;
+    public Action futureAction;
 
     public Progress getProgress() {
         return programRepository.getActiveProgram().getProgress();

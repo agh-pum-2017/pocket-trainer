@@ -170,4 +170,15 @@ public class Progress {
 
         return it.hasNext() ? it.next() : null;
     }
+
+    public Action getFutureAction() {
+
+        final ActionIterator it = program.getActionIterator();
+
+        for (int i = 0; it.hasNext() && i < trainingProgress.getNumRecords() + 1; i++) {
+            it.next();
+        }
+
+        return it.hasNext() ? it.next() : null;
+    }
 }

@@ -81,8 +81,15 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
     @Override
     protected void onDestroy() {
+
         stopTimer();
         tickTockSound.stop();
+
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+
         super.onDestroy();
     }
 
