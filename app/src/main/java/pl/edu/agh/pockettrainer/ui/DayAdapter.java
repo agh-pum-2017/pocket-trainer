@@ -32,7 +32,7 @@ public class DayAdapter extends ArrayAdapter<Day> {
         TextView ExercisesLabel = convertView.findViewById(R.id.exercise_list_label);
 
         DayLabel.setText("Day " + Integer.toString(position+1) + "");
-        ExercisesLabel.setText(day.getName() + ": " + "list of exercises : " + day.getClass());
+        ExercisesLabel.setText(day.getName() + ": " + "list of exercises : " + day.toString());
 
         return convertView;
     }
