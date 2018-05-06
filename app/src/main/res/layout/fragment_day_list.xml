@@ -2,9 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:appConfig="http://schemas.android.com/apk/res-auto"
     tools:context="pl.edu.agh.pockettrainer.ui.activities.DayListFragment">
-
 
     <ListView
         android:id="@+id/day_list"

@@ -1,88 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsActivity">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
+    <TabHost
+        android:id="@+id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="1dp"
+        tools:ignore="MissingConstraints">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <!--<TabHost-->
-        <!--android:id="@+id/tabhost"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--tools:layout_editor_absoluteX="32dp"-->
-        <!--tools:layout_editor_absoluteY="1dp"-->
-        <!--tools:ignore="MissingConstraints">-->
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eeeeee"/>
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical">-->
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#dddddd">
 
-            <!--<TabWidget-->
-                <!--android:id="@android:id/tabs"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="#eeeeee"/>-->
+                <LinearLayout
+                    android:id="@+id/About"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-            <!--<FrameLayout-->
-                <!--android:id="@android:id/tabcontent"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:background="#dddddd">-->
+                    <fragment
+                        android:id="@+id/fragment_program_details_list"
+                        android:name="pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
 
-                <!--<LinearLayout-->
-                    <!--android:id="@+id/About"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:orientation="vertical">-->
+                <LinearLayout
+                    android:id="@+id/Exercises"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <!--<android.support.v4.view.ViewPager-->
-                    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-                    <!--android:id="@+id/view_pager_about"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent" />-->
+                    <fragment
+                        android:id="@+id/fragment_exercise_list"
+                        android:name="pl.edu.agh.pockettrainer.ui.activities.ExerciseListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
 
-                <!--</LinearLayout>-->
+                <LinearLayout
+                    android:id="@+id/Schedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <!--<LinearLayout-->
-                    <!--android:id="@+id/Exercises"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:orientation="vertical">-->
-
-
-                    <!--<ListView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent" />-->
-                <!--</LinearLayout>-->
-
-                <!--<LinearLayout-->
-                    <!--android:id="@+id/Schedule"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:orientation="vertical">-->
-
-                    <!--<android.support.v4.view.ViewPager-->
-                        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-                        <!--android:id="@+id/view_pager_schedule"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent" />-->
-                <!--</LinearLayout>-->
-            <!--</FrameLayout>-->
-        <!--</LinearLayout>-->
-    <!--</TabHost>-->
+                    <fragment
+                        android:id="@+id/fragment_day_list"
+                        android:name="pl.edu.agh.pockettrainer.ui.activities.DayListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
 </android.support.constraint.ConstraintLayout>

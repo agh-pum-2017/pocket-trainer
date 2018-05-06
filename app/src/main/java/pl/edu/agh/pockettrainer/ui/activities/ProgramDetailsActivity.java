@@ -1,110 +1,62 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TabHost;
-
-import java.util.List;
-
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.program.repository.program.CachedProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.DecoratedProgram;
-import pl.edu.agh.pockettrainer.program.repository.program.FileProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepositoryFactory;
-import pl.edu.agh.pockettrainer.ui.DayAdapter;
-import pl.edu.agh.pockettrainer.ui.TabHostSwipeAdapter;
 
-public class ProgramDetailsActivity extends FragmentActivity {//AppCompatActivity {//
+public class ProgramDetailsActivity extends AppCompatActivity  {
 
-    ViewPager viewPager;
-    TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_program_details);
 
-        viewPager = findViewById(R.id.view_pager);
-        tabLayout = findViewById(R.id.tab_layout);
-
-        final Bundle extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            //Setting of program details into About
-            final ProgramRepository programRepository = ProgramRepositoryFactory.getCachedFileRepository(this);
-            final DecoratedProgram program = programRepository.getById(extras.getString("programId"));
-            setTitle(program.getMetadata().getName());
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            TabHostSwipeAdapter swipeAdapter = new TabHostSwipeAdapter(getSupportFragmentManager(),this);//, (ArrayAdapter<DecoratedProgram>) programs);
-            Log.d("SWP","ProgramDetailsActivity: swipeAdapter.getCount() = "+Integer.toString(swipeAdapter.getCount()));
-            if(viewPager==null) Log.d("SWP","ERROR!  viewPager==null");
-            viewPager.setAdapter(swipeAdapter);
-            tabLayout.setupWithViewPager(viewPager);
-            //viewPager.setCurrentItem(extras.getInt("position",0));
-            // TODO
-        }
-    }
-}//*/
-
-        /*
-    ViewPager viewPagerAbout;
-    ViewPager viewPagerSchedule;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_program_details);
-
-        viewPagerAbout = (ViewPager)findViewById(R.id.view_pager_about);
-        viewPagerSchedule = (ViewPager)findViewById(R.id.view_pager_schedule);
-
-        final Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {
-            TabHost tabHost = (TabHost) findViewById(R.id.tabhost);
-            tabHost.setup();
             //About
-            TabHost.TabSpec spec = tabHost.newTabSpec("About");
-            spec.setContent(R.id.About);
-            spec.setIndicator("About");
-            tabHost.addTab(spec);
+            ProgramDetailsListFragment fragmentDetailsList = new ProgramDetailsListFragment();
+            fragmentDetailsList.setArguments(extras);
+            fragmentTransaction.add(R.id.fragment_program_details_list,fragmentDetailsList);
+
             //Exercises
-            spec = tabHost.newTabSpec("Exercises");
-            spec.setContent(R.id.Exercises);
-            spec.setIndicator("Exercises");
-            tabHost.addTab(spec);
+            ExerciseListFragment fragmentExerciseList = new ExerciseListFragment();
+            fragmentExerciseList.setArguments(extras);
+            fragmentTransaction.add(R.id.fragment_exercise_list,fragmentExerciseList);
+
             //Schedule
-            spec = tabHost.newTabSpec("Schedule");
-            spec.setContent(R.id.Schedule);
-            spec.setIndicator("Schedule");
-            tabHost.addTab(spec);
+            DayListFragment fragmentDayList = new DayListFragment();
+            fragmentDayList.setArguments(extras);
+            fragmentTransaction.add(R.id.fragment_day_list,fragmentDayList);
 
-            //Setting of program details into About
-            //final List<DecoratedProgram> programs = ProgramRepositoryFactory.getCachedFileRepository(this).getInstalled();
-            ProgramRepository programRepository = ProgramRepositoryFactory.getCachedFileRepository(getApplicationContext());
-            final DecoratedProgram program = programRepository.getById(extras.getString("programId"));
-            //ProgramRepository programs = ProgramRepositoryFactory.getCachedFileRepository(getApplicationContext());
-            ProgramDetailsSwipeAdapter swipeAdapter = new ProgramDetailsSwipeAdapter(getSupportFragmentManager(),this);//, (ArrayAdapter<DecoratedProgram>) programs);
-            Log.d("SWP","[before] viewPagerAbout.setAdapter(swipeAdapter);");
-            viewPagerAbout.setAdapter(swipeAdapter);
-            viewPagerAbout.setCurrentItem(extras.getInt("position",0));
+            fragmentTransaction.commit();
 
-            //Setting of program schedule into Schedule
-            DayListSwipeAdapter dayListSwipeAdapter = new DayListSwipeAdapter(getSupportFragmentManager(),this);
-            viewPagerSchedule.setAdapter(dayListSwipeAdapter);
-            viewPagerSchedule.setCurrentItem(extras.getInt("position",0));
+            TabHost tabHost = findViewById(R.id.tabhost);
+            tabHost.setup();
 
-            tabHost.setCurrentTabByTag("Schedule");
-            //setTitle(program.getMetadata().getName());
-            // TODO
+            //About
+            TabHost.TabSpec specAbout = tabHost.newTabSpec("About");
+            specAbout.setContent(R.id.About);
+            specAbout.setIndicator("About");
+            //Exercises
+            TabHost.TabSpec specEcercises = tabHost.newTabSpec("Exercises");
+            specEcercises.setContent(R.id.Exercises);
+            specEcercises.setIndicator("Exercises");
+            //Schedule
+            TabHost.TabSpec specSchedule = tabHost.newTabSpec("Schedule");
+            specSchedule.setContent(R.id.Schedule);
+            specSchedule.setIndicator("Schedule");
+
+            tabHost.addTab(specAbout);
+            tabHost.addTab(specEcercises);
+            tabHost.addTab(specSchedule);
         }
     }
-}/*
-//*/
+}

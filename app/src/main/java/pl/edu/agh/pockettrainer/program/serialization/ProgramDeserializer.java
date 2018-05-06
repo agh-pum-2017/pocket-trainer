@@ -1,5 +1,7 @@
 package pl.edu.agh.pockettrainer.program.serialization;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -78,6 +80,9 @@ public class ProgramDeserializer {
     }
 
     protected File parsePath(String path) {
+        Log.d("IMGMUS","path to file: " + path);
+        if(path==null)
+            Log.d("IMGMUS","path is null (why?): " + path);
         return new File(path);
     }
 
@@ -120,7 +125,8 @@ public class ProgramDeserializer {
                 entry.getKey(),
                 child.get("muscles").asEnums(Muscle.class),
                 child.get("text").asString(),
-                parsePath(child.get("image").asString()));
+                parsePath(child.get("image").asString()),
+                parsePath(child.get("imagemuscles").asString()));
             exerciseMap.put(entry.getKey(), exercise);
         }
         return exerciseMap;

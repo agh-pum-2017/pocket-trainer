@@ -11,15 +11,18 @@ public class Exercise implements Comparable<Exercise> {
     private final Set<Muscle> muscles;
     private final String description;
     private final File image;
+    private final File imagemuscles;
 
     public Exercise(String name,
                     Set<Muscle> muscles,
                     String description,
-                    File image) {
+                    File image,
+                    File imagemuscles) {
         this.name = name;
         this.description = description;
         this.muscles = muscles;
         this.image = image;
+        this.imagemuscles = imagemuscles;
     }
 
     public String getName() {
@@ -36,6 +39,10 @@ public class Exercise implements Comparable<Exercise> {
 
     public File getImage() {
         return image;
+    }
+
+    public File getImageOfMuslces() {
+        return imagemuscles;
     }
 
     @Override
