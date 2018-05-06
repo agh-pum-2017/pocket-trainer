@@ -35,7 +35,7 @@ public abstract class WithMenuActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00A6FF")));

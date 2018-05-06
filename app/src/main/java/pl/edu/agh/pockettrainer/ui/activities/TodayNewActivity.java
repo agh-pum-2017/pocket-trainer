@@ -5,10 +5,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public class TodayNewActivity extends WithMenuActivity {
@@ -26,9 +24,8 @@ public class TodayNewActivity extends WithMenuActivity {
     @Override
     protected void initView(View child) {
 
-        MetaRepository metaRepository = new DefaultMetaRepository(this);
-        ProgramRepository programRepository = metaRepository.getProgramRepository();
-        Program program = programRepository.getActiveProgram();
+        final ApplicationState state = (ApplicationState) getApplicationContext();
+        final Program program = state.programRepository.getActiveProgram();
 
         final TextView titleLabel = child.findViewById(R.id.today_new_title);
         titleLabel.setText(program.getMetadata().getName());

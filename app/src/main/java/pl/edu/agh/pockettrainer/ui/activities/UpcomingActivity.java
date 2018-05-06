@@ -22,15 +22,11 @@ import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
-import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.Program;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
-import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public class UpcomingActivity extends AppCompatActivity {
+
+    private ApplicationState state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +44,9 @@ public class UpcomingActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_white);
         }
 
-        final MetaRepository metaRepository = new DefaultMetaRepository(this);
-        final ProgramRepository programRepository = metaRepository.getProgramRepository();
-        final Program program = programRepository.getActiveProgram();
-        final Progress progress = program.getProgress();
+        state = (ApplicationState) getApplicationContext();
 
-        final Action action = progress.getNextAction();
-
-        final ApplicationState state = (ApplicationState) getApplicationContext();
+        final Action action = state.getProgress().getNextAction();
         state.action = action;
 
         final ImageView imageView = findViewById(R.id.upcoming_action_image);
@@ -81,13 +72,13 @@ public class UpcomingActivity extends AppCompatActivity {
             title.setText(capitalize(exercise.getName()));
             label.setText(repsAction.getReps() + " reps");
         } else if (action instanceof TimedRecovery) {
-            TimedRecovery timedRecovery = (TimedRecovery) action;
+            final TimedRecovery timedRecovery = (TimedRecovery) action;
             iconView.setImageResource(R.drawable.ic_watch);
             title.setText("Timed recovery");
             label.setText(timedRecovery.getSeconds() + " seconds");
             button.setVisibility(View.INVISIBLE);
         } else if (action instanceof Recovery) {
-            TimedRecovery timedRecovery = (TimedRecovery) action;
+            final Recovery recovery = (Recovery) action;
             iconView.setImageResource(R.drawable.ic_reps);
             title.setText("Recovery");
             label.setText("");
@@ -106,13 +97,12 @@ public class UpcomingActivity extends AppCompatActivity {
     }
 
     public void onShowButtonClick(View view) {
-        final Navigator navigator = new Navigator(this);
         // TODO show exercise details (fragment of program details?)
+        // state.navigator.navigateTo();
     }
 
     public void onGoButtonClick(View view) {
-        final Navigator navigator = new Navigator(this);
-        navigator.navigateTo(CountdownActivity.class);
+        state.navigator.navigateTo(CountdownActivity.class);
     }
 
     private void setImage(ImageView imageView, File imageFile) {

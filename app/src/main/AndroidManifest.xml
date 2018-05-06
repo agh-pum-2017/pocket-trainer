@@ -23,28 +23,39 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity android:name=".ui.activities.TodayNoneActivity" />
         <activity android:name=".ui.activities.ProgramBrowserActivity" />
+
         <activity
             android:name=".ui.activities.ProgramDetailsActivity"
             android:parentActivityName=".ui.activities.ProgramBrowserActivity" />
+
         <activity android:name=".ui.activities.TodayFinishedActivity" />
         <activity android:name=".ui.activities.TodayRecoveryActivity" />
         <activity android:name=".ui.activities.TodayNewActivity" />
         <activity android:name=".ui.activities.TodayReadyActivity" />
         <activity android:name=".ui.activities.UpcomingActivity" />
         <activity android:name=".ui.activities.TodayBelatedActivity" />
+
         <activity
             android:name=".ui.activities.CountdownActivity"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".ui.activities.TimedActionActivity"
+
+        <activity
+            android:name=".ui.activities.TimedActionActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity android:name=".ui.activities.TimedRecoveryActivity"
                   android:noHistory="true"
                   android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
     </application>
 
 </manifest>

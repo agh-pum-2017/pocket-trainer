@@ -6,6 +6,7 @@ import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.Navigator;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramBrowserActivity;
 
@@ -20,21 +21,19 @@ public class StartupTask implements Runnable {
     @Override
     public void run() {
 
-        final AppConfig appConfig = new AppConfig(context);
-        final MetaRepository metaRepository = new DefaultMetaRepository(context);
-        final ProgramRepository programRepository = metaRepository.getProgramRepository();
+        final ApplicationState state = ApplicationState.getInstance(context);
 
-        if (appConfig.isFirstRun()) {
-            for (String name : programRepository.getBundledArchives()) {
-                programRepository.installResource(name);
+        if (state.appConfig.isFirstRun()) {
+            for (String name : state.programRepository.getBundledArchives()) {
+                state.programRepository.installResource(name);
             }
         }
 
-        programRepository.getInstalled();  // force load all while still showing splash screen
+        state.programRepository.getInstalled();  // force load all while still showing splash screen
 
         final Navigator navigator = new Navigator(context);
-        if (programRepository.hasActiveProgram()) {
-            navigator.navigateToToday(programRepository.getActiveProgram());
+        if (state.programRepository.hasActiveProgram()) {
+            navigator.navigateToToday(state.programRepository.getActiveProgram());
         } else {
             navigator.navigateTo(ProgramBrowserActivity.class);
         }

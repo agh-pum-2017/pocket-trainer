@@ -12,7 +12,7 @@ import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
-import pl.edu.agh.pockettrainer.ui.Navigator;
+import pl.edu.agh.pockettrainer.ui.ApplicationState;
 
 public class TodayRecoveryActivity extends WithMenuActivity {
 
@@ -63,12 +63,13 @@ public class TodayRecoveryActivity extends WithMenuActivity {
     @Override
     protected void initView(View child) {
 
+        final ApplicationState state = (ApplicationState) getApplicationContext();
+
         labelCounter = template.findViewById(R.id.today_recovery_textViewCounter);
 
-        setNextTrainingAt();
+        setNextTrainingAt(state);
 
         final long duration = Math.max(0L, nextTrainingAt - System.currentTimeMillis());
-        final Navigator navigator = new Navigator(this);
 
         if (duration > 0) {
             labelCounter.setVisibility(View.VISIBLE);
@@ -82,7 +83,7 @@ public class TodayRecoveryActivity extends WithMenuActivity {
                 @Override
                 public void onFinish() {
                     labelCounter.setVisibility(View.INVISIBLE);
-                    navigator.navigateTo(TodayReadyActivity.class);
+                    state.navigator.navigateTo(TodayReadyActivity.class);
                 }
             };
             timer.start();
@@ -92,12 +93,11 @@ public class TodayRecoveryActivity extends WithMenuActivity {
     }
 
     private void setNextTrainingAt() {
+        setNextTrainingAt((ApplicationState) getApplicationContext());
+    }
 
-        MetaRepository metaRepository = new DefaultMetaRepository(this);
-        ProgramRepository programRepository = metaRepository.getProgramRepository();
-        Program program = programRepository.getActiveProgram();
-        Progress progress = program.getProgress();
-
+    private void setNextTrainingAt(ApplicationState state) {
+        final Progress progress = state.getProgress();
         nextTrainingAt = progress.getNextTrainingAt().timestamp;
     }
 

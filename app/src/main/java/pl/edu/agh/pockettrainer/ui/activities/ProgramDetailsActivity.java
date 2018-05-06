@@ -8,10 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.ui.ApplicationState;
 
 public class ProgramDetailsActivity extends AppCompatActivity {
 
@@ -34,9 +32,8 @@ public class ProgramDetailsActivity extends AppCompatActivity {
 
             final String id = extras.getString("programId");
 
-            final MetaRepository metaRepository = new DefaultMetaRepository(this);
-            final ProgramRepository programRepository = metaRepository.getProgramRepository();
-            final Program program = programRepository.getById(id);
+            final ApplicationState state = (ApplicationState) getApplicationContext();
+            final Program program = state.programRepository.getById(id);
 
             setTitle(Html.fromHtml("<font color='#ffffff'>" + program.getMetadata().getName() + "</font>"));
 

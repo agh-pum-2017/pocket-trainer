@@ -1,10 +1,9 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
-import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,13 +18,8 @@ import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.domain.Exercise;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
-import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.Program;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
-import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public class TimedActionActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
@@ -37,7 +31,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     private TextView labelSeconds;
     private int numSeconds;
     private TextToSpeech tts;
-    private Navigator navigator;
+    private ApplicationState state;
     private Progress progress;
 
     @Override
@@ -51,12 +45,8 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timed_action);
 
-        final MetaRepository metaRepository = new DefaultMetaRepository(this);
-        final ProgramRepository programRepository = metaRepository.getProgramRepository();
-        final Program program = programRepository.getActiveProgram();
-        progress = program.getProgress();
-
-        navigator = new Navigator(this);
+        state = (ApplicationState) getApplicationContext();
+        progress = state.getProgress();
 
         tts = new TextToSpeech(this, this);
 
@@ -65,7 +55,6 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         final TextView label = findViewById(R.id.timed_action_label);
         labelSeconds = findViewById(R.id.timed_action_seconds);
 
-        final ApplicationState state = (ApplicationState) getApplicationContext();
         timedAction = (TimedAction) state.action;
         final Exercise exercise = timedAction.getExercise();
 
@@ -122,7 +111,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         stopTimer();
         tickTockSound.stop();
         progress.skipAction();
-        navigator.navigateToNextAction(progress, timedAction);
+        state.navigator.navigateToNextAction(progress, timedAction);
     }
 
     private void stopTimer() {
@@ -163,7 +152,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
                 public void onFinish() {
                     tickTockSound.stop();
                     progress.finishAction();
-                    navigator.navigateToNextAction(progress, timedAction);
+                    state.navigator.navigateToNextAction(progress, timedAction);
                 }
             };
 

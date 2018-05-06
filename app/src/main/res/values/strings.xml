@@ -11,4 +11,6 @@
     <string name="show">Show</string>
     <string name="go">Go!</string>
     <string name="skip">Skip</string>
+    <string name="coming_next">Coming next...</string>
+    <string name="recovery">Recovery</string>
 </resources>

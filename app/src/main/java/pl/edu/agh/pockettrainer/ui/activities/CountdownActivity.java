@@ -111,14 +111,13 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
     private void navigateToTrainer() {
 
         final ApplicationState state = (ApplicationState) getApplicationContext();
-        final Navigator navigator = new Navigator(this);
 
         if (state.action instanceof TimedAction) {
-            navigator.navigateTo(TimedActionActivity.class);
+            state.navigator.navigateTo(TimedActionActivity.class);
         } else if (state.action instanceof RepsAction) {
             // TODO navigator.navigateTo(RepsActionActivity.class);
         } else if (state.action instanceof TimedRecovery) {
-            // TODO navigator.navigateTo(TimedRecoveryActivity.class);
+            state.navigator.navigateTo(TimedRecoveryActivity.class);
         } else if (state.action instanceof Recovery) {
             // TODO navigator.navigateTo(TimedRecoveryActivity.class);
         }
