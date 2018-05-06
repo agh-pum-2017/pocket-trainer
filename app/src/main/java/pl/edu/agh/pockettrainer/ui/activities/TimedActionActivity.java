@@ -25,7 +25,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
     private final Logger logger = new Logger(TimedActionActivity.class);
 
-    private BufferedMediaPlayer tickTockSound;
+    private BufferedMediaPlayer beatSound;
     private CountDownTimer timer;
     private TimedAction timedAction;
     private TextView labelSeconds;
@@ -75,7 +75,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     @Override
     protected void onPause() {
         stopTimer();
-        tickTockSound.stop();
+        beatSound.stop();
         super.onPause();
     }
 
@@ -83,7 +83,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     protected void onDestroy() {
 
         stopTimer();
-        tickTockSound.stop();
+        beatSound.stop();
 
         if (tts != null) {
             tts.stop();
@@ -96,7 +96,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     @Override
     protected void onStop() {
         stopTimer();
-        tickTockSound.stop();
+        beatSound.stop();
         super.onStop();
     }
 
@@ -116,9 +116,9 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
     public void onSkipButtonClick(View view) {
         stopTimer();
-        tickTockSound.stop();
+        beatSound.stop();
         progress.skipAction();
-        state.navigator.navigateToNextAction(progress, timedAction);
+        state.navigator.navigateToNextAction(progress);
     }
 
     private void stopTimer() {
@@ -135,8 +135,8 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
         if (timer == null) {
 
-            tickTockSound = BufferedMediaPlayer.create(this, R.raw.beat);
-            tickTockSound.start();
+            beatSound = BufferedMediaPlayer.create(this, R.raw.beat);
+            beatSound.start();
 
             timer = new CountDownTimer((1 + timedAction.getSeconds()) * 1000L, 1000L) {
 
@@ -157,9 +157,9 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
                 @Override
                 public void onFinish() {
-                    tickTockSound.stop();
+                    beatSound.stop();
                     progress.finishAction();
-                    state.navigator.navigateToNextAction(progress, timedAction);
+                    state.navigator.navigateToNextAction(progress);
                 }
             };
 

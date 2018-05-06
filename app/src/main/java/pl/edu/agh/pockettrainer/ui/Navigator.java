@@ -35,10 +35,10 @@ public class Navigator {
         context.startActivity(new Intent(context, activityClass));
     }
 
-    public void navigateToNextAction(Progress progress, Action action) {
+    public void navigateToNextAction(Progress progress) {
 
         final ApplicationState state = (ApplicationState) context.getApplicationContext();
-        state.action = state.getProgress().getNextAction();
+        state.action = progress.getNextAction();
         state.futureAction = null;
 
         if (state.action == null) {
