@@ -72,7 +72,7 @@ public class ScheduleAdapter extends ArrayAdapter<Day> {
             final Exercise exercise = exercises.get(i);
             final Integer count = map.get(exercise);
 
-            sb.append(count).append("× ").append(exercise.getName().toLowerCase());
+            sb.append(count).append("× ").append(capitalize(exercise.getName()));
 
             if (i < exercises.size() - 1) {
                 sb.append("\n");
@@ -116,5 +116,10 @@ public class ScheduleAdapter extends ArrayAdapter<Day> {
         });
 
         return sorted;
+    }
+
+    private String capitalize(String string) {
+        string = string.toLowerCase().replaceAll("[_-]", " ");
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 }

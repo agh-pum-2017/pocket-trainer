@@ -178,7 +178,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     }
 
     private String capitalize(String string) {
-        string = string.toLowerCase();
+        string = string.toLowerCase().replaceAll("[_-]", " ");
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 }

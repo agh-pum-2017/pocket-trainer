@@ -62,7 +62,7 @@ public class ExerciseAdapter extends ArrayAdapter<Exercise> {
     }
 
     private String capitalize(String string) {
-        string = string.toLowerCase();
+        string = string.toLowerCase().replaceAll("[_-]", " ");
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 
