@@ -13,18 +13,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
 import pl.edu.agh.pockettrainer.R;
+import pl.edu.agh.pockettrainer.program.domain.Exercise;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
+import pl.edu.agh.pockettrainer.ui.ExerciseAdapter;
+import pl.edu.agh.pockettrainer.ui.ProgramAdapter;
 
 public class ProgramDetailsActivity extends AppCompatActivity {
 
@@ -192,9 +197,41 @@ public class ProgramDetailsActivity extends AppCompatActivity {
 
     public static class ExercisesFragment extends Fragment {
 
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+            final Bundle arguments = getArguments();
+            final ApplicationState state = (ApplicationState) getContext().getApplicationContext();
+            final Program program = state.programRepository.getById(arguments.getString("programId"));
+            final List<Exercise> exercises = sortByName(program.getExercises());
+
+            final View rootView = inflater.inflate(R.layout.fragment_program_details_exercises, container, false);
+
+            final ListView listView = rootView.findViewById(R.id.program_details_exercises_listView);
+            listView.setAdapter(new ExerciseAdapter(this.getContext(), exercises));
+
+            return rootView;
+        }
+
+        private List<Exercise> sortByName(Set<Exercise> exercises) {
+
+            final List<Exercise> sorted = new ArrayList<>(exercises);
+
+            Collections.sort(sorted, new Comparator<Exercise>() {
+                @Override
+                public int compare(Exercise o1, Exercise o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+
+            return sorted;
+        }
     }
 
     public static class ScheduleFragment extends Fragment {
+
+        // TODO
 
     }
 }
