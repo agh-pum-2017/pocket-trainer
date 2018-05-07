@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appConfig="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:drawable/dialog_holo_light_frame">
@@ -26,7 +25,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Push-ups"
         android:textSize="22sp"
         appConfig:layout_constraintLeft_toLeftOf="parent"
         appConfig:layout_constraintTop_toBottomOf="@+id/program_details_exercise_image" />
@@ -39,14 +37,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto"
-        android:text="The push-up is the ultimate bodyweight exercise that utilizes literally every major muscle in your body, thereby helping you firm your whole body. Get into a plank position, placing your hands directly under the shoulders and push your whole body up, maintaining a straight line with the legs, back and butt. Lower your body down on the same way and repeat."
         android:textSize="16sp"
         appConfig:layout_constraintEnd_toEndOf="parent"
         appConfig:layout_constraintStart_toStartOf="parent"
         appConfig:layout_constraintTop_toBottomOf="@+id/program_details_exercise_title" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/program_details_exercise_muscles"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -54,8 +51,7 @@
         android:layout_marginTop="8dp"
         appConfig:layout_constraintEnd_toEndOf="parent"
         appConfig:layout_constraintStart_toStartOf="parent"
-        appConfig:layout_constraintTop_toBottomOf="@+id/program_details_exercise_description"
-        appConfig:srcCompat="@drawable/muscle_blank_figures" />
+        appConfig:layout_constraintTop_toBottomOf="@+id/program_details_exercise_description" />
 
 
 </android.support.constraint.ConstraintLayout>
