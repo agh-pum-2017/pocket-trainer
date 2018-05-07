@@ -26,10 +26,11 @@ import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Exercise;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
+import pl.edu.agh.pockettrainer.program.domain.days.Day;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
-import pl.edu.agh.pockettrainer.ui.ExerciseAdapter;
-import pl.edu.agh.pockettrainer.ui.ProgramAdapter;
+import pl.edu.agh.pockettrainer.ui.adapter.ExerciseAdapter;
+import pl.edu.agh.pockettrainer.ui.adapter.ScheduleAdapter;
 
 public class ProgramDetailsActivity extends AppCompatActivity {
 
@@ -231,7 +232,21 @@ public class ProgramDetailsActivity extends AppCompatActivity {
 
     public static class ScheduleFragment extends Fragment {
 
-        // TODO
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+            final Bundle arguments = getArguments();
+            final ApplicationState state = (ApplicationState) getContext().getApplicationContext();
+            final Program program = state.programRepository.getById(arguments.getString("programId"));
+            final List<Day> schedule = program.getSchedule();
+
+            final View rootView = inflater.inflate(R.layout.fragment_program_details_schedule, container, false);
+
+            final ListView listView = rootView.findViewById(R.id.program_details_schedule_listView);
+            listView.setAdapter(new ScheduleAdapter(this.getContext(), schedule));
+
+            return rootView;
+        }
     }
 }

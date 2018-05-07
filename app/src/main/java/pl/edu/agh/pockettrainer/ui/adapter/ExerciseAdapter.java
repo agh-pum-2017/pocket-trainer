@@ -1,4 +1,4 @@
-package pl.edu.agh.pockettrainer.ui;
+package pl.edu.agh.pockettrainer.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package pl.edu.agh.pockettrainer.ui;
+package pl.edu.agh.pockettrainer.ui.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,6 +28,7 @@ import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.ui.SingleClickListener;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsActivity;
 
 public class ProgramAdapter extends ArrayAdapter<Program> {

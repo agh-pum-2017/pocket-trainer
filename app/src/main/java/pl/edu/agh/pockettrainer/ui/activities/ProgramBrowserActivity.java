@@ -6,7 +6,7 @@ import android.widget.ListView;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
-import pl.edu.agh.pockettrainer.ui.ProgramAdapter;
+import pl.edu.agh.pockettrainer.ui.adapter.ProgramAdapter;
 
 public class ProgramBrowserActivity extends WithMenuActivity {
 
