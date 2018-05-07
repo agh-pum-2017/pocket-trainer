@@ -17,7 +17,6 @@ import java.io.File;
 
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Exercise;
-import pl.edu.agh.pockettrainer.program.domain.actions.Action;
 import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
@@ -61,9 +60,6 @@ public class UpcomingActivity extends AppCompatActivity {
         final ImageView iconView = findViewById(R.id.upcoming_action_icon);
         final TextView title = findViewById(R.id.upcoming_action_title);
         final TextView label = findViewById(R.id.upcoming_action_label);
-        final TextView button = findViewById(R.id.upcoming_action_button_show);
-
-        button.setVisibility(View.VISIBLE);
 
         if (pointedAction.isTimedAction()) {
             final TimedAction timedAction = (TimedAction) pointedAction.action;
@@ -84,13 +80,11 @@ public class UpcomingActivity extends AppCompatActivity {
             iconView.setImageResource(R.drawable.ic_watch);
             title.setText("Timed recovery");
             label.setText(timedRecovery.getSeconds() + " seconds");
-            button.setVisibility(View.INVISIBLE);
         } else if (pointedAction.isRecoveryAction()) {
             final Recovery recovery = (Recovery) pointedAction.action;
             iconView.setImageResource(R.drawable.ic_reps);
             title.setText("Recovery");
             label.setText("");
-            button.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -102,11 +96,6 @@ public class UpcomingActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onShowButtonClick(View view) {
-        // TODO show exercise details (fragment of program details?)
-        // state.navigator.navigateTo();
     }
 
     public void onGoButtonClick(View view) {
