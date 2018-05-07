@@ -14,8 +14,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import pl.edu.agh.pockettrainer.R;
@@ -62,12 +63,17 @@ public class ScheduleAdapter extends ArrayAdapter<Day> {
 
     private String getDescription(Day day) {
 
-        final List<Exercise> exercises = sorted(getExercises(day));
+        final Map<Exercise, Integer> map = getExerciseCount(day);
+        final List<Exercise> exercises = sorted(map.keySet());
 
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < exercises.size(); i++) {
+
             final Exercise exercise = exercises.get(i);
-            sb.append(String.valueOf(i + 1)).append(". ").append(exercise.getName().toLowerCase());
+            final Integer count = map.get(exercise);
+
+            sb.append(count).append("× ").append(exercise.getName().toLowerCase());
+
             if (i < exercises.size() - 1) {
                 sb.append("\n");
             }
@@ -76,20 +82,26 @@ public class ScheduleAdapter extends ArrayAdapter<Day> {
         return sb.toString();
     }
 
-    private Set<Exercise> getExercises(Day day) {
-        final Set<Exercise> exercises = new HashSet<>();
+    private Map<Exercise, Integer> getExerciseCount(Day day) {
+        final Map<Exercise, Integer> map = new HashMap<>();
         for (Action action : day.getActions()) {
             if (action instanceof TimedAction) {
                 final TimedAction timedAction = (TimedAction) action;
                 final Exercise exercise = timedAction.getExercise();
-                exercises.add(exercise);
+                if (!map.containsKey(exercise)) {
+                    map.put(exercise, 0);
+                }
+                map.put(exercise, map.get(exercise) + 1);
             } else if (action instanceof RepsAction) {
                 final RepsAction repsAction = (RepsAction) action;
                 final Exercise exercise = repsAction.getExercise();
-                exercises.add(exercise);
+                if (!map.containsKey(exercise)) {
+                    map.put(exercise, 0);
+                }
+                map.put(exercise, map.get(exercise) + 1);
             }
         }
-        return exercises;
+        return map;
     }
 
     private List<Exercise> sorted(Set<Exercise> exercises) {
