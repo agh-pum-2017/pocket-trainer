@@ -13,4 +13,10 @@
     <string name="skip">Skip</string>
     <string name="coming_next">Coming next...</string>
     <string name="recovery">Recovery</string>
+    <string name="title_activity_program_details">ProgramDetailsActivity</string>
+    <string name="tab_text_1">About</string>
+    <string name="tab_text_2">Exercises</string>
+    <string name="tab_text_3">Schedule</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

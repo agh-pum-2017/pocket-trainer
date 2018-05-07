@@ -12,7 +12,6 @@
         android:roundIcon="@drawable/pt_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -27,13 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.activities.TodayNoneActivity" />
         <activity android:name=".ui.activities.ProgramBrowserActivity" />
-
-        <activity
-            android:name=".ui.activities.ProgramDetailsActivity"
-            android:parentActivityName=".ui.activities.ProgramBrowserActivity" />
 
         <activity android:name=".ui.activities.TodayFinishedActivity" />
         <activity android:name=".ui.activities.TodayRecoveryActivity" />
@@ -41,21 +35,27 @@
         <activity android:name=".ui.activities.TodayReadyActivity" />
         <activity android:name=".ui.activities.UpcomingActivity" />
         <activity android:name=".ui.activities.TodayBelatedActivity" />
-
         <activity
             android:name=".ui.activities.CountdownActivity"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".ui.activities.TimedActionActivity"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-        <activity android:name=".ui.activities.TimedRecoveryActivity"
-                  android:noHistory="true"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-
+        <activity
+            android:name=".ui.activities.TimedRecoveryActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".ui.activities.ProgramDetailsActivity"
+            android:label="@string/title_activity_program_details"
+            android:parentActivityName=".ui.activities.ProgramBrowserActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pl.edu.agh.pockettrainer.ui.activities.ProgramBrowserActivity" />
+        </activity>
     </application>
 
 </manifest>
