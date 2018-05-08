@@ -114,11 +114,11 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
         if (state.pointedAction.isTimedAction()) {
             state.navigator.navigateTo(TimedActionActivity.class);
         } else if (state.pointedAction.isRepsAction()) {
-            // TODO navigator.navigateTo(RepsActionActivity.class);
+            state.navigator.navigateTo(RepsActionActivity.class);
         } else if (state.pointedAction.isTimedRecoveryAction()) {
             state.navigator.navigateTo(TimedRecoveryActivity.class);
         } else if (state.pointedAction.isRecoveryAction()) {
-            // TODO navigator.navigateTo(TimedRecoveryActivity.class);
+            state.navigator.navigateTo(RecoveryActionActivity.class);
         }
     }
 

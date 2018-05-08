@@ -28,7 +28,6 @@
         </activity>
         <activity android:name=".ui.activities.TodayNoneActivity" />
         <activity android:name=".ui.activities.ProgramBrowserActivity" />
-
         <activity android:name=".ui.activities.TodayFinishedActivity" />
         <activity android:name=".ui.activities.TodayRecoveryActivity" />
         <activity android:name=".ui.activities.TodayNewActivity" />
@@ -56,6 +55,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pl.edu.agh.pockettrainer.ui.activities.ProgramBrowserActivity" />
         </activity>
+        <activity
+            android:name=".ui.activities.RepsActionActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".ui.activities.RecoveryActionActivity"
+                  android:noHistory="true"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>

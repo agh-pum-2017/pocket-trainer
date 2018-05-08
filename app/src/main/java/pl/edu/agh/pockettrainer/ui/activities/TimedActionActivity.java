@@ -157,7 +157,9 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
                             tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
                         }
                     } else {
-                        if (secondsLeft % 30 == 0 || (numSeconds == maxSeconds - 1)) {
+                        if (numSeconds == maxSeconds - 1) {
+                            tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                        } else if (secondsLeft % 30 == 0) {
                             if (!tts.isSpeaking()) {
                                 tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
                             }
