@@ -1,6 +1,7 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.Locale;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.domain.Exercise;
+import pl.edu.agh.pockettrainer.program.domain.ProgressState;
 import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
 import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
@@ -50,8 +52,6 @@ public class RecoveryActionActivity extends AppCompatActivity implements TextToS
         state = (ApplicationState) getApplicationContext();
         progress = state.getProgress();
         progress.startAction();
-
-        tts = new TextToSpeech(this, this);
 
         recovery = (Recovery) state.pointedAction.action;
 
@@ -105,6 +105,8 @@ public class RecoveryActionActivity extends AppCompatActivity implements TextToS
             label.setVisibility(View.INVISIBLE);
         }
 
+        tts = new TextToSpeech(this, this);
+
         super.onResume();
     }
 
@@ -120,8 +122,32 @@ public class RecoveryActionActivity extends AppCompatActivity implements TextToS
     }
 
     public void onDoneButtonClick(View view) {
+
         progress.finishAction();
-        state.navigator.navigateToNextAction(progress);
+
+        if (state.futurePointedAction == null) {
+            tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
+            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override
+                public void onStart(String utteranceId) {
+                    // do nothing
+                }
+
+                @Override
+                public void onDone(String utteranceId) {
+                    if ("end_of_workout".equals(utteranceId)) {
+                        state.navigator.navigateToNextAction(progress);
+                    }
+                }
+
+                @Override
+                public void onError(String utteranceId) {
+                    // do nothing
+                }
+            });
+        } else {
+            state.navigator.navigateToNextAction(progress);
+        }
     }
 
     private void setImage(ImageView imageView, File imageFile) {

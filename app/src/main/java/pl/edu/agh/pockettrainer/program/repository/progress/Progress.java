@@ -174,12 +174,23 @@ public class Progress {
 
     public PointedAction getFutureAction() {
 
+        final PointedAction currentAction = getNextAction();
+
         final ActionIterator it = program.getActionIterator();
 
         for (int i = 0; it.hasNext() && i < trainingProgress.getNumRecords() + 1; i++) {
             it.next();
         }
 
-        return it.hasNext() ? it.next() : null;
+        if (it.hasNext()) {
+            PointedAction futureAction = it.next();
+            if (futureAction.isSameDayAs(currentAction)) {
+                return futureAction;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }

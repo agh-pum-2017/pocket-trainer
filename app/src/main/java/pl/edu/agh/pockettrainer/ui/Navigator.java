@@ -3,15 +3,9 @@ package pl.edu.agh.pockettrainer.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
-
-import java.util.Locale;
 
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.domain.ProgressState;
-import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
-import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.activities.RecoveryActionActivity;
@@ -29,7 +23,6 @@ public class Navigator {
     private final Logger logger = new Logger(Navigator.class);
 
     private final Context context;
-    private TextToSpeech tts;
 
     public Navigator(Context context) {
         this.context = context;
@@ -66,7 +59,6 @@ public class Navigator {
                 }
             }
         } else {
-            speakEndOfWorkout();
             navigateToToday(progress.getProgram());
         }
     }
@@ -95,46 +87,5 @@ public class Navigator {
                 navigateTo(TodayFinishedActivity.class);
                 break;
         }
-    }
-
-    private void speakEndOfWorkout() {
-
-        final TextToSpeech.OnInitListener initListener = new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    final int result = tts.setLanguage(Locale.US);
-                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        logger.error("TTS language is not supported: US English");
-                    } else {
-                        tts.speak("End of workout.", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
-                    }
-                } else {
-                    logger.error("Unable to initialize TTS");
-                }
-            }
-        };
-
-        tts = new TextToSpeech(context.getApplicationContext(), initListener);
-        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-            @Override
-            public void onStart(String utteranceId) {
-
-            }
-
-            @Override
-            public void onDone(String utteranceId) {
-                if ("end_of_workout".equals(utteranceId)) {
-                    tts.stop();
-                    tts.shutdown();
-                }
-            }
-
-            @Override
-            public void onError(String utteranceId) {
-                tts.stop();
-                tts.shutdown();
-            }
-        });
     }
 }

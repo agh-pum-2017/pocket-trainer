@@ -35,4 +35,8 @@ public class PointedAction {
     public boolean isRepsAction() {
         return action instanceof RepsAction;
     }
+
+    public boolean isSameDayAs(PointedAction action) {
+        return pointer.dayIndex == action.pointer.dayIndex;
+    }
 }

@@ -3,6 +3,7 @@ package pl.edu.agh.pockettrainer.ui.activities;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -52,8 +53,6 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
         state = (ApplicationState) getApplicationContext();
         progress = state.getProgress();
-
-        tts = new TextToSpeech(this, this);
 
         timedRecoveryAction = (TimedRecovery) state.pointedAction.action;
         secondsLabel = findViewById(R.id.timed_recovery_seconds);
@@ -108,6 +107,8 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
             title.setVisibility(View.INVISIBLE);
             label.setVisibility(View.INVISIBLE);
         }
+
+        tts = new TextToSpeech(this, this);
 
         resetTimer();
     }
@@ -201,7 +202,7 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
                 public void onFinish() {
                     tickTockSound.stop();
                     progress.finishAction();
-                    state.navigator.navigateToNextAction(progress);
+                    navigateToNextAction();
                 }
             };
 
@@ -228,7 +229,33 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
         stopTimer();
         tickTockSound.stop();
         progress.skipAction();
-        state.navigator.navigateToNextAction(progress);
+        navigateToNextAction();
+    }
+
+    private void navigateToNextAction() {
+        if (state.futurePointedAction == null) {
+            tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
+            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override
+                public void onStart(String utteranceId) {
+                    // do nothing
+                }
+
+                @Override
+                public void onDone(String utteranceId) {
+                    if ("end_of_workout".equals(utteranceId)) {
+                        state.navigator.navigateToNextAction(progress);
+                    }
+                }
+
+                @Override
+                public void onError(String utteranceId) {
+                    // do nothing
+                }
+            });
+        } else {
+            state.navigator.navigateToNextAction(progress);
+        }
     }
 
     private void setImage(ImageView imageView, File imageFile) {
