@@ -64,6 +64,12 @@ public class CachedProgramRepository implements ProgramRepository {
     }
 
     @Override
+    public void forceReload() {
+        cache.invalidate();
+        wrapped.forceReload();
+    }
+
+    @Override
     public Program getById(String id) {
         return cache.getOrSet(id, new Cache.ValueProvider<String, Program>() {
             @Override

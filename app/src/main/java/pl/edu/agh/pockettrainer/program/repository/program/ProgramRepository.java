@@ -11,6 +11,8 @@ public interface ProgramRepository extends Repository {
 
     List<Program> getInstalled();
 
+    void forceReload();
+
     Program getById(String id);
 
     void installResource(String path);

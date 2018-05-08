@@ -75,6 +75,11 @@ public class FileProgramRepository implements ProgramRepository {
     }
 
     @Override
+    public void forceReload() {
+        // do nothing
+    }
+
+    @Override
     public Program getById(String id) {
         return id == null ? null : loadInstalledProgram(new File(getInstalledDir(), id));
     }
