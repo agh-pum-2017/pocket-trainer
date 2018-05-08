@@ -37,7 +37,8 @@ public class TodayFinishedActivity extends WithMenuActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
+                program.getProgress().delete();
+                state.navigator.navigateToToday(program);
             }
         });
     }

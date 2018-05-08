@@ -2,6 +2,7 @@ package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -100,13 +101,13 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
     public void onDonButtonClick(View view) {
         beatSound.stop();
         progress.finishAction();
-        state.navigator.navigateToNextAction(progress);
+        navigateToNextAction();
     }
 
     public void onSkipButtonClick(View view) {
         beatSound.stop();
         progress.skipAction();
-        state.navigator.navigateToNextAction(progress);
+        navigateToNextAction();
     }
 
     private void setImage(ImageView imageView, File imageFile) {
@@ -129,6 +130,32 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
             }
         } else {
             logger.error("Unable to initialize TTS");
+        }
+    }
+
+    private void navigateToNextAction() {
+        if (state.isEndOfWorkout(progress)) {
+            tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
+            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override
+                public void onStart(String utteranceId) {
+                    // do nothing
+                }
+
+                @Override
+                public void onDone(String utteranceId) {
+                    if ("end_of_workout".equals(utteranceId)) {
+                        state.navigator.navigateToNextAction(progress);
+                    }
+                }
+
+                @Override
+                public void onError(String utteranceId) {
+                    // do nothing
+                }
+            });
+        } else {
+            state.navigator.navigateToNextAction(progress);
         }
     }
 }

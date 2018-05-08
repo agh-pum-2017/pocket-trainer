@@ -59,4 +59,9 @@ public class ApplicationState extends Application {
 
         return 0;
     }
+
+    public boolean isEndOfWorkout(Progress progress) {
+        //return progress.getFutureAction() == null;
+        return futurePointedAction == null;
+    }
 }

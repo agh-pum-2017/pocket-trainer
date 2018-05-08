@@ -11,6 +11,8 @@ import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.program.repository.program.iterator.PointedAction;
+import pl.edu.agh.pockettrainer.program.repository.program.iterator.Pointer;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 
@@ -19,6 +21,7 @@ public class TodayRecoveryActivity extends WithMenuActivity {
     private CountDownTimer timer;
     private long nextTrainingAt;
     private TextView labelCounter;
+    private Progress progress;
 
     @Override
     protected void onResume() {
@@ -65,6 +68,7 @@ public class TodayRecoveryActivity extends WithMenuActivity {
 
         final ApplicationState state = (ApplicationState) getApplicationContext();
 
+        progress = state.getProgress();
         labelCounter = template.findViewById(R.id.today_recovery_textViewCounter);
 
         setNextTrainingAt(state);
@@ -97,7 +101,6 @@ public class TodayRecoveryActivity extends WithMenuActivity {
     }
 
     private void setNextTrainingAt(ApplicationState state) {
-        final Progress progress = state.getProgress();
         nextTrainingAt = progress.getNextTrainingAt().timestamp;
     }
 

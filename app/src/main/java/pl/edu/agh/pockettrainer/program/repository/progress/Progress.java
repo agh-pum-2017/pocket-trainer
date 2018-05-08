@@ -193,4 +193,8 @@ public class Progress {
             return null;
         }
     }
+
+    public void delete() {
+        progressRepository.deleteProgress(program);
+    }
 }

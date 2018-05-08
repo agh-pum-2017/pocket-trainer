@@ -233,7 +233,7 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
     }
 
     private void navigateToNextAction() {
-        if (state.futurePointedAction == null) {
+        if (state.isEndOfWorkout(progress)) {
             tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
             tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                 @Override

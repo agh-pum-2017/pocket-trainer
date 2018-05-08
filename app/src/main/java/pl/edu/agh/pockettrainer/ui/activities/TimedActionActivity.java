@@ -3,6 +3,7 @@ package pl.edu.agh.pockettrainer.ui.activities;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -124,7 +125,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         stopTimer();
         beatSound.stop();
         progress.skipAction();
-        state.navigator.navigateToNextAction(progress);
+        navigateToNextAction();
     }
 
     private void stopTimer() {
@@ -171,12 +172,38 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
                 public void onFinish() {
                     beatSound.stop();
                     progress.finishAction();
-                    state.navigator.navigateToNextAction(progress);
+                    navigateToNextAction();
                 }
             };
 
             progress.startAction();
             timer.start();
+        }
+    }
+
+    private void navigateToNextAction() {
+        if (state.isEndOfWorkout(progress)) {
+            tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
+            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override
+                public void onStart(String utteranceId) {
+                    // do nothing
+                }
+
+                @Override
+                public void onDone(String utteranceId) {
+                    if ("end_of_workout".equals(utteranceId)) {
+                        state.navigator.navigateToNextAction(progress);
+                    }
+                }
+
+                @Override
+                public void onError(String utteranceId) {
+                    // do nothing
+                }
+            });
+        } else {
+            state.navigator.navigateToNextAction(progress);
         }
     }
 

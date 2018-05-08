@@ -51,10 +51,7 @@ public class UpcomingActivity extends AppCompatActivity {
         final PointedAction pointedAction = progress.getNextAction();
 
         state.pointedAction = pointedAction;
-
-        if (pointedAction.isRecovery()) {
-            state.futurePointedAction = progress.getFutureAction();
-        }
+        state.futurePointedAction = progress.getFutureAction();
 
         final ImageView imageView = findViewById(R.id.upcoming_action_image);
         final ImageView iconView = findViewById(R.id.upcoming_action_icon);

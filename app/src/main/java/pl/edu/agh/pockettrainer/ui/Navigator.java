@@ -36,15 +36,12 @@ public class Navigator {
         if (progress.getState() == ProgressState.IN_PROGRESS) {
             final ApplicationState state = (ApplicationState) context.getApplicationContext();
             state.pointedAction = progress.getNextAction();
-            state.futurePointedAction = null;
+            state.futurePointedAction = state.getProgress().getFutureAction();
 
             if (state.pointedAction == null) {
                 navigateToToday(progress.getProgram());
             } else {
                 if (state.pointedAction.isRecovery()) {
-
-                    state.futurePointedAction = state.getProgress().getFutureAction();
-
                     if (state.pointedAction.isTimedRecoveryAction()) {
                         state.navigator.navigateTo(TimedRecoveryActivity.class);
                     } else if (state.pointedAction.isRecoveryAction()) {

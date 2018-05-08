@@ -71,7 +71,7 @@ public abstract class WithMenuActivity extends AppCompatActivity {
                                 onSelectProgramBrowser();
                                 break;
                             case R.id.nav_stats:
-                                onSelectStatistics();
+                                onSelectProgress();
                                 break;
                             case R.id.nav_settings:
                                 onSelectSettings();
@@ -118,8 +118,8 @@ public abstract class WithMenuActivity extends AppCompatActivity {
         navigateTo(ProgramBrowserActivity.class);
     }
 
-    protected void onSelectStatistics() {
-        toast("Statistics");
+    protected void onSelectProgress() {
+        toast("Progress");
     }
 
     protected void onSelectSettings() {
