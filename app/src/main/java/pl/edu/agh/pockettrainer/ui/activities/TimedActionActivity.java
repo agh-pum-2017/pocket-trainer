@@ -30,6 +30,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     private CountDownTimer timer;
     private TimedAction timedAction;
     private TextView labelSeconds;
+    private int maxSeconds;
     private int numSeconds;
     private TextToSpeech tts;
     private ApplicationState state;
@@ -133,7 +134,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     }
 
     private void resetTimer() {
-        numSeconds = timedAction.getSeconds();
+        numSeconds = maxSeconds = timedAction.getSeconds();
     }
 
     private void startTimer() {
@@ -152,10 +153,14 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
                     int secondsLeft = (int) (millisUntilFinished / 1000L);
 
                     if (secondsLeft <= 10) {
-                        tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                        if (!tts.isSpeaking()) {
+                            tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                        }
                     } else {
-                        if (secondsLeft % 30 == 0) {
-                            tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                        if (secondsLeft % 30 == 0 || (numSeconds == maxSeconds - 1)) {
+                            if (!tts.isSpeaking()) {
+                                tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                            }
                         }
                     }
                 }

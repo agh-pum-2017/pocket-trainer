@@ -27,10 +27,6 @@ import pl.edu.agh.pockettrainer.ui.ApplicationState;
 
 public class TimedRecoveryActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
-    // TODO TTS recovery time 30 seconds...
-    // TODO TTS next exercise: "push-ups"
-    // TODO destroy() shutdown TTS
-
     private final Logger logger = new Logger(TimedRecoveryActivity.class);
 
     private BufferedMediaPlayer tickTockSound;
@@ -185,12 +181,18 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
                     if (secondsLeft <= 0) {
                         secondsLabel.setText(R.string.go);
-                        tts.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, "go");
+                        if (!tts.isSpeaking()) {
+                            tts.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, "go");
+                        }
                     } else if (secondsLeft <= 3) {
-                        tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                        if (!tts.isSpeaking()) {
+                            tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                        }
                     } else {
                         if (secondsLeft % 30 == 0) {
-                            tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                            if (!tts.isSpeaking()) {
+                                tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                            }
                         }
                     }
                 }
