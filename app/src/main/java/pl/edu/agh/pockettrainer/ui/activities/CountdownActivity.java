@@ -37,9 +37,17 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_countdown);
-        tts = new TextToSpeech(this, this);
+
+        final ApplicationState state = (ApplicationState) getApplicationContext();
+
+        if (state.appConfig.isVoiceEnabled()) {
+            tts = new TextToSpeech(this, this);
+        } else {
+            startTimer();
+        }
     }
 
     @Override
@@ -130,7 +138,7 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
 
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    if (!tts.isSpeaking()) {
+                    if (tts == null || !tts.isSpeaking()) {
                         if (count < 0) {
                             cancel();
                             navigateToTrainer();
@@ -138,10 +146,14 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
                             title.setVisibility(View.VISIBLE);
                             label.setVisibility(View.VISIBLE);
                             labelHidden.setVisibility(View.INVISIBLE);
-                            tts.speak("" + count, TextToSpeech.QUEUE_FLUSH, null, "" + count);
+                            if (tts != null) {
+                                tts.speak("" + count, TextToSpeech.QUEUE_FLUSH, null, "" + count);
+                            }
                             label.setText(String.valueOf(count));
                         } else {
-                            tts.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, "0");
+                            if (tts != null) {
+                                tts.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, "0");
+                            }
                             title.setVisibility(View.INVISIBLE);
                             label.setVisibility(View.INVISIBLE);
                             labelHidden.setVisibility(View.VISIBLE);

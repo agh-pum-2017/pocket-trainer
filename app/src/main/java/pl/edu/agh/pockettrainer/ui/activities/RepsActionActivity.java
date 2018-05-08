@@ -106,7 +106,9 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
 
         initComingNext();
 
-        tts = new TextToSpeech(this, this);
+        if (state.appConfig.isVoiceEnabled()) {
+            tts = new TextToSpeech(this, this);
+        }
 
         tripleTapListener = new TripleTapListener(new Runnable() {
 
@@ -220,7 +222,7 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
     }
 
     private void navigateToNextAction() {
-        if (state.isEndOfWorkout(progress)) {
+        if (tts != null && state.isEndOfWorkout(progress)) {
             tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
             tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                 @Override

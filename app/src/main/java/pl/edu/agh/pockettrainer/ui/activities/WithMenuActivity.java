@@ -125,7 +125,7 @@ public abstract class WithMenuActivity extends AppCompatActivity {
     }
 
     protected void onSelectSettings() {
-        toast("TODO");
+        navigateTo(SettingsActivity.class);
     }
 
     protected void navigateTo(Class<? extends Activity> activityClass) {

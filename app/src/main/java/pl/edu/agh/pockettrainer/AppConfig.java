@@ -10,6 +10,9 @@ public class AppConfig {
     private static final String NAME = "pl.edu.agh.pockettrainer";
     private static final String KEY_FIRST_RUN = "firstRun";
     private static final String KEY_ACTIVE_PROGRAM_ID = "programId";
+    private static final String KEY_VOICE_INSTRUCTIONS = "voice";
+    private static final String KEY_SOUND_AND_MUSIC = "sound";
+    private static final String KEY_VIBRATE = "vibrate";
 
     private final Logger logger = new Logger(AppConfig.class);
     private final SharedPreferences preferences;
@@ -42,5 +45,29 @@ public class AppConfig {
 
     public int getCountdownIntervalSeconds() {
         return 3; // TODO
+    }
+
+    public boolean isVoiceEnabled() {
+        return preferences.getBoolean(KEY_VOICE_INSTRUCTIONS, true);
+    }
+
+    public void setVoiceEnabled(boolean enabled) {
+        preferences.edit().putBoolean(KEY_VOICE_INSTRUCTIONS, enabled).apply();
+    }
+
+    public boolean isSoundEnabled() {
+        return preferences.getBoolean(KEY_SOUND_AND_MUSIC, true);
+    }
+
+    public void setSoundEnabled(boolean enabled) {
+        preferences.edit().putBoolean(KEY_SOUND_AND_MUSIC, enabled).apply();
+    }
+
+    public boolean isVibrateEnabled() {
+        return preferences.getBoolean(KEY_VIBRATE, true);
+    }
+
+    public void setVibrateEnabled(boolean enabled) {
+        preferences.edit().putBoolean(KEY_VIBRATE, enabled).apply();
     }
 }

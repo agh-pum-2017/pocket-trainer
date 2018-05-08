@@ -85,7 +85,11 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         resetTimer();
         labelSeconds.setText(String.valueOf(numSeconds));
 
-        tts = new TextToSpeech(this, this);
+        if (state.appConfig.isVoiceEnabled()) {
+            tts = new TextToSpeech(this, this);
+        } else {
+            startTimer();
+        }
 
         resetTimer();
 
@@ -240,16 +244,18 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
                     int secondsLeft = (int) (millisUntilFinished / 1000L);
 
-                    if (secondsLeft <= 10) {
-                        if (!tts.isSpeaking()) {
-                            tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
-                        }
-                    } else {
-                        if (numSeconds == maxSeconds - 1) {
-                            tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
-                        } else if (secondsLeft % 30 == 0) {
+                    if (tts != null) {
+                        if (secondsLeft <= 10) {
                             if (!tts.isSpeaking()) {
+                                tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                            }
+                        } else {
+                            if (numSeconds == maxSeconds - 1) {
                                 tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                            } else if (secondsLeft % 30 == 0) {
+                                if (!tts.isSpeaking()) {
+                                    tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                                }
                             }
                         }
                     }
@@ -269,7 +275,7 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     }
 
     private void navigateToNextAction() {
-        if (state.isEndOfWorkout(progress)) {
+        if (state.isEndOfWorkout(progress) && tts != null) {
             tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
             tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                 @Override

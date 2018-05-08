@@ -71,7 +71,11 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
         initComingNext();
 
-        tts = new TextToSpeech(this, this);
+        if (state.appConfig.isVoiceEnabled()) {
+            tts = new TextToSpeech(this, this);
+        } else {
+            startTimer();
+        }
 
         tripleTapListener = new TripleTapListener(new Runnable() {
 
@@ -208,7 +212,9 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
                 message += ". " + nextExerciseMessage;
             }
 
-            tts.speak(message, TextToSpeech.QUEUE_FLUSH, null, "recovery_time");
+            if (tts != null) {
+                tts.speak(message, TextToSpeech.QUEUE_FLUSH, null, "recovery_time");
+            }
 
             timer = new CountDownTimer((1 + timedRecoveryAction.getSeconds()) * 1000L, 1000L) {
 
@@ -221,16 +227,16 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
                     if (secondsLeft <= 0) {
                         secondsLabel.setText(R.string.go);
-                        if (!tts.isSpeaking()) {
+                        if (tts != null && !tts.isSpeaking()) {
                             tts.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, "go");
                         }
-                    } else if (secondsLeft <= 3) {
+                    } else if (tts != null && secondsLeft <= 3) {
                         if (!tts.isSpeaking()) {
                             tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
                         }
                     } else {
                         if (secondsLeft % 30 == 0) {
-                            if (!tts.isSpeaking()) {
+                            if (tts != null && !tts.isSpeaking()) {
                                 tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
                             }
                         }
@@ -272,7 +278,7 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
     }
 
     private void navigateToNextAction() {
-        if (state.isEndOfWorkout(progress)) {
+        if (tts != null && state.isEndOfWorkout(progress)) {
             tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
             tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                 @Override
