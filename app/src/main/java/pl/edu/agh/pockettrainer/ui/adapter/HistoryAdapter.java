@@ -40,6 +40,13 @@ public class HistoryAdapter extends ArrayAdapter<TrackedDay> {
         final TextView title = convertView.findViewById(R.id.history_item_title);
         title.setText("Day " + trackedDay.getNumber());
 
+        final TextView startedAtLabel = convertView.findViewById(R.id.history_item_started);
+        final TrackedActionRecord dayFirstRecord = trackedDay.getRecords().get(0);
+        startedAtLabel.setText(dayFirstRecord.startedAt.toString() + " UTC");
+
+        final TextView totalTime = convertView.findViewById(R.id.history_item_total_time);
+        totalTime.setText(trackedDay.getTotalTime().toString());
+
         final TextView content = convertView.findViewById(R.id.history_item_content);
         content.setText(getContent(trackedDay));
 

@@ -57,6 +57,10 @@ public class TimeInstant {
         return new TimeInstant(timestamp - duration.milliseconds);
     }
 
+    public TimeDuration minus(TimeInstant instant) {
+        return new TimeDuration(timestamp - instant.timestamp);
+    }
+
     public TimeInstant endOfDay() {
 
         final Calendar calendar = getCalendar();

@@ -74,8 +74,11 @@ public class TodayRecoveryActivity extends WithMenuActivity {
 
         setNextTrainingAt(state);
 
+        final TextView titleLabel = template.findViewById(R.id.today_recovery_title);
+        titleLabel.setText(progress.getProgram().getMetadata().getName());
+
         final ProgressBar progressBar = template.findViewById(R.id.today_recovery_progressBar);
-        final int percent = state.getProgress().getPercentage();
+        final int percent = progress.getPercentage();
         progressBar.setProgress(percent);
 
         final TextView percentLabel = template.findViewById(R.id.today_recovery_complete);
