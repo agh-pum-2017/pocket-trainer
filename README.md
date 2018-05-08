@@ -15,12 +15,16 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 
 ### Bugs and glitches
 
+* "Go" not shown / zero not spoken on real device (timed recovery action).
+* Changing screen orientation breaks the countdown.
 * When finished and clicking "Start over", the upcoming exercise is displayed. However, when clicking back it should go to today rather than "Start over" again.
 * Menu icon in the program browser should be white instead of black (three dots in the upper right corner).
 * Back button sometimes allows to navigate to forbidden views. 
 
 ### Nice to have
 
+* Show enrolled first or display selected program more prominently.
+* Program browser search and filter.
 * Integrate running, maps and location (distance vs. time).
 * Configurable number of seconds (e.g. announcement every 30 seconds, countdown when <= 10 seconds, etc.)
 * Default music / custom music / vibrate / turn off.

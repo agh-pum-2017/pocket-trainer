@@ -263,22 +263,24 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
                 @Override
                 public void onTick(long millisUntilFinished) {
+
                     labelSeconds.setText(String.valueOf(numSeconds--));
 
                     int secondsLeft = (int) (millisUntilFinished / 1000L);
 
-                    if (tts != null) {
-                        if (secondsLeft <= 10) {
-                            if (!tts.isSpeaking()) {
-                                tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
-                            }
-                        } else {
-                            if (numSeconds == maxSeconds - 1) {
+                    if (secondsLeft <= state.appConfig.getCountdownIntervalSeconds()) {
+                        if (tts != null && !tts.isSpeaking()) {
+                            tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
+                        }
+                        state.vibrateShort();
+                    } else {
+                        if (numSeconds == maxSeconds - 1) {
+                            if (tts != null) {
                                 tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
-                            } else if (secondsLeft % 30 == 0) {
-                                if (!tts.isSpeaking()) {
-                                    tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
-                                }
+                            }
+                        } else if (secondsLeft % 30 == 0) {
+                            if (tts != null && !tts.isSpeaking()) {
+                                tts.speak(secondsLeft + " seconds", TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
                             }
                         }
                     }
@@ -300,26 +302,32 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     }
 
     private void navigateToNextAction() {
-        if (state.isEndOfWorkout(progress) && tts != null) {
-            tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
-            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                @Override
-                public void onStart(String utteranceId) {
-                    // do nothing
-                }
-
-                @Override
-                public void onDone(String utteranceId) {
-                    if ("end_of_workout".equals(utteranceId)) {
-                        state.navigator.navigateToNextAction(progress);
+        if (state.isEndOfWorkout(progress)) {
+            if (tts != null) {
+                tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+                        // do nothing
                     }
-                }
 
-                @Override
-                public void onError(String utteranceId) {
-                    // do nothing
-                }
-            });
+                    @Override
+                    public void onDone(String utteranceId) {
+                        if ("end_of_workout".equals(utteranceId)) {
+                            state.navigator.navigateToNextAction(progress);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        // do nothing
+                    }
+                });
+                state.vibrateLong();
+            } else {
+                state.vibrateLong();
+                state.navigator.navigateToNextAction(progress);
+            }
         } else {
             state.navigator.navigateToNextAction(progress);
         }

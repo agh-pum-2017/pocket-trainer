@@ -248,10 +248,11 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
                         if (tts != null && !tts.isSpeaking()) {
                             tts.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, "go");
                         }
-                    } else if (tts != null && secondsLeft <= 3) {
-                        if (!tts.isSpeaking()) {
+                    } else if (secondsLeft <= state.appConfig.getCountdownIntervalSeconds()) {
+                        if (tts != null && !tts.isSpeaking()) {
                             tts.speak("" + secondsLeft, TextToSpeech.QUEUE_FLUSH, null, "" + secondsLeft);
                         }
+                        state.vibrateShort();
                     } else {
                         if (secondsLeft % 30 == 0) {
                             if (tts != null && !tts.isSpeaking()) {
@@ -305,26 +306,32 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
     }
 
     private void navigateToNextAction() {
-        if (tts != null && state.isEndOfWorkout(progress)) {
-            tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
-            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                @Override
-                public void onStart(String utteranceId) {
-                    // do nothing
-                }
-
-                @Override
-                public void onDone(String utteranceId) {
-                    if ("end_of_workout".equals(utteranceId)) {
-                        state.navigator.navigateToNextAction(progress);
+        if (state.isEndOfWorkout(progress)) {
+            if (tts != null) {
+                tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+                        // do nothing
                     }
-                }
 
-                @Override
-                public void onError(String utteranceId) {
-                    // do nothing
-                }
-            });
+                    @Override
+                    public void onDone(String utteranceId) {
+                        if ("end_of_workout".equals(utteranceId)) {
+                            state.navigator.navigateToNextAction(progress);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        // do nothing
+                    }
+                });
+                state.vibrateLong();
+            } else {
+                state.vibrateLong();
+                state.navigator.navigateToNextAction(progress);
+            }
         } else {
             state.navigator.navigateToNextAction(progress);
         }

@@ -167,26 +167,32 @@ public class RecoveryActionActivity extends AppCompatActivity implements TextToS
 
         progress.finishAction();
 
-        if (tts != null && state.isEndOfWorkout(progress)) {
-            tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
-            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                @Override
-                public void onStart(String utteranceId) {
-                    // do nothing
-                }
-
-                @Override
-                public void onDone(String utteranceId) {
-                    if ("end_of_workout".equals(utteranceId)) {
-                        state.navigator.navigateToNextAction(progress);
+        if (state.isEndOfWorkout(progress)) {
+            if (tts != null) {
+                tts.speak("End of workout", TextToSpeech.QUEUE_FLUSH, null, "end_of_workout");
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+                        // do nothing
                     }
-                }
 
-                @Override
-                public void onError(String utteranceId) {
-                    // do nothing
-                }
-            });
+                    @Override
+                    public void onDone(String utteranceId) {
+                        if ("end_of_workout".equals(utteranceId)) {
+                            state.navigator.navigateToNextAction(progress);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        // do nothing
+                    }
+                });
+                state.vibrateLong();
+            } else {
+                state.vibrateLong();
+                state.navigator.navigateToNextAction(progress);
+            }
         } else {
             state.navigator.navigateToNextAction(progress);
         }

@@ -6,6 +6,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -17,6 +18,7 @@ import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
+import pl.edu.agh.pockettrainer.ui.TripleTapListener;
 
 public class CountdownActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
@@ -30,9 +32,14 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
     private TextView label;
     private TextView labelHidden;
 
+    private ApplicationState state;
+    private TripleTapListener tripleTapListener;
+
     @Override
     public void onBackPressed() {
-        // prevent from interrupting the countdown
+        if (tripleTapListener != null) {
+            tripleTapListener.tap();
+        }
     }
 
     @Override
@@ -41,7 +48,25 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_countdown);
 
-        final ApplicationState state = (ApplicationState) getApplicationContext();
+        state = (ApplicationState) getApplicationContext();
+
+        tripleTapListener = new TripleTapListener(new Runnable() {
+
+            @Override
+            public void run() {
+
+                stopTimer();
+
+                if (tts != null) {
+                    tts.stop();
+                    tts.shutdown();
+                }
+
+                Toast.makeText(getApplicationContext(), "Training interrupted", Toast.LENGTH_SHORT).show();
+
+                state.navigator.navigateToToday(state.getProgress().getProgram());
+            }
+        });
 
         if (state.appConfig.isVoiceEnabled()) {
             tts = new TextToSpeech(this, this);
@@ -150,6 +175,7 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
                                 tts.speak("" + count, TextToSpeech.QUEUE_FLUSH, null, "" + count);
                             }
                             label.setText(String.valueOf(count));
+                            state.vibrateShort();
                         } else {
                             if (tts != null) {
                                 tts.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, "0");
@@ -157,6 +183,7 @@ public class CountdownActivity extends AppCompatActivity implements TextToSpeech
                             title.setVisibility(View.INVISIBLE);
                             label.setVisibility(View.INVISIBLE);
                             labelHidden.setVisibility(View.VISIBLE);
+                            state.vibrateLong();
                         }
 
                         count--;

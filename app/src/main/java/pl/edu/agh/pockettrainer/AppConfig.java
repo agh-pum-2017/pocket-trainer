@@ -8,11 +8,16 @@ import pl.edu.agh.pockettrainer.program.Logger;
 public class AppConfig {
 
     private static final String NAME = "pl.edu.agh.pockettrainer";
+
     private static final String KEY_FIRST_RUN = "firstRun";
     private static final String KEY_ACTIVE_PROGRAM_ID = "programId";
     private static final String KEY_VOICE_INSTRUCTIONS = "voice";
     private static final String KEY_SOUND_AND_MUSIC = "sound";
     private static final String KEY_VIBRATE = "vibrate";
+
+    private static final boolean DEFAULT_VOICE_ENABLED = true;
+    private static final boolean DEFAULT_SOUND_ENABLED = true;
+    private static final boolean DEFAULT_VIBRATE_ENABLED = true;
 
     private final Logger logger = new Logger(AppConfig.class);
     private final SharedPreferences preferences;
@@ -48,7 +53,7 @@ public class AppConfig {
     }
 
     public boolean isVoiceEnabled() {
-        return preferences.getBoolean(KEY_VOICE_INSTRUCTIONS, true);
+        return preferences.getBoolean(KEY_VOICE_INSTRUCTIONS, DEFAULT_VOICE_ENABLED);
     }
 
     public void setVoiceEnabled(boolean enabled) {
@@ -56,7 +61,7 @@ public class AppConfig {
     }
 
     public boolean isSoundEnabled() {
-        return preferences.getBoolean(KEY_SOUND_AND_MUSIC, true);
+        return preferences.getBoolean(KEY_SOUND_AND_MUSIC, DEFAULT_SOUND_ENABLED);
     }
 
     public void setSoundEnabled(boolean enabled) {
@@ -64,7 +69,7 @@ public class AppConfig {
     }
 
     public boolean isVibrateEnabled() {
-        return preferences.getBoolean(KEY_VIBRATE, true);
+        return preferences.getBoolean(KEY_VIBRATE, DEFAULT_VIBRATE_ENABLED);
     }
 
     public void setVibrateEnabled(boolean enabled) {

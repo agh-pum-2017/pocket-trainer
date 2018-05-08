@@ -2,19 +2,19 @@ package pl.edu.agh.pockettrainer.ui;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 
 import pl.edu.agh.pockettrainer.AppConfig;
-import pl.edu.agh.pockettrainer.program.domain.actions.Action;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
 import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.iterator.PointedAction;
 import pl.edu.agh.pockettrainer.program.repository.program.iterator.Pointer;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.program.repository.progress.ProgressRepository;
-import pl.edu.agh.pockettrainer.program.tasks.StartupTask;
 
 public class ApplicationState extends Application {
 
@@ -27,6 +27,7 @@ public class ApplicationState extends Application {
         state.programRepository = state.metaRepository.getProgramRepository();
         state.progressRepository = state.metaRepository.getProgressRepository();
         state.navigator = new Navigator(context);
+        state.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
         return state;
     }
@@ -39,6 +40,27 @@ public class ApplicationState extends Application {
 
     public PointedAction pointedAction;
     public PointedAction futurePointedAction;
+
+    private Vibrator vibrator;
+
+    public void vibrateShort() {
+        vibrate(200L);
+    }
+
+    public void vibrateLong() {
+        vibrate(500L);
+    }
+
+    private void vibrate(long milliseconds) {
+        if (appConfig.isVibrateEnabled()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                //deprecated in API 26
+                vibrator.vibrate(milliseconds);
+            }
+        }
+    }
 
     public Progress getProgress() {
         return programRepository.getActiveProgram().getProgress();
