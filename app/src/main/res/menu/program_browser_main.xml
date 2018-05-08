@@ -2,4 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="Browse..." android:id="@+id/program_browser_menu_browser"/>
     <item android:title="Download..." android:id="@+id/program_browser_menu_download"/>
+    <item android:title="Delete all" android:id="@+id/program_browser_menu_delete_all"/>
 </menu>

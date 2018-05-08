@@ -1,13 +1,18 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.DataSetObserver;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -54,6 +59,51 @@ public class ProgramBrowserActivity extends WithMenuActivity {
         switch (item.getItemId()) {
             case R.id.program_browser_menu_browser:
                 ensureHasPermissionsToRead();
+                return true;
+            case R.id.program_browser_menu_download:
+                // TODO
+                return true;
+            case R.id.program_browser_menu_delete_all:
+
+                final Context context = this;
+                final ApplicationState state = (ApplicationState) getApplicationContext();
+                final int numPrograms = state.programRepository.getInstalled().size();
+
+                if (numPrograms > 0) {
+                    final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+
+                                    state.programRepository.uninstallAll();
+                                    state.programRepository.forceReload();
+                                    state.progressRepository.deleteAll();
+                                    updateProgramAdapter(state);
+
+                                    String message = "Deleted " + numPrograms + " training program";
+                                    if (numPrograms > 1) {
+                                        message += "s";
+                                    }
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    break;
+                            }
+                        }
+                    };
+                    String message = "Are you sure to delete " + numPrograms + " program";
+                    if (numPrograms > 1) {
+                        message += "s";
+                    }
+                    message += "?";
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(message)
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener)
+                            .show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -151,10 +201,24 @@ public class ProgramBrowserActivity extends WithMenuActivity {
         state.programRepository.forceReload();
 
         updateProgramAdapter(state);
+
+        Toast.makeText(this, "Installed new program", Toast.LENGTH_SHORT).show();
     }
 
-    private void updateProgramAdapter(ApplicationState state) {
+    private void updateProgramAdapter(final ApplicationState state) {
+
+        final Context context = this;
+        final ListAdapter adapter = new ProgramAdapter(context, state.programRepository);
         final ListView listView = template.findViewById(R.id.program_browser_listView);
-        listView.setAdapter(new ProgramAdapter(this, state.programRepository));
+
+        listView.setAdapter(adapter);
+
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onInvalidated() {
+                super.onInvalidated();
+                listView.setAdapter(new ProgramAdapter(context, state.programRepository));
+            }
+        });
     }
 }

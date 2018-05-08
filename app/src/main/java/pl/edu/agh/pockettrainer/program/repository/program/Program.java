@@ -97,4 +97,8 @@ public class Program {
         }
         return numActions;
     }
+
+    public void uninstall() {
+        programRepository.uninstall(id);
+    }
 }

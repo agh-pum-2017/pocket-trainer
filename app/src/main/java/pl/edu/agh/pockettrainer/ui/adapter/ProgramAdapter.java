@@ -28,6 +28,7 @@ import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.SingleClickListener;
 import pl.edu.agh.pockettrainer.ui.activities.ProgramDetailsActivity;
 
@@ -54,24 +55,65 @@ public class ProgramAdapter extends ArrayAdapter<Program> {
         final ImageView imageView = convertView.findViewById(R.id.program_item_image);
         final TextView title = convertView.findViewById(R.id.program_item_title);
         final TextView goals = convertView.findViewById(R.id.program_item_goals);
-        final Button btnToggleEnroll = convertView.findViewById(R.id.program_item_button);
+        final Button buttonToggleEnroll = convertView.findViewById(R.id.program_item_button_enroll);
+        final Button buttonDelete = convertView.findViewById(R.id.program_item_button_delete);
 
         title.setText(metadata.getName());
         goals.setText(makeString(metadata.getGoals()));
         setImage(convertView, imageView, metadata);
 
         convertView.setOnClickListener(onClick(program));
-        btnToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
+        buttonToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
+        buttonDelete.setOnClickListener(onBtnDeleteClick(program));
 
         if (program.isActive()) {
-            btnToggleEnroll.setTextColor(0xff00a6ff);
-            btnToggleEnroll.setText("enrolled");
+            buttonToggleEnroll.setTextColor(0xff00a6ff);
+            buttonToggleEnroll.setText("enrolled");
         } else {
-            btnToggleEnroll.setTextColor(0xffaaaaaa);
-            btnToggleEnroll.setText("enroll");
+            buttonToggleEnroll.setTextColor(0xffaaaaaa);
+            buttonToggleEnroll.setText("enroll");
         }
 
         return convertView;
+    }
+
+    private View.OnClickListener onBtnDeleteClick(final Program program) {
+        final Context context = getContext();
+        final ApplicationState state = (ApplicationState) context.getApplicationContext();
+        return new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+
+                                program.uninstall();
+                                state.programRepository.forceReload();
+                                state.progressRepository.deleteProgress(program);
+
+                                notifyDataSetInvalidated();
+
+                                String message = "Deleted 1 training program";
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
+                    }
+                };
+                String message = "Are you sure to delete this program?";
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(message)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener)
+                        .show();
+            }
+        };
     }
 
     private String makeString(Set<ProgramGoal> goals) {

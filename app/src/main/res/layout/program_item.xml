@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appConfig="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:drawable/dialog_holo_light_frame">
@@ -47,7 +48,21 @@
         appConfig:layout_constraintTop_toBottomOf="@+id/program_item_title" />
 
     <Button
-        android:id="@+id/program_item_button"
+        android:id="@+id/program_item_button_enroll"
+        android:layout_width="wrap_content"
+        android:layout_height="30sp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:text="Enroll"
+        android:textColor="@android:color/darker_gray"
+        appConfig:layout_constraintBottom_toBottomOf="@+id/program_item_button_delete"
+        appConfig:layout_constraintEnd_toStartOf="@+id/program_item_button_delete"
+        appConfig:layout_constraintTop_toTopOf="@+id/program_item_button_delete"
+        appConfig:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/program_item_button_delete"
         android:layout_width="wrap_content"
         android:layout_height="30sp"
         android:layout_marginBottom="16dp"
@@ -55,7 +70,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="4dp"
         android:background="@android:drawable/screen_background_light_transparent"
-        android:text="Enroll"
+        android:text="Delete"
         android:textColor="@android:color/darker_gray"
         appConfig:layout_constraintBottom_toBottomOf="parent"
         appConfig:layout_constraintEnd_toEndOf="parent"

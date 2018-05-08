@@ -136,11 +136,15 @@ public class FileProgramRepository implements ProgramRepository {
     @Override
     public void uninstallAll() {
         IoUtils.delete(getInstalledDir());
+        appConfig.unsetActiveProgramId();
     }
 
     @Override
     public void uninstall(String programId) {
         IoUtils.delete(new File(getInstalledDir(), programId));
+        if (programId.equals(appConfig.getActiveProgramId())) {
+            appConfig.unsetActiveProgramId();
+        }
     }
 
     @Override
