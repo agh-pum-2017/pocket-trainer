@@ -20,11 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
-import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public abstract class WithMenuActivity extends AppCompatActivity {
 
@@ -71,8 +67,8 @@ public abstract class WithMenuActivity extends AppCompatActivity {
                             case R.id.nav_programs:
                                 onSelectProgramBrowser();
                                 break;
-                            case R.id.nav_stats:
-                                onSelectProgress();
+                            case R.id.nav_history:
+                                onSelectHistory();
                                 break;
                             case R.id.nav_settings:
                                 onSelectSettings();
@@ -117,12 +113,12 @@ public abstract class WithMenuActivity extends AppCompatActivity {
         navigateTo(ProgramBrowserActivity.class);
     }
 
-    protected void onSelectProgress() {
+    protected void onSelectHistory() {
 
         final ApplicationState state = (ApplicationState) getApplicationContext();
 
         if (state.programRepository.hasActiveProgram()) {
-            navigateTo(ProgressActivity.class);
+            navigateTo(HistoryActivity.class);
         } else {
             toast("No active program");
         }

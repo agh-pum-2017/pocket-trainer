@@ -21,13 +21,10 @@ import pl.edu.agh.pockettrainer.program.domain.days.TrackedDay;
 import pl.edu.agh.pockettrainer.program.domain.time.TimeDuration;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 
-public class ProgressAdapter extends ArrayAdapter<TrackedDay> {
+public class HistoryAdapter extends ArrayAdapter<TrackedDay> {
 
-    private final Progress progress;
-
-    public ProgressAdapter(Context context, Progress progress) {
+    public HistoryAdapter(Context context, Progress progress) {
         super(context, 0, progress.getTrackedDays());
-        this.progress = progress;
     }
 
     @NonNull
@@ -37,13 +34,13 @@ public class ProgressAdapter extends ArrayAdapter<TrackedDay> {
         final TrackedDay trackedDay = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.progress_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_item, parent, false);
         }
 
-        final TextView title = convertView.findViewById(R.id.progress_item_title);
+        final TextView title = convertView.findViewById(R.id.history_item_title);
         title.setText("Day " + trackedDay.getNumber());
 
-        final TextView content = convertView.findViewById(R.id.progress_item_content);
+        final TextView content = convertView.findViewById(R.id.history_item_content);
         content.setText(getContent(trackedDay));
 
         return convertView;
@@ -56,15 +53,18 @@ public class ProgressAdapter extends ArrayAdapter<TrackedDay> {
         for (int i = 0; i < records.size(); i++) {
 
             final TrackedActionRecord record = records.get(i);
-            final TimeDuration duration = record.getDuration();
 
             final String status = record.skipped ? "✗ " : "✔ ";
 
             if (record.action.isRecovery()) {
-                sb.append(status).append("Recovery (").append(duration).append(")");
+                sb.append(status).append("Recovery");
             } else {
                 final Exercise exercise = getExercise(record.action);
-                sb.append(status).append(capitalize(exercise.getName())).append(" (").append(duration).append(")");
+                sb.append(status).append(capitalize(exercise.getName()));
+            }
+
+            if (!record.skipped) {
+                sb.append(" (").append(record.getDuration()).append(")");
             }
 
             if (i < records.size() - 1) {

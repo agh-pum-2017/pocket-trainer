@@ -6,10 +6,9 @@ import android.widget.ListView;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
-import pl.edu.agh.pockettrainer.ui.adapter.ProgramAdapter;
-import pl.edu.agh.pockettrainer.ui.adapter.ProgressAdapter;
+import pl.edu.agh.pockettrainer.ui.adapter.HistoryAdapter;
 
-public class ProgressActivity extends WithMenuActivity {
+public class HistoryActivity extends WithMenuActivity {
 
     @Override
     protected int getChildLayoutId() {
@@ -18,7 +17,7 @@ public class ProgressActivity extends WithMenuActivity {
 
     @Override
     protected String getTitleForActivity() {
-        return "Progress";
+        return "History";
     }
 
     @Override
@@ -27,12 +26,12 @@ public class ProgressActivity extends WithMenuActivity {
         final ApplicationState state = (ApplicationState) getApplicationContext();
         final Progress progress = state.getProgress();
 
-        final ListView listView = template.findViewById(R.id.progress_listView);
-        listView.setAdapter(new ProgressAdapter(this, progress));
+        final ListView listView = template.findViewById(R.id.history_listView);
+        listView.setAdapter(new HistoryAdapter(this, progress));
     }
 
     @Override
-    protected void onSelectProgress() {
+    protected void onSelectHistory() {
         // do nothing
     }
 }
