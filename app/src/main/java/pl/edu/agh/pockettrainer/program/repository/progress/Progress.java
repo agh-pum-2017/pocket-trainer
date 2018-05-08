@@ -1,17 +1,21 @@
 package pl.edu.agh.pockettrainer.program.repository.progress;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.edu.agh.pockettrainer.program.domain.ActionRecord;
 import pl.edu.agh.pockettrainer.program.domain.ProgressState;
+import pl.edu.agh.pockettrainer.program.domain.TrackedActionRecord;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgress;
 import pl.edu.agh.pockettrainer.program.domain.actions.Action;
 import pl.edu.agh.pockettrainer.program.domain.days.Day;
+import pl.edu.agh.pockettrainer.program.domain.days.TrackedDay;
 import pl.edu.agh.pockettrainer.program.domain.time.TimeInstant;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.iterator.ActionIterator;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.program.repository.program.iterator.PointedAction;
+import pl.edu.agh.pockettrainer.program.repository.program.iterator.Pointer;
 
 public class Progress {
 
@@ -152,7 +156,7 @@ public class Progress {
         if (startedAt != null) {
 
             final TimeInstant finishedAt = TimeInstant.now();
-            final ActionRecord record = new ActionRecord(startedAt, finishedAt, true);
+            final ActionRecord record = new ActionRecord(startedAt, finishedAt, false);
             trainingProgress.addRecord(record);
 
             progressRepository.update(this);
@@ -196,5 +200,36 @@ public class Progress {
 
     public void delete() {
         progressRepository.deleteProgress(program);
+    }
+
+    public List<TrackedDay> getTrackedDays() {
+
+        final List<TrackedDay> trackedDays = new ArrayList<>();
+
+        final List<ActionRecord> allRecords = trainingProgress.getRecords();
+        final ActionIterator it = program.getActionIterator();
+        for (int i = 0; it.hasNext() && i < allRecords.size(); i++) {
+
+            final ActionRecord record = allRecords.get(i);
+
+            final PointedAction pointedAction = it.next();
+            final Pointer pointer = pointedAction.pointer;
+            final Action action = pointedAction.action;
+
+            int lastDayIndex = -1;
+            if (trackedDays.size() > 0) {
+                final TrackedDay trackedDay = trackedDays.get(trackedDays.size() - 1);
+                lastDayIndex = trackedDay.getIndex();
+            }
+
+            if (pointer.dayIndex > lastDayIndex) {
+                trackedDays.add(new TrackedDay(pointer.dayIndex));
+            }
+
+            final TrackedDay trackedDay = trackedDays.get(trackedDays.size() - 1);
+            trackedDay.add(new TrackedActionRecord(action, record));
+        }
+
+        return trackedDays;
     }
 }

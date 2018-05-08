@@ -59,9 +59,11 @@
             android:name=".ui.activities.RepsActionActivity"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".ui.activities.RecoveryActionActivity"
-                  android:noHistory="true"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".ui.activities.RecoveryActionActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".ui.activities.ProgressActivity"></activity>
     </application>
 
 </manifest>

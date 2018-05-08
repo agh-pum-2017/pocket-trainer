@@ -23,6 +23,7 @@ import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
+import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.Navigator;
 
 public abstract class WithMenuActivity extends AppCompatActivity {
@@ -103,14 +104,12 @@ public abstract class WithMenuActivity extends AppCompatActivity {
 
     protected void onSelectToday() {
 
-        final MetaRepository metaRepository = new DefaultMetaRepository(this);
-        final ProgramRepository programs = metaRepository.getProgramRepository();
-        final Navigator navigator = new Navigator(this);
+        final ApplicationState state = (ApplicationState) getApplicationContext();
 
-        if (programs.hasActiveProgram()) {
-            navigator.navigateToToday(programs.getActiveProgram());
+        if (state.programRepository.hasActiveProgram()) {
+            state.navigator.navigateToToday(state.programRepository.getActiveProgram());
         } else {
-            navigator.navigateTo(TodayNoneActivity.class);
+            state.navigator.navigateTo(TodayNoneActivity.class);
         }
     }
 
@@ -119,11 +118,18 @@ public abstract class WithMenuActivity extends AppCompatActivity {
     }
 
     protected void onSelectProgress() {
-        toast("Progress");
+
+        final ApplicationState state = (ApplicationState) getApplicationContext();
+
+        if (state.programRepository.hasActiveProgram()) {
+            navigateTo(ProgressActivity.class);
+        } else {
+            toast("No active program");
+        }
     }
 
     protected void onSelectSettings() {
-        toast("Settings");
+        toast("TODO");
     }
 
     protected void navigateTo(Class<? extends Activity> activityClass) {
