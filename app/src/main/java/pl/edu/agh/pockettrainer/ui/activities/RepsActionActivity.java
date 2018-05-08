@@ -96,6 +96,9 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
 
         message = exercise.getName() + ", " + repsAction.getReps() + " times";
 
+        final TextView stepLabel = findViewById(R.id.reps_action_step);
+        stepLabel.setText(state.getDayActionNumber() + " / " + state.getDayActionsCount(progress));
+
         initComingNext();
 
         tts = new TextToSpeech(this, this);

@@ -5,6 +5,7 @@ import android.content.Context;
 
 import pl.edu.agh.pockettrainer.AppConfig;
 import pl.edu.agh.pockettrainer.program.domain.actions.Action;
+import pl.edu.agh.pockettrainer.program.domain.days.Day;
 import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
@@ -61,7 +62,15 @@ public class ApplicationState extends Application {
     }
 
     public boolean isEndOfWorkout(Progress progress) {
-        //return progress.getFutureAction() == null;
         return futurePointedAction == null;
+    }
+
+    public int getDayActionNumber() {
+        return pointedAction.pointer.actionIndex + 1;
+    }
+
+    public int getDayActionsCount(Progress progress) {
+        final Day day = progress.getProgram().getSchedule().get(pointedAction.pointer.dayIndex);
+        return day.getNumActions();
     }
 }

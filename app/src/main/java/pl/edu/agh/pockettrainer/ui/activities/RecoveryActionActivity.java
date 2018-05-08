@@ -59,6 +59,9 @@ public class RecoveryActionActivity extends AppCompatActivity implements TextToS
         final ProgressBar progressBar = findViewById(R.id.recovery_action_next_progressBar);
         progressBar.setProgress(state.getDayProgressPercentage());
 
+        final TextView stepLabel = findViewById(R.id.recovery_action_step);
+        stepLabel.setText(state.getDayActionNumber() + " / " + state.getDayActionsCount(progress));
+
         initComingNext();
 
         tts = new TextToSpeech(this, this);

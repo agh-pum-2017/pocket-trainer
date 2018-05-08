@@ -20,7 +20,6 @@ import java.io.File;
 
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
-import pl.edu.agh.pockettrainer.program.domain.TrainingProgress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.adapter.ProgramAdapter;
 
@@ -58,6 +57,7 @@ public class ProgramBrowserActivity extends WithMenuActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        final ApplicationState state = ApplicationState.getInstance(this);
         switch (item.getItemId()) {
             case R.id.program_browser_menu_browser:
                 ensureHasPermissionsToRead();
@@ -65,10 +65,32 @@ public class ProgramBrowserActivity extends WithMenuActivity {
             case R.id.program_browser_menu_download:
                 // TODO
                 return true;
+            case R.id.program_browser_menu_restore:
+
+                // TODO show some spinning wheel with ability to cancel...
+
+                int count = 0;
+                for (String name : state.programRepository.getBundledArchives()) {
+                    final TrainingProgram program = state.programRepository.installResource(name);
+                    if (program != null) {
+                        count++;
+                    }
+                }
+
+                state.programRepository.forceReload();
+                updateProgramAdapter(state);
+
+                String msg = "Installed " + count + " program";
+                if (count > 1) {
+                    msg += "s";
+                }
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
+                return true;
+
             case R.id.program_browser_menu_delete_all:
 
                 final Context context = this;
-                final ApplicationState state = (ApplicationState) getApplicationContext();
                 final int numPrograms = state.programRepository.getInstalled().size();
 
                 if (numPrograms > 0) {

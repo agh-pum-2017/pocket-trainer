@@ -61,6 +61,9 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
         final ProgressBar progressBar = findViewById(R.id.timed_recovery_next_progressBar);
         progressBar.setProgress(state.getDayProgressPercentage());
 
+        final TextView stepLabel = findViewById(R.id.timed_recovery_step);
+        stepLabel.setText(state.getDayActionNumber() + " / " + state.getDayActionsCount(progress));
+
         initComingNext();
 
         tts = new TextToSpeech(this, this);

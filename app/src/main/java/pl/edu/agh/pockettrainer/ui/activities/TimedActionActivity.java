@@ -72,6 +72,9 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         title.setText(capitalize(exercise.getName()));
         label.setText(timedAction.getSeconds() + " seconds");
 
+        final TextView stepLabel = findViewById(R.id.timed_action_step);
+        stepLabel.setText(state.getDayActionNumber() + " / " + state.getDayActionsCount(progress));
+
         initComingNext();
 
         resetTimer();
