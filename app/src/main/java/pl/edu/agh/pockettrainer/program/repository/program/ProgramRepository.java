@@ -3,6 +3,7 @@ package pl.edu.agh.pockettrainer.program.repository.program;
 import java.io.File;
 import java.util.List;
 
+import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
 import pl.edu.agh.pockettrainer.program.repository.Repository;
 
 public interface ProgramRepository extends Repository {
@@ -15,11 +16,11 @@ public interface ProgramRepository extends Repository {
 
     Program getById(String id);
 
-    void installResource(String path);
+    TrainingProgram installResource(String path);
 
-    void installLocalFile(File file);
+    TrainingProgram installLocalFile(File file);
 
-    void installRemoteFile(String address);
+    TrainingProgram installRemoteFile(String address);
 
     void uninstallAll();
 

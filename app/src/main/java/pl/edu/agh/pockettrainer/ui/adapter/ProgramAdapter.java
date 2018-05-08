@@ -97,7 +97,7 @@ public class ProgramAdapter extends ArrayAdapter<Program> {
 
                                 notifyDataSetInvalidated();
 
-                                String message = "Deleted 1 training program";
+                                String message = "Deleted " + program.getMetadata().getName();
                                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
                                 break;

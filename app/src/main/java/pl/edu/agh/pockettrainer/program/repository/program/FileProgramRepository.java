@@ -85,9 +85,9 @@ public class FileProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public void installResource(final String name) {
+    public TrainingProgram installResource(final String name) {
         logger.debug("Installing program from bundled resource '%s'", name);
-        install(new InputStreamProvider() {
+        return install(new InputStreamProvider() {
 
             @Override
             public InputStream open() throws IOException {
@@ -102,9 +102,9 @@ public class FileProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public void installLocalFile(final File file) {
+    public TrainingProgram installLocalFile(final File file) {
         logger.debug("Installing program from file '%s'", file.getAbsolutePath());
-        install(new InputStreamProvider() {
+        return install(new InputStreamProvider() {
 
             @Override
             public InputStream open() throws FileNotFoundException {
@@ -119,11 +119,11 @@ public class FileProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public void installRemoteFile(String address) {
+    public TrainingProgram installRemoteFile(String address) {
         File file = null;
         try {
             file = IoUtils.downloadSync(address, context.getCacheDir());
-            installLocalFile(file);
+            return installLocalFile(file);
         } catch (IOException ex) {
             logger.error(ex, "Unable to download file from '%s'", address);
         } finally {
@@ -131,6 +131,7 @@ public class FileProgramRepository implements ProgramRepository {
                 IoUtils.delete(file);
             }
         }
+        return null;
     }
 
     @Override
@@ -172,7 +173,7 @@ public class FileProgramRepository implements ProgramRepository {
         appConfig.unsetActiveProgramId();
     }
 
-    private void install(InputStreamProvider provider) {
+    private TrainingProgram install(InputStreamProvider provider) {
         try (TempDir tempDir = IoUtils.makeTempDir(context.getCacheDir())) {
             try (InputStream inputStream = provider.open()) {
 
@@ -193,6 +194,7 @@ public class FileProgramRepository implements ProgramRepository {
                     logger.debug("Training program already installed at '%s'", installed.getAbsolutePath());
                 } else {
                     IoUtils.save(installed, serializedJsonString);
+                    return program;
                 }
 
             } catch (JSONException ex) {
@@ -203,6 +205,7 @@ public class FileProgramRepository implements ProgramRepository {
         } catch (IOException ex) {
             logger.error(ex, "Unable to install program from %s", provider.getName());
         }
+        return null;
     }
 
     private Program loadInstalledProgram(File file) {

@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
 import pl.edu.agh.pockettrainer.program.repository.io.Cache;
 import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.progress.ProgressRepository;
@@ -65,7 +66,7 @@ public class CachedProgramRepository implements ProgramRepository {
 
     @Override
     public void forceReload() {
-        cache.invalidate();
+        invalidateCache();
         wrapped.forceReload();
     }
 
@@ -80,18 +81,18 @@ public class CachedProgramRepository implements ProgramRepository {
     }
 
     @Override
-    public void installResource(String path) {
-        wrapped.installResource(path);
+    public TrainingProgram installResource(String path) {
+        return wrapped.installResource(path);
     }
 
     @Override
-    public void installLocalFile(File file) {
-        wrapped.installLocalFile(file);
+    public TrainingProgram installLocalFile(File file) {
+        return wrapped.installLocalFile(file);
     }
 
     @Override
-    public void installRemoteFile(String address) {
-        wrapped.installRemoteFile(address);
+    public TrainingProgram installRemoteFile(String address) {
+        return wrapped.installRemoteFile(address);
     }
 
     @Override

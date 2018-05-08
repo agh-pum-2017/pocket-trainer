@@ -19,6 +19,8 @@ import android.widget.Toast;
 import java.io.File;
 
 import pl.edu.agh.pockettrainer.R;
+import pl.edu.agh.pockettrainer.program.domain.TrainingProgram;
+import pl.edu.agh.pockettrainer.program.domain.TrainingProgress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.adapter.ProgramAdapter;
 
@@ -197,12 +199,15 @@ public class ProgramBrowserActivity extends WithMenuActivity {
 
         final ApplicationState state = (ApplicationState) getApplicationContext();
 
-        state.programRepository.installLocalFile(file);
-        state.programRepository.forceReload();
+        final TrainingProgram newProgram = state.programRepository.installLocalFile(file);
 
-        updateProgramAdapter(state);
-
-        Toast.makeText(this, "Installed new program", Toast.LENGTH_SHORT).show();
+        if (newProgram != null) {
+            state.programRepository.forceReload();
+            updateProgramAdapter(state);
+            Toast.makeText(this, "Installed " + newProgram.getMetadata().getName(), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Failed to install program", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateProgramAdapter(final ApplicationState state) {
