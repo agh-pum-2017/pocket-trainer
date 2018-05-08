@@ -77,14 +77,17 @@ public class ProgramBrowserActivity extends WithMenuActivity {
                     }
                 }
 
-                state.programRepository.forceReload();
-                updateProgramAdapter(state);
+                if (count > 0) {
 
-                String msg = "Installed " + count + " program";
-                if (count > 1) {
-                    msg += "s";
+                    state.programRepository.forceReload();
+                    updateProgramAdapter(state);
+
+                    String msg = "Installed " + count + " program";
+                    if (count > 1) {
+                        msg += "s";
+                    }
+                    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
                 return true;
 

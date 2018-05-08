@@ -26,10 +26,10 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 * Default music / custom music / vibrate / turn off.
 * Variable (random?) music samples.
 * Spotify integration.
-* TTS language and locale.
-* Pre-generate TTS for better performance.
+* Multiple languages.
+* Configurable TTS language and locale.
+* Pre-generate TTS for better performance (earcon?).
 * Audio mixer (volume down when speaking).
 * Cast to ChromeCast.
-* Multiple languages.
 * Responsive design (different screen orientations and sizes).
 * Improve performance.
