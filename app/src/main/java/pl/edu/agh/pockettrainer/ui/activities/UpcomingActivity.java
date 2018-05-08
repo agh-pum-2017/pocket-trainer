@@ -28,6 +28,7 @@ import pl.edu.agh.pockettrainer.ui.ApplicationState;
 public class UpcomingActivity extends AppCompatActivity {
 
     private ApplicationState state;
+    private Progress progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class UpcomingActivity extends AppCompatActivity {
 
         state = (ApplicationState) getApplicationContext();
 
-        final Progress progress = state.getProgress();
+        progress = state.getProgress();
         final PointedAction pointedAction = progress.getNextAction();
 
         state.pointedAction = pointedAction;

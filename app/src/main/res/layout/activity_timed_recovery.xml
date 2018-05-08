@@ -69,13 +69,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="#ddd"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintBottom_toTopOf="@+id/timed_recovery_constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/timed_recovery_constraintLayout"
         android:layout_width="0dp"
         android:layout_height="278dp"
         android:layout_marginBottom="8dp"

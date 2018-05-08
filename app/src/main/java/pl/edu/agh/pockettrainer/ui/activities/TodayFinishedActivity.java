@@ -5,11 +5,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import pl.edu.agh.pockettrainer.R;
-import pl.edu.agh.pockettrainer.program.repository.meta.DefaultMetaRepository;
-import pl.edu.agh.pockettrainer.program.repository.meta.MetaRepository;
 import pl.edu.agh.pockettrainer.program.repository.program.Program;
-import pl.edu.agh.pockettrainer.program.repository.program.ProgramRepository;
-import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 
 public class TodayFinishedActivity extends WithMenuActivity {
@@ -38,7 +34,7 @@ public class TodayFinishedActivity extends WithMenuActivity {
             @Override
             public void onClick(View view) {
                 program.getProgress().delete();
-                state.navigator.navigateToToday(program);
+                state.navigator.navigateTo(UpcomingActivity.class);
             }
         });
     }

@@ -19,7 +19,10 @@ import pl.edu.agh.pockettrainer.BufferedMediaPlayer;
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.Logger;
 import pl.edu.agh.pockettrainer.program.domain.Exercise;
+import pl.edu.agh.pockettrainer.program.domain.actions.Recovery;
+import pl.edu.agh.pockettrainer.program.domain.actions.RepsAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
+import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 
@@ -54,8 +57,6 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         state = (ApplicationState) getApplicationContext();
         progress = state.getProgress();
 
-        tts = new TextToSpeech(this, this);
-
         final ProgressBar progressBar = findViewById(R.id.timed_action_progressBar);
         progressBar.setProgress(state.getDayProgressPercentage());
 
@@ -71,12 +72,71 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
         title.setText(capitalize(exercise.getName()));
         label.setText(timedAction.getSeconds() + " seconds");
 
+        initComingNext();
+
         resetTimer();
         labelSeconds.setText(String.valueOf(numSeconds));
+
+        tts = new TextToSpeech(this, this);
 
         resetTimer();
 
         super.onResume();
+    }
+
+    private void initComingNext() {
+
+        final TextView comingLabel = findViewById(R.id.timed_action_coming_label);
+        final ImageView nextImageView = findViewById(R.id.timed_action_next_image);
+        final ImageView nextIconView = findViewById(R.id.timed_action_next_icon);
+        final TextView nextTitle = findViewById(R.id.timed_action_next_title);
+        final TextView nextLabel = findViewById(R.id.timed_action_next_label);
+        nextImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        if (state.futurePointedAction != null) {
+
+            comingLabel.setVisibility(View.VISIBLE);
+            nextImageView.setVisibility(View.VISIBLE);
+            nextTitle.setVisibility(View.VISIBLE);
+            nextIconView.setVisibility(View.VISIBLE);
+            nextLabel.setVisibility(View.VISIBLE);
+
+            if (state.futurePointedAction.isTimedAction()) {
+                final TimedAction nextTimedAction = (TimedAction) state.futurePointedAction.action;
+                final Exercise nextExercise = nextTimedAction.getExercise();
+                setImage(nextImageView, nextExercise.getImage());
+                nextTitle.setText(capitalize(nextExercise.getName()));
+                nextIconView.setImageResource(R.drawable.ic_watch);
+                nextLabel.setText(nextTimedAction.getSeconds() + " seconds");
+            } else if (state.futurePointedAction.isRepsAction()) {
+                final RepsAction nextRepsAction = (RepsAction) state.futurePointedAction.action;
+                final Exercise nextExercise = nextRepsAction.getExercise();
+                setImage(nextImageView, nextExercise.getImage());
+                nextIconView.setImageResource(R.drawable.ic_reps);
+                nextTitle.setText(capitalize(nextExercise.getName()));
+                nextLabel.setText(nextRepsAction.getReps() + " reps");
+            } else if (state.futurePointedAction.isTimedRecoveryAction()) {
+                final TimedRecovery nextTimedRecovery = (TimedRecovery) state.futurePointedAction.action;
+                nextImageView.setImageResource(R.drawable.ic_battery);
+                nextImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                nextIconView.setImageResource(R.drawable.ic_watch);
+                nextTitle.setText("Timed recovery");
+                nextLabel.setText(nextTimedRecovery.getSeconds() + " seconds");
+            } else if (state.futurePointedAction.isRecoveryAction()) {
+                final Recovery nextRecovery = (Recovery) state.futurePointedAction.action;
+                nextImageView.setImageResource(R.drawable.ic_battery);
+                nextImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                nextIconView.setImageResource(R.drawable.ic_reps);
+                nextTitle.setText("Recovery");
+                nextLabel.setText("");
+            }
+        } else {
+            comingLabel.setVisibility(View.INVISIBLE);
+            nextImageView.setVisibility(View.INVISIBLE);
+            nextTitle.setVisibility(View.INVISIBLE);
+            nextIconView.setVisibility(View.INVISIBLE);
+            nextLabel.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

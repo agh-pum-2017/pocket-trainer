@@ -5,6 +5,7 @@ import android.speech.tts.UtteranceProgressListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -58,56 +59,71 @@ public class RecoveryActionActivity extends AppCompatActivity implements TextToS
         final ProgressBar progressBar = findViewById(R.id.recovery_action_next_progressBar);
         progressBar.setProgress(state.getDayProgressPercentage());
 
-        final TextView comingLabel = findViewById(R.id.recovery_action_coming_label);
-        final ImageView imageView = findViewById(R.id.recovery_action_next_image);
-        final ImageView iconView = findViewById(R.id.recovery_action_next_icon);
-        final TextView title = findViewById(R.id.recovery_action_next_title);
-        final TextView label = findViewById(R.id.recovery_action_next_label);
-
-        if (state.futurePointedAction != null) {
-
-            comingLabel.setVisibility(View.VISIBLE);
-            iconView.setVisibility(View.VISIBLE);
-            title.setVisibility(View.VISIBLE);
-            label.setVisibility(View.VISIBLE);
-
-            if (state.futurePointedAction.isTimedAction()) {
-                final TimedAction timedAction = (TimedAction) state.futurePointedAction.action;
-                final Exercise exercise = timedAction.getExercise();
-                nextExerciseMessage = "Next exercise: " + exercise.getName();
-                setImage(imageView, exercise.getImage());
-                iconView.setImageResource(R.drawable.ic_watch);
-                title.setText(capitalize(exercise.getName()));
-                label.setText(timedAction.getSeconds() + " seconds");
-            } else if (state.futurePointedAction.isRepsAction()) {
-                final RepsAction repsAction = (RepsAction) state.futurePointedAction.action;
-                final Exercise exercise = repsAction.getExercise();
-                nextExerciseMessage = "Next exercise: " + exercise.getName();
-                setImage(imageView, exercise.getImage());
-                iconView.setImageResource(R.drawable.ic_reps);
-                title.setText(capitalize(exercise.getName()));
-                label.setText(repsAction.getReps() + " reps");
-            } else if (state.futurePointedAction.isTimedAction()) {
-                final TimedRecovery timedRecovery = (TimedRecovery) state.futurePointedAction.action;
-                iconView.setImageResource(R.drawable.ic_watch);
-                title.setText("Timed recovery");
-                label.setText(timedRecovery.getSeconds() + " seconds");
-            } else if (state.futurePointedAction.isRecoveryAction()) {
-                final Recovery recovery = (Recovery) state.futurePointedAction.action;
-                iconView.setImageResource(R.drawable.ic_reps);
-                title.setText("Recovery");
-                label.setText("");
-            }
-        } else {
-            comingLabel.setVisibility(View.INVISIBLE);
-            iconView.setVisibility(View.INVISIBLE);
-            title.setVisibility(View.INVISIBLE);
-            label.setVisibility(View.INVISIBLE);
-        }
+        initComingNext();
 
         tts = new TextToSpeech(this, this);
 
         super.onResume();
+    }
+
+    private void initComingNext() {
+
+        final TextView comingLabel = findViewById(R.id.recovery_action_coming_label);
+        final ImageView nextImageView = findViewById(R.id.recovery_action_next_image);
+        final ImageView nextIconView = findViewById(R.id.recovery_action_next_icon);
+        final TextView nextTitle = findViewById(R.id.recovery_action_next_title);
+        final TextView nextLabel = findViewById(R.id.recovery_action_next_label);
+        final Button readyButton = findViewById(R.id.recovery_action_next_button_done);
+        nextImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        if (state.futurePointedAction != null) {
+
+            readyButton.setText(R.string.ready);
+            comingLabel.setVisibility(View.VISIBLE);
+            nextImageView.setVisibility(View.VISIBLE);
+            nextTitle.setVisibility(View.VISIBLE);
+            nextIconView.setVisibility(View.VISIBLE);
+            nextLabel.setVisibility(View.VISIBLE);
+
+            if (state.futurePointedAction.isTimedAction()) {
+                final TimedAction nextTimedAction = (TimedAction) state.futurePointedAction.action;
+                final Exercise nextExercise = nextTimedAction.getExercise();
+                nextExerciseMessage = "Next exercise: " + nextExercise.getName();
+                setImage(nextImageView, nextExercise.getImage());
+                nextTitle.setText(capitalize(nextExercise.getName()));
+                nextIconView.setImageResource(R.drawable.ic_watch);
+                nextLabel.setText(nextTimedAction.getSeconds() + " seconds");
+            } else if (state.futurePointedAction.isRepsAction()) {
+                final RepsAction nextRepsAction = (RepsAction) state.futurePointedAction.action;
+                final Exercise nextExercise = nextRepsAction.getExercise();
+                nextExerciseMessage = "Next exercise: " + nextExercise.getName();
+                setImage(nextImageView, nextExercise.getImage());
+                nextIconView.setImageResource(R.drawable.ic_reps);
+                nextTitle.setText(capitalize(nextExercise.getName()));
+                nextLabel.setText(nextRepsAction.getReps() + " reps");
+            } else if (state.futurePointedAction.isTimedRecoveryAction()) {
+                final TimedRecovery nextTimedRecovery = (TimedRecovery) state.futurePointedAction.action;
+                nextImageView.setImageResource(R.drawable.ic_battery);
+                nextImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                nextIconView.setImageResource(R.drawable.ic_watch);
+                nextTitle.setText("Timed recovery");
+                nextLabel.setText(nextTimedRecovery.getSeconds() + " seconds");
+            } else if (state.futurePointedAction.isRecoveryAction()) {
+                final Recovery nextRecovery = (Recovery) state.futurePointedAction.action;
+                nextImageView.setImageResource(R.drawable.ic_battery);
+                nextImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                nextIconView.setImageResource(R.drawable.ic_reps);
+                nextTitle.setText("Recovery");
+                nextLabel.setText("");
+            }
+        } else {
+            readyButton.setText(R.string.done);
+            comingLabel.setVisibility(View.INVISIBLE);
+            nextImageView.setVisibility(View.INVISIBLE);
+            nextTitle.setVisibility(View.INVISIBLE);
+            nextIconView.setVisibility(View.INVISIBLE);
+            nextLabel.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
