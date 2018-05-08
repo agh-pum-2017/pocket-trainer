@@ -53,13 +53,20 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
 
     @Override
     protected void onPause() {
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
+
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
 
         if (tts != null) {
             tts.stop();
@@ -71,7 +78,11 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
 
     @Override
     protected void onStop() {
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
+
         super.onStop();
     }
 
@@ -96,8 +107,10 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
         final TextView label = findViewById(R.id.reps_action_label);
         label.setText(String.valueOf(repsAction.getReps()));
 
-        beatSound = BufferedMediaPlayer.create(this, R.raw.beat);
-        beatSound.start();
+        if (state.appConfig.isSoundEnabled()) {
+            beatSound = BufferedMediaPlayer.create(this, R.raw.beat);
+            beatSound.start();
+        }
 
         message = exercise.getName() + ", " + repsAction.getReps() + " times";
 
@@ -115,7 +128,9 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
             @Override
             public void run() {
 
-                beatSound.stop();
+                if (beatSound != null) {
+                    beatSound.stop();
+                }
 
                 if (tts != null) {
                     tts.stop();
@@ -187,13 +202,21 @@ public class RepsActionActivity extends AppCompatActivity implements TextToSpeec
     }
 
     public void onDonButtonClick(View view) {
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
+
         progress.finishAction();
         navigateToNextAction();
     }
 
     public void onSkipButtonClick(View view) {
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
+
         progress.skipAction();
         navigateToNextAction();
     }

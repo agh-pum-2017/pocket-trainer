@@ -99,7 +99,10 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
             public void run() {
 
                 stopTimer();
-                beatSound.stop();
+
+                if (beatSound != null) {
+                    beatSound.stop();
+                }
 
                 if (tts != null) {
                     tts.stop();
@@ -172,8 +175,13 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
     @Override
     protected void onPause() {
+
         stopTimer();
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
+
         super.onPause();
     }
 
@@ -181,7 +189,10 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     protected void onDestroy() {
 
         stopTimer();
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
 
         if (tts != null) {
             tts.stop();
@@ -193,8 +204,13 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
     @Override
     protected void onStop() {
+
         stopTimer();
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
+
         super.onStop();
     }
 
@@ -213,8 +229,13 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
     }
 
     public void onSkipButtonClick(View view) {
+
         stopTimer();
-        beatSound.stop();
+
+        if (beatSound != null) {
+            beatSound.stop();
+        }
+
         progress.skipAction();
         navigateToNextAction();
     }
@@ -233,8 +254,10 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
         if (timer == null) {
 
-            beatSound = BufferedMediaPlayer.create(this, R.raw.beat);
-            beatSound.start();
+            if (state.appConfig.isSoundEnabled()) {
+                beatSound = BufferedMediaPlayer.create(this, R.raw.beat);
+                beatSound.start();
+            }
 
             timer = new CountDownTimer((1 + timedAction.getSeconds()) * 1000L, 1000L) {
 
@@ -263,7 +286,9 @@ public class TimedActionActivity extends AppCompatActivity implements TextToSpee
 
                 @Override
                 public void onFinish() {
-                    beatSound.stop();
+                    if (beatSound != null) {
+                        beatSound.stop();
+                    }
                     progress.finishAction();
                     navigateToNextAction();
                 }

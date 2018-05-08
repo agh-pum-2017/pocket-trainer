@@ -83,7 +83,10 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
             public void run() {
 
                 stopTimer();
-                tickTockSound.stop();
+
+                if (tickTockSound != null) {
+                    tickTockSound.stop();
+                }
 
                 if (tts != null) {
                     tts.stop();
@@ -164,8 +167,13 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
     @Override
     protected void onPause() {
+
         stopTimer();
-        tickTockSound.stop();
+
+        if (tickTockSound != null) {
+            tickTockSound.stop();
+        }
+
         super.onPause();
     }
 
@@ -173,7 +181,10 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
     protected void onDestroy() {
 
         stopTimer();
-        tickTockSound.stop();
+
+        if (tickTockSound != null) {
+            tickTockSound.stop();
+        }
 
         if (tts != null) {
             tts.stop();
@@ -185,8 +196,13 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
     @Override
     protected void onStop() {
+
         stopTimer();
-        tickTockSound.stop();
+
+        if (tickTockSound != null) {
+            tickTockSound.stop();
+        }
+
         super.onStop();
     }
 
@@ -204,8 +220,10 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
         if (timer == null) {
 
-            tickTockSound = BufferedMediaPlayer.create(this, R.raw.tick_tock);
-            tickTockSound.start();
+            if (state.appConfig.isSoundEnabled()) {
+                tickTockSound = BufferedMediaPlayer.create(this, R.raw.tick_tock);
+                tickTockSound.start();
+            }
 
             String message = "Recovery time";
             if (nextExerciseMessage != null) {
@@ -245,7 +263,11 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
 
                 @Override
                 public void onFinish() {
-                    tickTockSound.stop();
+
+                    if (tickTockSound != null) {
+                        tickTockSound.stop();
+                    }
+
                     progress.finishAction();
                     navigateToNextAction();
                 }
@@ -271,8 +293,13 @@ public class TimedRecoveryActivity extends AppCompatActivity implements TextToSp
     }
 
     public void onSkipButtonClick(View view) {
+
         stopTimer();
-        tickTockSound.stop();
+
+        if (tickTockSound != null) {
+            tickTockSound.stop();
+        }
+
         progress.skipAction();
         navigateToNextAction();
     }
