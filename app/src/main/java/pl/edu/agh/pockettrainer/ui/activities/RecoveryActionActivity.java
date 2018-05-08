@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -25,6 +26,7 @@ import pl.edu.agh.pockettrainer.program.domain.actions.TimedAction;
 import pl.edu.agh.pockettrainer.program.domain.actions.TimedRecovery;
 import pl.edu.agh.pockettrainer.program.repository.progress.Progress;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
+import pl.edu.agh.pockettrainer.ui.TripleTapListener;
 
 public class RecoveryActionActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
@@ -35,10 +37,13 @@ public class RecoveryActionActivity extends AppCompatActivity implements TextToS
     private Recovery recovery;
     private TextToSpeech tts;
     private String nextExerciseMessage;
+    private TripleTapListener tripleTapListener;
 
     @Override
     public void onBackPressed() {
-        // prevent from interrupting the countdown
+        if (tripleTapListener != null) {
+            tripleTapListener.tap();
+        }
     }
 
     @Override
@@ -65,6 +70,22 @@ public class RecoveryActionActivity extends AppCompatActivity implements TextToS
         initComingNext();
 
         tts = new TextToSpeech(this, this);
+
+        tripleTapListener = new TripleTapListener(new Runnable() {
+
+            @Override
+            public void run() {
+
+                if (tts != null) {
+                    tts.stop();
+                    tts.shutdown();
+                }
+
+                progress.abort();
+                Toast.makeText(getApplicationContext(), "Training interrupted", Toast.LENGTH_SHORT).show();
+                state.navigator.navigateToToday(progress.getProgram());
+            }
+        });
 
         super.onResume();
     }

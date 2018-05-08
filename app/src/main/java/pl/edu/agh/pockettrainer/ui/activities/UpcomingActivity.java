@@ -3,6 +3,8 @@ package pl.edu.agh.pockettrainer.ui.activities;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -84,6 +86,25 @@ public class UpcomingActivity extends AppCompatActivity {
             title.setText("Recovery");
             label.setText("");
         }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final String message = "Hint: triple tap the back button to interrupt";
+                final Snackbar snackbar = Snackbar.make(findViewById(R.id.layout_upcoming), message, Snackbar.LENGTH_INDEFINITE);
+                final TextView textView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextColor(Color.WHITE);
+                snackbar.setActionTextColor(Color.parseColor("#00A6FF"));
+                snackbar.setAction("DISMISS", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                    }
+                });
+                snackbar.show();
+            }
+        }, 250L);
+
     }
 
     @Override

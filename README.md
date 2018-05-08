@@ -10,16 +10,14 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 
 ### Must have
 
-* A way to abort in progress workout.
-* Show number of completed actions (non-recovery) vs. all non-recovery actions on each screen?
 * Prepare test data with muscles, genders, superset (no gaps between actions), different kinds of actions, etc.
 * Install from remote location (HTTP hook already in place and tested, albeit synchronous)
-
 
 ### Bugs and glitches
 
 * When finished and clicking "Start over", the upcoming exercise is displayed. However, when clicking back it should go to today rather than "Start over" again.
 * Menu icon in the program browser should be white instead of black (three dots in the upper right corner).
+* Back button sometimes allows to navigate to forbidden views. 
 
 ### Nice to have
 

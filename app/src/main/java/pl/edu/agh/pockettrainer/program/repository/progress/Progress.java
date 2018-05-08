@@ -151,6 +151,10 @@ public class Progress {
         }
     }
 
+    public void abort() {
+        startedAt = null;
+    }
+
     public void finishAction() {
 
         if (startedAt != null) {
