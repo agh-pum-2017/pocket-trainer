@@ -2,6 +2,7 @@ package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -72,6 +73,13 @@ public class TodayRecoveryActivity extends WithMenuActivity {
         labelCounter = template.findViewById(R.id.today_recovery_textViewCounter);
 
         setNextTrainingAt(state);
+
+        final ProgressBar progressBar = template.findViewById(R.id.today_recovery_progressBar);
+        final int percent = state.getProgress().getPercentage();
+        progressBar.setProgress(percent);
+
+        final TextView percentLabel = template.findViewById(R.id.today_recovery_complete);
+        percentLabel.setText(String.valueOf(percent) + "% complete");
 
         final long duration = Math.max(0L, nextTrainingAt - System.currentTimeMillis());
 
