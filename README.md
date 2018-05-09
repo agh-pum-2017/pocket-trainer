@@ -101,7 +101,7 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 
 ## On-line Repository
 
-<img align="right" height="450" src="docs/repo.jpg">
+<img align="right" height="400" src="docs/repo.jpg">
 
 There is a default [public repository](http://asdf.pythonanywhere.com/pocket-trainer) the application uses for querying and downloading training programs. However, users are free to use their own private repositories since repository URL is configurable. A sample repository server comes with this project as a tiny Python/Flask script (about 50 lines of code).
 
