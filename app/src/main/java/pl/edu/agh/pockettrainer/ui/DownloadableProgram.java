@@ -8,13 +8,13 @@ import pl.edu.agh.pockettrainer.program.domain.Metadata;
 
 public class DownloadableProgram {
 
-    public final String filename;
+    public final String fileUrl;
     public final Metadata metadata;
 
     private final String encodedImage;
 
-    public DownloadableProgram(String filename, String encodedImage, Metadata metadata) {
-        this.filename = filename;
+    public DownloadableProgram(String fileUrl, String encodedImage, Metadata metadata) {
+        this.fileUrl = fileUrl;
         this.encodedImage = encodedImage;
         this.metadata = metadata;
     }

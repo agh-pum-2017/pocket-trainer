@@ -27,6 +27,9 @@ public class ProgramBrowserActivity extends WithMenuActivity {
 
     private static final int READ_EXTERNAL_STORAGE_REQUESTCODE = 42;
     private static final int CHOOSE_FILE_REQUESTCODE = 7;
+    private static final int UPDATE_ADAPTER_REQUESTCODE = 83;
+
+    private InvalidateObserver observer;
 
     @Override
     protected int getChildLayoutId() {
@@ -40,7 +43,11 @@ public class ProgramBrowserActivity extends WithMenuActivity {
 
     @Override
     protected void initView(View child) {
+
         final ApplicationState state = (ApplicationState) getApplicationContext();
+        final ListView listView = template.findViewById(R.id.program_browser_listView);
+        observer = new InvalidateObserver(listView, this, state);
+
         updateProgramAdapter(state);
     }
 
@@ -63,7 +70,7 @@ public class ProgramBrowserActivity extends WithMenuActivity {
                 ensureHasPermissionsToRead();
                 return true;
             case R.id.program_browser_menu_download:
-                navigateTo(DownloadActivity.class);
+                navigateToForResult(DownloadActivity.class);
                 return true;
             case R.id.program_browser_menu_restore:
 
@@ -217,6 +224,10 @@ public class ProgramBrowserActivity extends WithMenuActivity {
                     install(file);
                 }
                 break;
+            case UPDATE_ADAPTER_REQUESTCODE:
+                final ApplicationState state = (ApplicationState) getApplicationContext();
+                updateProgramAdapter(state);
+                break;
         }
     }
 
@@ -237,18 +248,36 @@ public class ProgramBrowserActivity extends WithMenuActivity {
 
     private void updateProgramAdapter(final ApplicationState state) {
 
-        final Context context = this;
-        final ListAdapter adapter = new ProgramAdapter(context, state.programRepository);
+        final ListAdapter adapter = new ProgramAdapter(this, state.programRepository);
+        adapter.registerDataSetObserver(observer);
+
         final ListView listView = template.findViewById(R.id.program_browser_listView);
-
         listView.setAdapter(adapter);
+    }
 
-        adapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onInvalidated() {
-                super.onInvalidated();
-                listView.setAdapter(new ProgramAdapter(context, state.programRepository));
-            }
-        });
+    private void navigateToForResult(Class<DownloadActivity> activityClass) {
+        startActivityForResult(new Intent(this, activityClass), UPDATE_ADAPTER_REQUESTCODE);
+    }
+
+    private static class InvalidateObserver extends DataSetObserver {
+
+        private final ListView listView;
+        private final Context context;
+        private final ApplicationState state;
+
+        private InvalidateObserver(ListView listView, Context context, ApplicationState state) {
+            this.listView = listView;
+            this.context = context;
+            this.state = state;
+        }
+
+        @Override
+        public void onInvalidated() {
+
+            final ListAdapter adapter = new ProgramAdapter(context, state.programRepository);
+            adapter.registerDataSetObserver(this);
+
+            listView.setAdapter(adapter);
+        }
     }
 }

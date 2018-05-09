@@ -1,16 +1,14 @@
 package pl.edu.agh.pockettrainer.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,19 +16,28 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import pl.edu.agh.pockettrainer.R;
 import pl.edu.agh.pockettrainer.program.domain.Metadata;
 import pl.edu.agh.pockettrainer.program.domain.ProgramGoal;
-import pl.edu.agh.pockettrainer.program.repository.program.Program;
 import pl.edu.agh.pockettrainer.ui.DownloadableProgram;
+import pl.edu.agh.pockettrainer.ui.components.CustomCheckBox;
 
 public class DownloadableProgramAdapter extends ArrayAdapter<DownloadableProgram> {
 
+    private Set<DownloadableProgram> selectedPrograms = new HashSet<>();
+    private final int programCount;
+
     public DownloadableProgramAdapter(Context context, List<DownloadableProgram> programs) {
         super(context, 0, programs);
+        this.programCount = programs.size();
+    }
+
+    public Set<DownloadableProgram> getSelectedPrograms() {
+        return selectedPrograms;
     }
 
     @NonNull
@@ -47,10 +54,6 @@ public class DownloadableProgramAdapter extends ArrayAdapter<DownloadableProgram
         final ImageView imageView = convertView.findViewById(R.id.downloadable_program_item_image);
         Glide.with(imageView).load(program.getThumbnail()).into(imageView);
 
-
-
-        // TODO encoded image setImage(convertView, imageView, metadata);
-
         final TextView title = convertView.findViewById(R.id.downloadable_program_item_title);
         title.setText(metadata.getName());
 
@@ -60,24 +63,34 @@ public class DownloadableProgramAdapter extends ArrayAdapter<DownloadableProgram
         final TextView goals = convertView.findViewById(R.id.downloadable_program_item_goals);
         goals.setText(makeString(metadata.getGoals()));
 
+        final CheckBox checkBox = convertView.findViewById(R.id.downloadable_program_item_checkbox);
+        checkBox.setOnCheckedChangeListener(onCheck(convertView, program));
 
-//        final Button buttonToggleEnroll = convertView.findViewById(R.id.downloadable_program_item_button_enroll);
-//        final Button buttonDelete = convertView.findViewById(R.id.downloadable_program_item_button_delete);
-//
-//
-//
-
-//
-//        convertView.setOnClickListener(onClick(program));
-//        buttonToggleEnroll.setOnClickListener(onBtnToggleEnrollClick(program));
-//        buttonDelete.setOnClickListener(onBtnDeleteClick(program));
-
+        convertView.setOnClickListener(onClick());
 
         return convertView;
     }
 
-    private void setImage(View view, ImageView imageView, Metadata metadata) {
-        Glide.with(view).load(metadata.getImage()).into(imageView);
+    private CompoundButton.OnCheckedChangeListener onCheck(final View convertView, final DownloadableProgram program) {
+        return new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    selectedPrograms.add(program);
+                } else {
+                    selectedPrograms.remove(program);
+                }
+
+                final View parent = (View) convertView.getParent().getParent();
+                final TextView countLabel = parent.findViewById(R.id.download_selected_count);
+                countLabel.setText("Selected " + selectedPrograms.size());
+
+                final CustomCheckBox selectAll = parent.findViewById(R.id.download_select_all);
+                selectAll.setChecked(selectedPrograms.size() == programCount, false);
+            }
+        };
     }
 
     private String makeString(Set<ProgramGoal> goals) {
@@ -88,5 +101,16 @@ public class DownloadableProgramAdapter extends ArrayAdapter<DownloadableProgram
         Collections.sort(strings);
         String result = strings.toString();
         return result.substring(1, result.length() - 1);
+    }
+
+    private View.OnClickListener onClick() {
+        return new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                final CheckBox checkBox = view.findViewById(R.id.downloadable_program_item_checkbox);
+                checkBox.toggle();
+            }
+        };
     }
 }

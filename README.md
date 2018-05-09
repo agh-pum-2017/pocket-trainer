@@ -11,7 +11,6 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 ### Must have
 
 * Prepare test data with muscles, genders, superset (no gaps between actions), different kinds of actions, etc.
-* Install from remote location (HTTP hook already in place and tested, albeit synchronous)
 
 ### Bugs and glitches
 
@@ -24,7 +23,7 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 ### Nice to have
 
 * When querying training program repository, send already installed programs to avoid downloading them unnecessarily (requires to bump format version on the client; the server should be backwards-compatible).
-* Show enrolled first or display selected program more prominently.
+* Show enrolled first or display selected program more prominently (sorting?).
 * Program browser search and filter.
 * Integrate running, maps and location (distance vs. time).
 * Configurable number of seconds (e.g. announcement every 30 seconds, countdown when <= 10 seconds, etc.)

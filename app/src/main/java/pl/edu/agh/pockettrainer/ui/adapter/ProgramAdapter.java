@@ -83,7 +83,7 @@ public class ProgramAdapter extends ArrayAdapter<Program> {
         return new View.OnClickListener() {
 
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
                 final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override

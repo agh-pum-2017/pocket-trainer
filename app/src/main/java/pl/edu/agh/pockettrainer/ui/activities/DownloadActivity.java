@@ -1,20 +1,21 @@
 package pl.edu.agh.pockettrainer.ui.activities;
 
 import android.app.Activity;
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,7 +31,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,13 +42,16 @@ import pl.edu.agh.pockettrainer.program.serialization.json.Json;
 import pl.edu.agh.pockettrainer.ui.ApplicationState;
 import pl.edu.agh.pockettrainer.ui.DownloadableProgram;
 import pl.edu.agh.pockettrainer.ui.adapter.DownloadableProgramAdapter;
-import pl.edu.agh.pockettrainer.ui.adapter.ProgramAdapter;
 
 public class DownloadActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
+    private CheckBox selectAll;
     private ListView listView;
+    private TextView status;
+    private TextView selectedCount;
     private MenuItem downloadMenuItem;
+    private DownloadableProgramAdapter adapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,11 +65,24 @@ public class DownloadActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_download:
+                if (adapter != null) {
+                    final Set<DownloadableProgram> selectedPrograms = adapter.getSelectedPrograms();
+                    if (selectedPrograms.size() > 0) {
 
-                // TODO
+                        status.setText("Installing...");
 
-                Toast.makeText(this, "Nothing selected", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.VISIBLE);
+                        status.setVisibility(View.VISIBLE);
+                        listView.setVisibility(View.INVISIBLE);
+                        selectedCount.setVisibility(View.INVISIBLE);
+                        downloadMenuItem.setEnabled(false);
 
+                        installPrograms(selectedPrograms);
+
+                    } else {
+                        Toast.makeText(this, "Nothing selected", Toast.LENGTH_SHORT).show();
+                    }
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -99,7 +115,32 @@ public class DownloadActivity extends AppCompatActivity {
         listView = findViewById(R.id.download_listView);
         listView.setVisibility(View.INVISIBLE);
 
+        selectAll = findViewById(R.id.download_select_all);
+        selectAll.setVisibility(View.INVISIBLE);
+        selectAll.setOnCheckedChangeListener(onSelectAll());
+
+        status = findViewById(R.id.download_status);
+        status.setVisibility(View.VISIBLE);
+        status.setText("Querying repository...");
+
+        selectedCount = findViewById(R.id.download_selected_count);
+        selectedCount.setVisibility(View.INVISIBLE);
+
         downloadIndex();
+    }
+
+    private CompoundButton.OnCheckedChangeListener onSelectAll() {
+        return new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                for (int i = 0; i < listView.getChildCount(); i++) {
+                    final View child = listView.getChildAt(i);
+                    final CheckBox checkBox = child.findViewById(R.id.downloadable_program_item_checkbox);
+                    checkBox.setChecked(isChecked);
+                }
+            }
+        };
     }
 
     private void downloadIndex() {
@@ -109,20 +150,20 @@ public class DownloadActivity extends AppCompatActivity {
 
     private void populateViewWith(List<DownloadableProgram> programs) {
 
-        listView.setAdapter(new DownloadableProgramAdapter(this, programs));
+        adapter = new DownloadableProgramAdapter(this, programs);
+        listView.setAdapter(adapter);
 
         progressBar.setVisibility(View.INVISIBLE);
+        status.setVisibility(View.INVISIBLE);
+        selectAll.setVisibility(View.VISIBLE);
         listView.setVisibility(View.VISIBLE);
+        selectedCount.setVisibility(View.VISIBLE);
         downloadMenuItem.setEnabled(true);
+    }
 
-
-
-        //Toast.makeText(this, "Found: " + programs.size(), Toast.LENGTH_SHORT).show();
-
-        // TODO
-        //final ListAdapter adapter = new DownloadableProgramAdapter(context, state.programRepository);
-        //final ListView listView = findViewById(R.id.download_listView);
-        //listView.setAdapter(adapter);
+    private void installPrograms(Set<DownloadableProgram> selectedPrograms) {
+        final AsyncTask<String, String, String> installTask = new InstallTask(this, selectedPrograms);
+        installTask.execute();
     }
 
     private static class DownloadIndexTask extends AsyncTask<String, String, String> {
@@ -163,8 +204,9 @@ public class DownloadActivity extends AppCompatActivity {
                                                 parent.get("targetGender").asEnum(Gender.class),
                                                 parent.get("goals").asEnums(ProgramGoal.class),
                                                 null);
+                                        final String fileUrl = state.appConfig.getRepositoryUrl() + "/" + filename;
                                         availablePrograms.add(
-                                            new DownloadableProgram(filename, encodedImage, metadata));
+                                            new DownloadableProgram(fileUrl, encodedImage, metadata));
                                     }
                                 }
 
@@ -194,8 +236,50 @@ public class DownloadActivity extends AppCompatActivity {
         }
 
         private void error(Activity activity, String message) {
-            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             activity.finish();
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private static class InstallTask extends AsyncTask<String, String, String> {
+
+        private final WeakReference<DownloadActivity> activityRef;
+        private final Set<DownloadableProgram> programs;
+
+        InstallTask(DownloadActivity activity, Set<DownloadableProgram>  programs) {
+            this.activityRef = new WeakReference<>(activity);
+            this.programs = programs;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            final DownloadActivity activity = activityRef.get();
+            final ApplicationState state = (ApplicationState) activity.getApplicationContext();
+
+            int numInstalled = 0;
+            for (DownloadableProgram program : programs) {
+                if (null != state.programRepository.installRemoteFile(program.fileUrl)) {
+                    numInstalled++;
+                }
+            }
+
+            state.programRepository.forceReload();
+            activity.finish();
+
+            final int fNumInstalled = numInstalled;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (fNumInstalled == 0) {
+                        Toast.makeText(activity, "Nothing was installed", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(activity, "Installed " + fNumInstalled + " programs", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            return "done";
         }
     }
 }
