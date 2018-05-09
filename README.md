@@ -96,7 +96,6 @@ Query the repository for available training programs. Each entry contains the co
                 "targetGender": "any"
             }
         }
-        // ...
     ]
 }
 ```
@@ -157,13 +156,13 @@ Following that is the `program` attribute which groups three more children, i.e.
     "format_version": "1.0",
     "program": {
         "metadata": {
-            // ...
+
         },
         "definitions": {
-            // ...
+
         },
         "schedule": [
-            // ...
+
         ]
 }
 ```
@@ -197,7 +196,7 @@ This attribute provides training program's description, which may be used for se
 
 > Note: Unknown enum values are ignored.
 
-```json
+```hjson
 "metadata": {
     "author": String,
     "name": String,
@@ -219,10 +218,10 @@ The `definitions` attribute is expected to contain two children, namely `exercis
     "program": {
         "definitions": {
             "exercises": {
-                // ...
+
             },
             "days": {
-                // ...
+
             }
         }
     }
@@ -323,8 +322,8 @@ Some training programs might target muscle groups on different days, which is of
                             "type": "@push-ups",
                             "goal": "seconds",
                             "value": 60
-                        },
-                        // ...
+                        }
+                    ]
                 }
             }
         }
@@ -360,7 +359,7 @@ Workout comprises a *routine* which is a sequnce of *actions* to be perfromed du
 {
     "type": "workout",
     "routine": [
-        // ...
+
     ]
 ```
 
@@ -477,9 +476,7 @@ An estimated time of the next training session is calculated by taking last work
             "@workout2",
             "@workout2",
             
-            "@recovery",
-
-            // ...
+            "@recovery"
         ]
     }
 }
