@@ -39,7 +39,7 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 * Apart from textual description exercises have a corresponding image and a figure depicting muscle groups activated (synthesized dynamically from sprite images).
 * To restart an active program one can simply unenroll from and enroll to the same program again. Only finished programs can be started over from today's view.
 
-![Alt Text](file:///C://Users/bartek/Desktop/pbrowser.jpg)
+![](docs/pbrowser.jpg)
 
 ### Today View
 
@@ -60,7 +60,7 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 * Message "Training Paused" is flashing when training had been interrupted.
 * During a recovery day a countdown shows how much time is left until the next training.
 
-![Alt Text](file:///C://Users/bartek/Desktop/today.jpg)
+![](docs/today.jpg)
 
 ### Personal Trainer
 
@@ -80,7 +80,7 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 * Some actions require user interaction to be marked complete, e.g. to indicate that a particular number of reps has been reached or when user decided to end a recovery break (perhaps he waited at the gym until a machine became available).
 * Each action can be skipped regardless of its type.
 
-![Alt Text](file:///C://Users/bartek/Desktop/trainer.jpg)
+![](docs/trainer.jpg)
 
 ### Progress
 
@@ -101,7 +101,7 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 
 ## On-line Repository
 
-![Alt Text](file:///C://Users/bartek/Desktop/repo.jpg){:style="float: right; height: 450px;"}
+![](docs/repo.jpg){:style="float: right; height: 450px;"}
 
 There is a default [public repository](http://asdf.pythonanywhere.com/pocket-trainer) the application uses for querying and downloading training programs. However, users are free to use their own private repositories since repository URL is configurable. A sample repository server comes with this project as a tiny Python/Flask script (about 50 lines of code).
 
