@@ -19,7 +19,7 @@ public class AppConfig {
     private static final boolean DEFAULT_VOICE_ENABLED = true;
     private static final boolean DEFAULT_SOUND_ENABLED = true;
     private static final boolean DEFAULT_VIBRATE_ENABLED = true;
-    private static final String DEFAULT_REPOSITORY_URL = "http://192.168.0.12:8080/repository";
+    private static final String DEFAULT_REPOSITORY_URL = "http://asdf.pythonanywhere.com/pocket-trainer";
 
     private final Logger logger = new Logger(AppConfig.class);
     private final SharedPreferences preferences;

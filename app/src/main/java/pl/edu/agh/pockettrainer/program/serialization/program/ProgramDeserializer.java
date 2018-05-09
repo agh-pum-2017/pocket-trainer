@@ -37,7 +37,7 @@ import pl.edu.agh.pockettrainer.program.serialization.json.Json;
 public class ProgramDeserializer {
 
     private static final String SUPPORTED_FORMAT_VERSION = "1.0";
-        private static final Logger logger = new Logger(ProgramDeserializer.class);
+    private static final Logger logger = new Logger(ProgramDeserializer.class);
 
     public static ProgramDeserializer withOriginalPaths() {
         return new ProgramDeserializer();

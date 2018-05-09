@@ -75,6 +75,7 @@ public class DownloadActivity extends AppCompatActivity {
                         status.setVisibility(View.VISIBLE);
                         listView.setVisibility(View.INVISIBLE);
                         selectedCount.setVisibility(View.INVISIBLE);
+                        selectAll.setVisibility(View.INVISIBLE);
                         downloadMenuItem.setEnabled(false);
 
                         installPrograms(selectedPrograms);

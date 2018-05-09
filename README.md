@@ -1,10 +1,495 @@
 # Pocket Trainer
 
-Personal trainer app with the ability to install and playback arbitrary training programs stored in JSON format.
+Personal trainer mobile app with the ability to install and playback arbitrary training programs stored in JSON format.
+
+![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
 
 ## Disclaimer
 
 This is a proof of concept / prototype and therefore it lacks unit tests, contains a lot of duplication and generally does not follow any good programming principles. Other than that there are some binary assets such as images and sounds that have been used or modified without consent of their respective authors.
+
+## Tools Used
+
+* [Android Studio](https://developer.android.com/studio/) (development)
+* [Audacity](https://www.audacityteam.org/) (sound effects)
+* [GIMP](https://www.gimp.org/) (image editing)
+* [Marvel](https://marvelapp.com/) (UI design)
+* [MuscleWiki](https://musclewiki.org/) (sprites)
+* [PythonAnywhere](https://www.pythonanywhere.com/) (web hosting)
+* [Trello](https://trello.com/) (project management)
+
+## Feature Overview
+
+### Training Programs
+
+* The application comes with some bundled training programs for demonstration purposes. They are installed on the fist run but can be restored later if deleted.
+* More programs can be copied or downloaded manually and installed from a local file on the device.
+* Training programs can be also downloaded and installed directly from the app using a remote repository.
+* There is a default [public repository](http://asdf.pythonanywhere.com/pocket-trainer) of training programs available on-line.
+* Flexible file format allows for defining brand new custom training programs.
+
+### Download
+
+* 
+
+### Personal Trainer
+
+### Program Browser
+
+* Installed programs can be browsed, explored, selected or deleted (individually or all at once).
+* Basic infomation about a program includes its goals, target gender, name, author, description and schedule.
+* Detailed view of a training program shows instructions on how to correctly perform each exercise.
+* Apart from textual description exercises have a corresponding image and a figure depicting muscle groups activated (synthesized dynamically from sprite images, while muscles are stored in an enumeration).
+
+### Configurability
+
+* Virtual trainer can be personalized by toggling TTS voice instructions, music and sound effects as well as phone vibrations.
+* Users can direct the app to custom repositories of training programs by providing a URL.
+* An option to set defaults.
+
+### Progress
+
+* There is a rudimentary history log of completed exercises, i.e. what, when, how long and how well.
+
+
+
+
+what happens on the first run???
+depending on the state
+
+
+
+
+## On-line Repository
+
+There is a default [public repository](http://asdf.pythonanywhere.com/pocket-trainer) the application uses for querying and downloading training programs. However, users are free to use their own private repositories since repository URL is configurable. A sample repository server comes with this project as a tiny Python/Flask script (about 50 lines of code).
+
+### API
+
+#### Index
+
+Query the repository for available training programs. Each entry contains the corresponding filename and program metadata including optional Base64-encoded image thumbnail. The response also provides version information to allow for backwards-compatible enhancements such as filters and exclusions in the future.
+
+##### Request
+
+`GET /`
+
+##### Response
+
+```json
+{
+    "format_version": "1.0",
+    "programs": [
+        {
+            "filename": "28days.zip",
+            "format_version": "1.0",
+            "metadata": {
+                "author": "fitnessandpower.com",
+                "description": "5 simple exercises that will transform your body in just four weeks",
+                "goals": [
+                    "fitness",
+                    "health",
+                    "fat loss"
+                ],
+                "image": "iVBORw0KGgoAAAA(...)",
+                "name": "28 days 10 minutes a day",
+                "targetGender": "any"
+            }
+        }
+        // ...
+    ]
+}
+```
+
+#### Download
+
+Request the download of a specific training program.
+
+##### Request
+
+`GET /28days.zip`
+
+##### Response
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/zip
+Content-Length: 116041
+Cache-Control: public, max-age=43200
+
+(...)
+```
+
+## ZIP Archive
+
+Training programs are stored as ZIP archives with at least one mandatory file inside, which is expected to be found at the root level. The file must be named `program.json` and should conform to a well-known schema. Apart from that ZIP files can contain arbitrary folders and subfolders for binary assets such as images, the mentioned file can refer to via relative paths.
+
+## Installation
+
+After being downloaded a training program is extracted to a temporary location. Its `program.json` file is then deserialized and inspected. Files with unsupported format version are rejected immediately.
+
+During unmarshalling data from JSON the relative paths of binary assets are rewritten with absolute paths using device's storage (application space). As a result of that JSON files saved on the device are different from the downloaded ones.
+
+Moreover, original file names are replaced with MD5 hash sums of files' contents. This allows for detecting and reusing identical files, which is often the case with exercises shared between programs. It also allows to detect already installed programs as well as uniquely identify training programs.
+
+> Note: In order to ensure consistent MD5 hash sum calculation, JSON attributes must be stored in the exact same order. Therefore, JSON marshaller assumes Android's default implementation of JSONObject to be using LinkedHashMap. If this ever changes, it will break the application!
+
+In the end that temporary folder is released with all its contents.
+
+## Caching
+
+Since training programs are immutable a caching layer has been introduced to avoid repetitive and unnecessary I/O operations. The cache is only invalidated when a new program is installed or an existing one gets deleted.
+
+## JSON Schema
+
+To allow for future modifications of the schema a `program.json` must provide `format_version` attribute at the top level.
+
+```json
+{
+    "format_version": "1.0"
+}
+```
+
+Following that is the `program` attribute which groups three more children, i.e. `metadata`, `definitions` and `schedule`:
+
+```json
+{
+    "format_version": "1.0",
+    "program": {
+        "metadata": {
+            // ...
+        },
+        "definitions": {
+            // ...
+        },
+        "schedule": [
+            // ...
+        ]
+}
+```
+
+### Metadata
+
+This attribute provides training program's description, which may be used for searching and filtering in the future.
+
+#### Exmaple
+
+```json
+{
+    "program": {
+        "metadata": {
+            "author": "fitnessandpower.com",
+            "name": "28 days 10 minutes a day",
+            "description": "5 simple exercises that will transform your body in just four weeks",
+            "targetGender": "any",
+            "goals": [
+                "fitness",
+                "health",
+                "fat loss"
+            ],
+            "image": "assets/fit-body.jpg"
+        }
+    }
+}
+```
+
+#### Data Types
+
+> Note: Unknown enum values are ignored.
+
+```json
+"metadata": {
+    "author": String,
+    "name": String,
+    "description": String,
+    "targetGender": Enum<any|male|female>,
+    "goals": List<Enum<build_mass|endurance|fat_loss|fitness|flexibility|get_ripped|health|strength>>,
+    "image": String
+}
+```
+
+### Definitions
+
+To avoid redundancy, e.g. by repeating the same exercise across multiple days or by duplicating days, a concept of definition was introduced. A definition is an arbitrary JSON object with a name, which resembles a variable in a programming language.
+
+The `definitions` attribute is expected to contain two children, namely `exercises` and `days`.
+
+```json
+{
+    "program": {
+        "definitions": {
+            "exercises": {
+                // ...
+            },
+            "days": {
+                // ...
+            }
+        }
+    }
+}   
+```
+
+Definitions can be later referenced by prepending an at-sign `@` to their names, e.g.
+
+```json
+{
+    "type": "@push-ups"
+}
+```
+
+or
+
+```json
+[
+    "@workout1"
+]
+```
+
+#### Exercises
+
+An exercise has:
+
+- name
+- textual description
+- optional image
+- collection of muscle groups it engages
+
+Muscle groups are used to dynamically synthesize a visual figure comprised of superimposed sprites (source: [MuscleWiki](https://musclewiki.org/)).
+
+##### Example
+
+```json
+{
+    "program": {
+        "definitions": {
+            "exercises": {
+                "push-ups": {
+                    "muscles": [
+                        "biceps",
+                        "deltoids",
+                        "pecs",
+                        "triceps"
+                    ],
+                    "text": "The push-up is the ultimate bodyweight exercise (...)",
+                    "image": "assets/push-ups.jpg"
+                }
+            }
+        }
+    }
+}
+```
+
+##### Data Types
+
+> Note: Unknown enum values are ignored.
+
+```json
+String: {
+    "muscles": List<Enum<back_lower|biceps|calves|deltoids|forearms|glutes|hamstrings|lats|obliques|pecs|quads|traps|triceps>>,
+    "text": String,
+    "image": String
+}
+```
+
+#### Days
+
+Training programs are measured in days which is the smallest unit of time. A design decision was made not to allow more than one workout per day, although it can be hacked around by incorrectly treating exercises as workouts.
+
+Some training programs might target muscle groups on different days, which is often referred to as the "split". In such a case one would want to give a meaningful name to a respective day definition, e.g. "leg-day".
+
+##### Example
+
+```json
+{
+    "program": {
+        "definitions": {
+            "days": {
+                "recovery": {
+                    "type": "recovery"
+                },
+                "workout1": {
+                    "type": "workout",
+                    "routine": [
+                        {
+                            "type": "@plank",
+                            "goal": "seconds",
+                            "value": 60
+                        },
+                        {
+                            "type": "timed_recovery",
+                            "seconds": "10"
+                        },
+                        {
+                            "type": "@push-ups",
+                            "goal": "seconds",
+                            "value": 60
+                        },
+                        // ...
+                }
+            }
+        }
+    }
+}
+```
+
+There are two predefined kinds of days (*recovery* and *workout*) but future versions may introduce more such as *running*, *swimming*, *cycling*, etc.
+
+Recovery is meant to signal a restraint from physical activity on a particular day. It is perfectly feasable for a few recovery days to exist in a row.
+
+##### Example
+
+```json
+{
+    "type": "recovery"
+}
+```
+
+##### Data Types
+
+```json
+{
+    "type": Enum<recovery|workout>
+}
+```
+
+Workout comprises a *routine* which is a sequnce of *actions* to be perfromed during a training session.
+
+##### Example
+
+```json
+{
+    "type": "workout",
+    "routine": [
+        // ...
+    ]
+```
+
+##### Data Types
+
+```json
+{
+    "type": Enum<recovery|workout>
+    "routine": List<Action>
+}
+```
+
+#### Action
+
+Action is a specialization of an *exercise* with addtional information, e.g. whether an exercise should be time-boxed or not. In future versions actions may be augmented with even more details such as the amount of weights to lift.
+
+> Note: Other than built-in "*recovery*"" and "*timed_recovery*"", action type must always reference an exercise definition.
+
+##### Example
+
+```json
+{
+    "type": "@plank",
+    "goal": "seconds",
+    "value": 60
+}
+```
+
+Another type of action is one with reps instead of seconds, which allows the user to perform the exercise at his own pace. This may become more desirable depending on the training programs's goal.
+
+##### Example
+
+```python
+{
+    "type": "@squats",
+    "goal": "reps",
+    "value": 5
+}
+```
+
+##### Data Types
+
+```json
+{
+    "type": String,
+    "goal": Enum<seconds|reps>,
+    "value": Integer
+}
+```
+
+Some actions do not have a corresponding exercise at all. These are called *recovery* actions and similarly they come in two flavours.
+
+##### Example
+
+```json
+{
+    "type": "timed_recovery",
+    "seconds": "10"
+}
+```
+
+##### Data Types
+
+```json
+{
+    "type": Enum<recovery|timed_recovery>,
+    "seconds": Integer
+}
+```
+
+or
+
+##### Example
+
+```json
+{
+    "type": "recovery"
+}
+```
+
+##### Data Types
+
+```json
+{
+    "type": Enum<recovery|timed_recovery>,
+}
+```
+
+Typically actions with an exercise to perform are interlaced with recovery actions. However, some workouts may define so called "supersets" without resting periods between exercises. The application shows next upcoming action at all times, so that the user can prepare himself.
+
+### Schedule
+
+Schedule is a flat continuous list of days. Some days may be recovery days, while others provide a routine to exercise on that day. There is no strict correspondence to calendar days other than their monotonic subsequence. It does not matter what day of week or month a user starts the training program. Once he decides to start, however, that day marks the beginning for all the remaining days.
+
+In case of a missed workout the application just informs the user about being behind schedule, but does not skip to the next day. Instead it waits allowing the user to finish outstanding days. This is also by design.
+
+An estimated time of the next training session is calculated by taking last workout's duration, number of recovery days ahead and current time into account.
+
+> Note: Day cannot be specified in place but rather must reference a definition. This may change in future implementations.
+
+#### Exmaple
+
+```json
+{
+    "program": {
+        "schedule": [
+
+            "@workout1",
+            "@workout2",
+            "@workout3",
+
+            "@recovery",
+
+            "@workout2",
+            "@workout2",
+            
+            "@recovery",
+
+            // ...
+        ]
+    }
+}
+```
+
+#### Data Types
+
+```json
+"schedule": List<Day>
+```
 
 ## TODO
 
@@ -22,6 +507,7 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 
 ### Nice to have
 
+* On-line wizard and a searchable database to create and publish training programs. Ability to reuse e.g. exercises.
 * When querying training program repository, send already installed programs to avoid downloading them unnecessarily (requires to bump format version on the client; the server should be backwards-compatible).
 * Show enrolled first or display selected program more prominently (sorting?).
 * Program browser search and filter.
