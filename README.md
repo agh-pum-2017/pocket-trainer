@@ -2,8 +2,6 @@
 
 Personal trainer mobile app with the ability to install and playback arbitrary training programs stored in JSON format.
 
-![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
-
 ## Disclaimer
 
 This is a proof of concept / prototype and therefore it lacks unit tests, contains a lot of duplication and generally does not follow any good programming principles. Other than that there are some binary assets such as images and sounds that have been used or modified without consent of their respective authors.
@@ -20,26 +18,80 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 
 ## Feature Overview
 
+### Splash Screen
+
+* A full-screen splash is shown with a spinning wheel while resources are being loaded.
+
 ### Training Programs
 
 * The application comes with some bundled training programs for demonstration purposes. They are installed on the fist run but can be restored later if deleted.
-* More programs can be copied or downloaded manually and installed from a local file on the device.
+* More programs can be copied or downloaded manually and installed from a local file on the device as long as user grants appropriate permissions.
 * Training programs can be also downloaded and installed directly from the app using a remote repository.
 * There is a default [public repository](http://asdf.pythonanywhere.com/pocket-trainer) of training programs available on-line.
+* Remote programs can be queried and downloaded selectively.
 * Flexible file format allows for defining brand new custom training programs.
-
-### Download
-
-* 
-
-### Personal Trainer
 
 ### Program Browser
 
-* Installed programs can be browsed, explored, selected or deleted (individually or all at once).
+* Installed programs can be browsed, explored, enrolled to or deleted (individually or all at once).
 * Basic infomation about a program includes its goals, target gender, name, author, description and schedule.
 * Detailed view of a training program shows instructions on how to correctly perform each exercise.
-* Apart from textual description exercises have a corresponding image and a figure depicting muscle groups activated (synthesized dynamically from sprite images, while muscles are stored in an enumeration).
+* Apart from textual description exercises have a corresponding image and a figure depicting muscle groups activated (synthesized dynamically from sprite images).
+* To restart an active program one can simply unenroll from and enroll to the same program again. Only finished programs can be started over from today's view.
+
+![Alt Text](file:///C://Users/bartek/Desktop/pbrowser.jpg)
+
+### Today View
+
+* User can commit and enroll to at most one training program at a time.
+* If user is not enrolled yet he is directed to program browser when aplication starts. Otherwise today's view is shown.
+* There are multile states a training program can be in:
+    - *none* (no active programs)
+    - *new* (enrolled but not started yet)
+    - *ready* (time for training)
+    - *belated* (behind schedule)
+    - *in* progress (training interrupted)
+    - *recovery* day (break from physcial activity)
+    - *finished* (training completed, can restart or choose another one)
+* A circular progress bar indicates training status with different colors
+    - *blue* - on track
+    - *red* - behind schedule
+    - *green* - training completed
+* Message "Training Paused" is flashing when training had been interrupted.
+* During a recovery day a countdown shows how much time is left until the next training.
+
+![Alt Text](file:///C://Users/bartek/Desktop/today.jpg)
+
+### Personal Trainer
+
+* Core functionality of the application is a metronome-like visual and audio instructions served automatically according to a chosen training program.
+* Prior to starting a new training session an upcoming view shows what exercise to expect before hitting the "Go" button. User may change his mind and back out, e.g. because of the need for heading to the gym.
+* Afterwards the user is embraced with a brief countdown.
+* In general a training session should not be interrupted but for emergency purposes one can pause it by triple tapping the back button or by tapping the home button.
+* For this reason training instructions are displayed in full-screen mode.
+* At each step the user is given visual information about:
+    - current training progress, i.e. how many actions are already completed vs. total number of actions left today;
+    - next coming action - specifically, its name, type with value (timed vs. reps) and image.
+* Optional voice instructions as well as optional vibrations are given about:
+    - time left (countdown like 3..2..1.. as well as round numbers such as 60 seconds);
+    - the next action, its type and value (seconds or reps);
+    - end of workout is also announced.
+* Timed actions are automatically completed and advanced to the next one after a certain amount of time elapses.
+* Some actions require user interaction to be marked complete, e.g. to indicate that a particular number of reps has been reached or when user decided to end a recovery break (perhaps he waited at the gym until a machine became available).
+* Each action can be skipped regardless of its type.
+
+![Alt Text](file:///C://Users/bartek/Desktop/trainer.jpg)
+
+### Progress
+
+* There is a rudimentary history log of completed or skipped exercises.
+* The log is stored in an append-only fashion using plain CSV file with the following columns:
+    - *started_at* (ISO 8601 UTC)
+    - *finished_at* (ISO 8601 UTC)
+    - *skipped* (boolean)
+* This can be used to infer duration of training sessions, if the user was behind schedule, which days, what exercises were involved, etc.
+* When a training program is unenrolled from, started over or deleted entirely the corresponding progress is gone.
+* Currently there is now way of retaining progresses of past trainings.
 
 ### Configurability
 
@@ -47,20 +99,9 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 * Users can direct the app to custom repositories of training programs by providing a URL.
 * An option to set defaults.
 
-### Progress
-
-* There is a rudimentary history log of completed exercises, i.e. what, when, how long and how well.
-
-
-
-
-what happens on the first run???
-depending on the state
-
-
-
-
 ## On-line Repository
+
+![Alt Text](file:///C://Users/bartek/Desktop/repo.jpg){:style="float: right; height: 450px;"}
 
 There is a default [public repository](http://asdf.pythonanywhere.com/pocket-trainer) the application uses for querying and downloading training programs. However, users are free to use their own private repositories since repository URL is configurable. A sample repository server comes with this project as a tiny Python/Flask script (about 50 lines of code).
 
@@ -119,7 +160,7 @@ Cache-Control: public, max-age=43200
 (...)
 ```
 
-## ZIP Archive
+## File Format
 
 Training programs are stored as ZIP archives with at least one mandatory file inside, which is expected to be found at the root level. The file must be named `program.json` and should conform to a well-known schema. Apart from that ZIP files can contain arbitrary folders and subfolders for binary assets such as images, the mentioned file can refer to via relative paths.
 
@@ -225,7 +266,7 @@ The `definitions` attribute is expected to contain two children, namely `exercis
             }
         }
     }
-}   
+}
 ```
 
 Definitions can be later referenced by prepending an at-sign `@` to their names, e.g.
@@ -282,7 +323,7 @@ Muscle groups are used to dynamically synthesize a visual figure comprised of su
 
 > Note: Unknown enum values are ignored.
 
-```json
+```hjson
 String: {
     "muscles": List<Enum<back_lower|biceps|calves|deltoids|forearms|glutes|hamstrings|lats|obliques|pecs|quads|traps|triceps>>,
     "text": String,
@@ -345,7 +386,7 @@ Recovery is meant to signal a restraint from physical activity on a particular d
 
 ##### Data Types
 
-```json
+```hjson
 {
     "type": Enum<recovery|workout>
 }
@@ -365,7 +406,7 @@ Workout comprises a *routine* which is a sequnce of *actions* to be perfromed du
 
 ##### Data Types
 
-```json
+```hjson
 {
     "type": Enum<recovery|workout>
     "routine": List<Action>
@@ -402,7 +443,7 @@ Another type of action is one with reps instead of seconds, which allows the use
 
 ##### Data Types
 
-```json
+```hjson
 {
     "type": String,
     "goal": Enum<seconds|reps>,
@@ -423,7 +464,7 @@ Some actions do not have a corresponding exercise at all. These are called *reco
 
 ##### Data Types
 
-```json
+```hjson
 {
     "type": Enum<recovery|timed_recovery>,
     "seconds": Integer
@@ -442,7 +483,7 @@ or
 
 ##### Data Types
 
-```json
+```hjson
 {
     "type": Enum<recovery|timed_recovery>,
 }
@@ -475,7 +516,7 @@ An estimated time of the next training session is calculated by taking last work
 
             "@workout2",
             "@workout2",
-            
+
             "@recovery"
         ]
     }
@@ -484,7 +525,7 @@ An estimated time of the next training session is calculated by taking last work
 
 #### Data Types
 
-```json
+```hjson
 "schedule": List<Day>
 ```
 
@@ -500,10 +541,11 @@ An estimated time of the next training session is calculated by taking last work
 * Changing screen orientation breaks the countdown.
 * When finished and clicking "Start over", the upcoming exercise is displayed. However, when clicking back it should go to today rather than "Start over" again.
 * Menu icon in the program browser should be white instead of black (three dots in the upper right corner).
-* Back button sometimes allows to navigate to forbidden views. 
+* Back button sometimes allows to navigate to forbidden views.
 
 ### Nice to have
 
+* Handle incoming calls correctly.
 * On-line wizard and a searchable database to create and publish training programs. Ability to reuse e.g. exercises.
 * When querying training program repository, send already installed programs to avoid downloading them unnecessarily (requires to bump format version on the client; the server should be backwards-compatible).
 * Show enrolled first or display selected program more prominently (sorting?).
@@ -520,3 +562,4 @@ An estimated time of the next training session is calculated by taking last work
 * Cast to ChromeCast.
 * Responsive design (different screen orientations and sizes).
 * Improve performance.
+* Automatically navigate to today view when recovery day elapsed.
