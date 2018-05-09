@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Browse..." android:id="@+id/program_browser_menu_browser"/>
     <item android:title="Download..." android:id="@+id/program_browser_menu_download"/>
+    <item android:title="Browse..." android:id="@+id/program_browser_menu_browser"/>
     <item android:title="Restore bundled" android:id="@+id/program_browser_menu_restore"/>
     <item android:title="Delete all" android:id="@+id/program_browser_menu_delete_all"/>
 </menu>

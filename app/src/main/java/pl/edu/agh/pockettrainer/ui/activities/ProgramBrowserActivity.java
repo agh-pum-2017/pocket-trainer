@@ -63,7 +63,7 @@ public class ProgramBrowserActivity extends WithMenuActivity {
                 ensureHasPermissionsToRead();
                 return true;
             case R.id.program_browser_menu_download:
-                // TODO
+                navigateTo(DownloadActivity.class);
                 return true;
             case R.id.program_browser_menu_restore:
 

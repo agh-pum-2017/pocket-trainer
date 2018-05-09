@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appConfig="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:drawable/dialog_holo_light_frame">
+
+    <ImageView
+        android:id="@+id/downloadable_program_item_image"
+        android:layout_width="match_parent"
+        android:layout_height="500px"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        appConfig:layout_constraintEnd_toEndOf="parent"
+        appConfig:layout_constraintStart_toStartOf="parent"
+        appConfig:layout_constraintTop_toTopOf="parent"
+        appConfig:srcCompat="@android:color/black" />
+
+    <TextView
+        android:id="@+id/downloadable_program_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto"
+        android:textSize="22sp"
+        appConfig:layout_constraintLeft_toLeftOf="parent"
+        appConfig:layout_constraintTop_toBottomOf="@+id/downloadable_program_item_image" />
+
+    <TextView
+        android:id="@+id/downloadable_program_item_goals"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto"
+        appConfig:layout_constraintEnd_toEndOf="parent"
+        appConfig:layout_constraintHorizontal_bias="0.0"
+        appConfig:layout_constraintLeft_toLeftOf="parent"
+        appConfig:layout_constraintStart_toStartOf="parent"
+        appConfig:layout_constraintTop_toBottomOf="@+id/downloadable_program_item_title" />
+
+    <TextView
+        android:id="@+id/downloadable_program_item_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto"
+        android:textSize="18sp"
+        appConfig:layout_constraintBottom_toBottomOf="parent"
+        appConfig:layout_constraintEnd_toEndOf="parent"
+        appConfig:layout_constraintHorizontal_bias="1.0"
+        appConfig:layout_constraintStart_toStartOf="parent"
+        appConfig:layout_constraintTop_toBottomOf="@+id/downloadable_program_item_goals"
+        appConfig:layout_constraintVertical_bias="0.0" />
+
+    <CheckBox
+        android:id="@+id/downloadable_program_item_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:buttonTint="#00A6FF"
+        appConfig:layout_constraintBottom_toBottomOf="@+id/downloadable_program_item_title"
+        appConfig:layout_constraintEnd_toEndOf="parent"
+        appConfig:layout_constraintTop_toTopOf="@+id/downloadable_program_item_title" />
+
+</android.support.constraint.ConstraintLayout>

@@ -14,10 +14,12 @@ public class AppConfig {
     private static final String KEY_VOICE_INSTRUCTIONS = "voice";
     private static final String KEY_SOUND_AND_MUSIC = "sound";
     private static final String KEY_VIBRATE = "vibrate";
+    private static final String KEY_REPOSITORY_URL = "repository_url";
 
     private static final boolean DEFAULT_VOICE_ENABLED = true;
     private static final boolean DEFAULT_SOUND_ENABLED = true;
     private static final boolean DEFAULT_VIBRATE_ENABLED = true;
+    private static final String DEFAULT_REPOSITORY_URL = "http://192.168.0.12:8080/repository";
 
     private final Logger logger = new Logger(AppConfig.class);
     private final SharedPreferences preferences;
@@ -34,6 +36,13 @@ public class AppConfig {
         } else {
             return false;
         }
+    }
+
+    public void setDefaults() {
+        setVoiceEnabled(DEFAULT_VOICE_ENABLED);
+        setSoundEnabled(DEFAULT_SOUND_ENABLED);
+        setVibrateEnabled(DEFAULT_VIBRATE_ENABLED);
+        setRepositoryUrl(DEFAULT_REPOSITORY_URL);
     }
 
     public String getActiveProgramId() {
@@ -74,5 +83,13 @@ public class AppConfig {
 
     public void setVibrateEnabled(boolean enabled) {
         preferences.edit().putBoolean(KEY_VIBRATE, enabled).apply();
+    }
+
+    public String getRepositoryUrl() {
+        return preferences.getString(KEY_REPOSITORY_URL, DEFAULT_REPOSITORY_URL);
+    }
+
+    public void setRepositoryUrl(String url) {
+        preferences.edit().putString(KEY_REPOSITORY_URL, url).apply();
     }
 }
