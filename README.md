@@ -103,6 +103,10 @@ This is a proof of concept / prototype and therefore it lacks unit tests, contai
 * Users can direct the app to custom repositories of training programs by providing a URL.
 * An option to set defaults.
 
+## Component Diagram
+
+![](docs/components.jpg)
+
 ## On-line Repository
 
 <img align="right" height="400" src="docs/repo.jpg">
